@@ -1,0 +1,5 @@
+work/
+*.pdf
+codes.json
+state.json
+__pycache__/
