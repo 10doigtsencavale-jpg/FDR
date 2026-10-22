@@ -68,3 +68,11 @@ Quand l'Agenda, un mail ou la fiche dit qu'il faut prendre un bus, un métro, un
   - Dans le JSON d'un nouvel événement : `"run":[{"ic":"🚌","b":"Jeu 19/11 · Gare → L'Agora","l":["Bus ligne 3","Monter : arrêt Gare", "...", "https://www.google.com/maps/dir/?api=1&..."]}]`.
 - Retour aussi en transports en commun : une deuxième ligne, même format.
 - N'invente aucune ligne ni aucun arrêt. Pas trouvé sur une source sûre → « Trajet en bus à vérifier » + le lien Google Maps, statut « à vérifier ».
+
+## Hôtel sans adresse — règle d'Aurélie du 22/10/2026
+Quand l'Agenda, un mail ou la fiche donne le NOM d'un hôtel (ou d'un logement) sans son adresse exacte :
+- Cherche l'adresse exacte (WebSearch : nom de l'hôtel + ville ; vérifie sur le site officiel de l'hôtel ou sa fiche Google Maps). Ex. « Hôtel L'Ambassadeur, Cherbourg » → « 22 Quai Caligny, 50100 Cherbourg-en-Cotentin ».
+- Fiche FDR, partie « 🛏️ HÉBERGEMENT » : « Nom » = nom de l'hôtel, « Adresse (GPS) » = adresse exacte (numéro, rue, code postal, ville), RIEN d'autre dans cette case (les infos comme « 5 min de la gare » vont dans la ligne « 📍 Hôtel »).
+- L'appli fait alors seule le bouton « 📍 Ouvrir dans Maps » vers la bonne adresse.
+- JSON d'un nouvel événement : `"hebergement":{"nom":"Hôtel L'Ambassadeur","adresse":"22 Quai Caligny, 50100 Cherbourg-en-Cotentin","maps":"https://www.google.com/maps/search/?api=1&query=<nom + adresse encodés>", ...}`.
+- Plusieurs hôtels du même nom dans la ville, ou adresse introuvable → n'invente rien : laisse « à vérifier » et dis-le.
