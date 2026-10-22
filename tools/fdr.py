@@ -150,8 +150,11 @@ def sheet(ev_id, path):
         e["run"] = []
         for i, r in enumerate(blocks["run"]):
             if not (r[0].strip() or r[1].strip()): continue
-            p = next((x for x in prev if x.get("b") == r[0].strip()), {})
-            e["run"].append({"ic": p.get("ic", "🚕"), "b": r[0].strip(), "l": [x.strip() for x in r[1].split("\n") if x.strip()]})
+            ic0, b0 = split_ic(r[0])
+            b = b0 if ic0 != "•" else r[0].strip()
+            p = next((x for x in prev if x.get("b") == b), {})
+            ic = ic0 if ic0 != "•" else p.get("ic", "🚕")
+            e["run"].append({"ic": ic, "b": b, "l": [x.strip() for x in r[1].split("\n") if x.strip()]})
     def items(block, base):
         prev = (base or {}).get("items", []) if isinstance(base, dict) else []
         out = []

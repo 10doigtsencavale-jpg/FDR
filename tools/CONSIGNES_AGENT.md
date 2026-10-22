@@ -55,3 +55,16 @@ Si l'événement est une prestation pour une ENTREPRISE (team building, atelier 
 - `"habille": true` → tenue « habillée, noire ou couleur sombre » au lieu de tee-shirt + pull 10 DEC.
 - Automatique pour les conférences et tables rondes à interpréter. À mettre aussi pour une soirée ou un atelier habillé si l'équipe le demande.
 - Dans la fiche FDR : partie 👕 TENUE, ligne « Habillée » (au lieu de « Journée »).
+
+## Transports en commun (bus, métro, tram) — règle d'Aurélie du 22/10/2026
+Quand l'Agenda, un mail ou la fiche dit qu'il faut prendre un bus, un métro, un tram ou une navette publique (ex. « De la gare à l'Agora bus ») :
+- Cherche le trajet sur le site OFFICIEL du réseau de la ville (WebSearch / WebFetch) et sur Google Maps : ligne(s), arrêt où monter, arrêt où descendre, marche à pied, durée. Direction seulement si tu es sûr.
+- Cherche aussi le billet : prix, où l'acheter (dans le bus, distributeur, appli, SMS), et s'il faut l'acheter AVANT de monter. Si oui, écris-le clairement : « ⚠️ Acheter le billet AVANT ».
+- Ça va TOUJOURS dans « 🚕 RUN / NAVETTE » (jamais dans les trajets / billets de train).
+  - Dans la fiche FDR : colonne « Quand » = « 🚌 <jour> · <départ> → <arrivée> » (🚌 bus, 🚇 métro, 🚊 tram). Colonne « Détail » = une info par ligne, phrases très courtes :
+    « Bus ligne 3 » / « Monter : arrêt Gare » / « Descendre : arrêt Dubost » / « Puis 5 min à pied » / « Environ 30 min en tout » / « Billet : 1,50 € dans le bus » / « ⚠️ Acheter le billet AVANT » si besoin / puis, en DERNIÈRE ligne, le lien Google Maps du trajet en transports :
+    `https://www.google.com/maps/dir/?api=1&origin=<départ encodé>&destination=<lieu + code postal encodés>&travelmode=transit`
+    (l'appli transforme ce lien en bouton « 🗺️ Voir le trajet »). Statut « ✓ OK », ou « à vérifier » si une info n'est pas sûre.
+  - Dans le JSON d'un nouvel événement : `"run":[{"ic":"🚌","b":"Jeu 19/11 · Gare → L'Agora","l":["Bus ligne 3","Monter : arrêt Gare", "...", "https://www.google.com/maps/dir/?api=1&..."]}]`.
+- Retour aussi en transports en commun : une deuxième ligne, même format.
+- N'invente aucune ligne ni aucun arrêt. Pas trouvé sur une source sûre → « Trajet en bus à vérifier » + le lien Google Maps, statut « à vérifier ».

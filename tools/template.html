@@ -226,7 +226,8 @@ function legHTML(l,e){
 }
 function telNorm(n){let d=n.replace(/[^0-9+]/g,"");if(d.startsWith("+336")||d.startsWith("+337")||d.startsWith("+33"))d="+33"+d.slice(3);return d}
 function telA(n){const pretty=n.replace(/^\+33\s?/,"0").replace(/[.\s]/g,"").replace(/^(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})$/,"$1 $2 $3 $4 $5");return `<a class="tel" href="tel:${telNorm(n)}">📞 <span class="num">${esc(pretty)}</span></a>`}
-function telify(t){return esc(t).replace(/\*\*(.+?)\*\*/g,'<b class="code">$1</b>').replace(/(\+33\s?\d[\d .]{7,}\d|0\d(?:[ .]?\d{2}){4})/g,m=>`<a class="tlink num" href="tel:${telNorm(m)}">${m}</a>`)}
+function telify0(t){return esc(t).replace(/\*\*(.+?)\*\*/g,'<b class="code">$1</b>').replace(/(\+33\s?\d[\d .]{7,}\d|0\d(?:[ .]?\d{2}){4})/g,m=>`<a class="tlink num" href="tel:${telNorm(m)}">${m}</a>`)}
+function telify(t){return String(t||"").split(/(https?:\/\/[^\s]+)/).map((p,i)=>i%2?`<a class="btn light" href="${esc(p)}" target="_blank" rel="noopener">${/google\.[a-z.]+\/maps|maps\.app\.goo\.gl|goo\.gl\/maps/.test(p)?"🗺️ Voir le trajet":"🔗 Ouvrir le lien"}</a>`:telify0(p)).join("")}
 const PCOL={"périnne":["#fff2cc","#7a5c00"],"eddy":["#d9ead3","#2f6b1f"],"théo":["#cfe2f3","#1f4e79"],"theo":["#cfe2f3","#1f4e79"],"christelle":["#f4cccc","#8a1c1c"],"célia":["#fce5cd","#8a4b08"],"aurélie":["#ead1dc","#741b47"],"jen":["#d0e0e3","#134f5c"],"helen":["#d9d2e9","#351c75"],"julianne":["#c9daf8","#1c4587"],"artur":["#e6b8af","#85200c"]};
 function pillStyle(q){const k=q.toLowerCase().trim();if(k.includes("+")||k.includes("4 mains"))return "background:#ffd6f5;color:#8a0070";for(const n in PCOL){if(k.startsWith(n)){const c=PCOL[n];return `background:${c[0]};color:${c[1]}`}}return ""}
 function persStyle(w){const k=w.toLowerCase();if(k.includes("+"))return "background:#ffeefa;border-color:#f3b6e4";for(const n in PCOL){if(k.startsWith(n)){const c=PCOL[n];return `background:${c[0]}66;border-color:${c[0]}`}}return ""}
