@@ -9,7 +9,7 @@ Commandes (dossier de travail : $FDR_WORK, par défaut /tmp/fdr_work, jamais dan
   fdr.py codes <codes_values.json>          -> écrit $FDR_WORK/codes.json à partir de get_values CODES!A4:G60
   fdr.py sheet <event_id> <values.json>     -> applique le contenu visible d'une fiche FDR (get_values FDR!A1:E250) à l'événement
   fdr.py addevent <event.json>              -> ajoute / remplace un événement (format CONSIGNES_AGENT.md)
-  fdr.py addbillet <event_id> <qui> <sens> <fileId> <titre> <pdf>  -> ajoute un vrai billet PDF à un trajet
+  fdr.py addbillet <event_id> <qui> <sens> <fileId> <titre> <pdf>  -> ajoute un vrai billet PDF à un trajet (mets la date JJ/MM dans le titre si la personne a plusieurs trajets dans le même sens)
   fdr.py sheetgen <event_id> <out.json>     -> requêtes Sheets (mise en forme) + <out>.values.json pour créer une fiche FDR
   fdr.py build                              -> régénère index.html et b/*.txt à la racine du dépôt
   fdr.py lock <cle_technique_base64>        -> rechiffre $FDR_WORK/state.json dans state.enc
@@ -247,7 +247,11 @@ def addbillet(ev_id, qui, sens, fid, titre, pdf):
     S = load(STATE); e = next(x for x in S["events"] if x["id"] == ev_id)
     if fid in S.get("billets_retires", []): print("ignoré (billet retiré, plus valable)", fid); return
     stash(ev_id, fid, pdf, S); S.setdefault("titres_billets", {})[fid] = titre
-    l = next((x for x in e["trajets"] if x["qui"].lower() == qui.lower() and x["sens"].lower() == sens.lower()), None)
+    L = [x for x in e["trajets"] if x["qui"].lower() == qui.lower() and x["sens"].lower() == sens.lower()]
+    # plusieurs lignes même personne / même sens : prends celle dont le jour est dans le titre du billet (ex. « … 15/11 »)
+    jours = set(re.findall(r"\b(\d{1,2})[/-]\d{1,2}\b", titre))
+    l = next((x for x in L if (re.findall(r"\b(\d{1,2})\b", x.get("date", "")) or [""])[0] in jours), None) if jours else None
+    if l is None: l = L[0] if L else None
     if l is None:
         l = {"qui": qui, "sens": sens.capitalize(), "date": "", "dep": "", "arr": "", "de": "", "vers": "", "detail": "", "etat": "ok", "billets": []}; e["trajets"].append(l)
     if fid not in l["billets"]: l["billets"].append(fid)
