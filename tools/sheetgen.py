@@ -57,7 +57,7 @@ for l in e["trajets"]:
     tr = (f'{l["de"]} → {l["vers"]}' if l.get("de") else "") + ((" · " if l.get("de") and l.get("detail") else "") + (l.get("detail") or ""))
     R("row", [(0, l["qui"], 1), (1, f'{l["sens"]} · {l["date"]}'.strip(" ·"), 1), (2, hor, 1), (3, tr, 1), (4, ST.get(l["etat"], ""), 1)], status=True)
 R("gap", [])
-section("run", "🚕 RUN / NAVETTE", [(0, "Quand", 1), (1, "Détail (une info par ligne)", 3), (4, "Statut", 1)])
+section("run", "🚕 RUN / TRANSPORTS", [(0, "Quand", 1), (1, "Détail (une info par ligne)", 3), (4, "Statut", 1)])
 run = e.get("run") or []
 if isinstance(run, dict): run = [{"b": k.capitalize(), "l": [v]} for k, v in run.items() if v]
 for r in run or [{"b": "", "l": [""]}]:

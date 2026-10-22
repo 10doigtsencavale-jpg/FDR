@@ -60,7 +60,7 @@ Si l'événement est une prestation pour une ENTREPRISE (team building, atelier 
 Quand l'Agenda, un mail ou la fiche dit qu'il faut prendre un bus, un métro, un tram ou une navette publique (ex. « De la gare à l'Agora bus ») :
 - Cherche le trajet sur le site OFFICIEL du réseau de la ville (WebSearch / WebFetch) et sur Google Maps : ligne(s), arrêt où monter, arrêt où descendre, marche à pied, durée. Direction seulement si tu es sûr.
 - Cherche aussi le billet : prix, où l'acheter (dans le bus, distributeur, appli, SMS), et s'il faut l'acheter AVANT de monter. Si oui, écris-le clairement : « ⚠️ Acheter le billet AVANT ».
-- Ça va TOUJOURS dans « 🚕 RUN / NAVETTE » (jamais dans les trajets / billets de train).
+- Ça va TOUJOURS dans « 🚕 RUN / TRANSPORTS » (jamais dans les trajets / billets de train).
   - Dans la fiche FDR : colonne « Quand » = « 🚌 <jour> · <départ> → <arrivée> » (🚌 bus, 🚇 métro, 🚊 tram). Colonne « Détail » = une info par ligne, phrases très courtes :
     « Bus ligne 3 » / « Monter : arrêt Gare » / « Descendre : arrêt Dubost » / « Puis 5 min à pied » / « Environ 30 min en tout » / « Billet : 1,50 € dans le bus » / « ⚠️ Acheter le billet AVANT » si besoin / puis, en DERNIÈRE ligne, le lien Google Maps du trajet en transports :
     `https://www.google.com/maps/dir/?api=1&origin=<départ encodé>&destination=<lieu + code postal encodés>&travelmode=transit`
@@ -78,3 +78,8 @@ Quand l'Agenda, un mail ou la fiche donne le NOM d'un hôtel (ou d'un logement) 
 - Plusieurs hôtels du même nom dans la ville, ou adresse introuvable → n'invente rien : laisse « à vérifier » et dis-le.
 - TOUJOURS deux boutons Maps dans l'hébergement (règle d'Aurélie du 22/10/2026) : remplis aussi la ligne « Gare (GPS) » de la partie « 🛏️ HÉBERGEMENT » avec la gare d'arrivée de l'équipe (ex. « Gare SNCF de Cherbourg », « Gare de Paris Gare de Lyon ») ; JSON : `"gare":"Gare SNCF de Cherbourg"`. L'appli affiche alors « 🚉 <gare> » et « 🏨 <hôtel> ». (Sans ligne Gare, l'appli prend la gare d'arrivée du trajet Aller.)
 - PAS de doublon : le nom et l'adresse de l'hôtel ne s'écrivent QUE dans « Nom » et « Adresse (GPS) ». Pas de ligne « 📍 Hôtel » qui répète le nom. Les autres lignes = infos pratiques (🛏️ Nuit, 🍳 Petit-déjeuner, 🔑 Arrivée, 🔢 code…).
+
+## Run / transports — vocabulaire (règle d'Aurélie du 22/10/2026)
+- Un RUN = l'orga (festival, salle) vient chercher ou déposer le chansigneur. Picto 🚕 (ou 🚐).
+- Un TRANSPORT AUTONOME = le chansigneur y va seul (bus, métro, tram, à pied). Picto 🚌 🚇 🚊 ou 🚶. L'appli les compte à part (« 1 transport autonome · 1 run »).
+- Ne jamais appeler « run » un trajet en bus ou métro.
