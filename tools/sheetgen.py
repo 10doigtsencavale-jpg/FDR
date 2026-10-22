@@ -65,9 +65,11 @@ for r in run or [{"b": "", "l": [""]}]:
 R("gap", [])
 section("dodo", "🛏️ HÉBERGEMENT")
 hb = e.get("hebergement") or {}
-kv("Nom", hb.get("nom", "")); kv("Adresse (GPS)", hb.get("adresse", "")); kv("Gare (GPS)", hb.get("gare", ""))
-for it in hb.get("items") or [{"ic": "🔑", "b": "Arrivée", "t": ""}, {"ic": "🚪", "b": "Départ", "t": ""}, {"ic": "🔢", "b": "Code", "t": ""}]:
-    kv(f'{it.get("ic","")} {it.get("b","")}'.strip(), it.get("t", "").replace("**", ""))
+kv("Gare (GPS)", hb.get("gare", ""))
+for n in (hb.get("nuits") or [hb]):
+    kv("Nom", n.get("nom", "")); kv("Adresse (GPS)", n.get("adresse", ""))
+    for it in n.get("items") or [{"ic": "🛏️", "b": "Nuit", "t": ""}, {"ic": "🔑", "b": "Arrivée", "t": ""}, {"ic": "🚪", "b": "Départ", "t": ""}, {"ic": "🔢", "b": "Code", "t": ""}]:
+        kv(f'{it.get("ic","")} {it.get("b","")}'.strip(), it.get("t", "").replace("**", ""))
 R("gap", [])
 section("cont", "📞 CONTACTS SUR PLACE", [(0, "Nom", 2), (2, "Rôle", 1), (3, "Téléphone", 1), (4, "Statut", 1)])
 for c in e["contacts"]:

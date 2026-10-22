@@ -167,20 +167,33 @@ def sheet(ev_id, path):
             out.append({"ic": p.get("ic", ic), "b": b, "t": t})
         return out
     if "dodo" in blocks:
-        hb = dict(old.get("hebergement") or {}); its = []
-        for k, v in kv("dodo"):
-            if k == "Nom": hb["nom"] = v
-            elif k.startswith("Adresse"):
-                hb["adresse"] = v
-            elif k.startswith("Gare"):
-                hb["gare"] = v
-                if v: hb["gare_maps"] = "https://www.google.com/maps/search/?api=1&query=" + urllib.parse.quote(v)
-        if hb.get("adresse"):
-            q = (hb.get("nom", "") + ", " + hb["adresse"]) if hb.get("nom") and hb["nom"].lower() not in hb["adresse"].lower() else hb["adresse"]
-            hb["maps"] = "https://www.google.com/maps/search/?api=1&query=" + urllib.parse.quote(q)
-        blocks["dodo2"] = [r for r in blocks["dodo"] if r[0].strip() not in ("Nom",) and not r[0].strip().startswith("Adresse") and not r[0].strip().startswith("Gare")]
-        hb["items"] = items("dodo2", old.get("hebergement"))
-        e["hebergement"] = hb if (hb.get("nom") or hb["items"]) else {}
+        hb = dict(old.get("hebergement") or {})
+        # plusieurs logements : chaque ligne « Nom » démarre un nouveau logement (une nuit ou plus)
+        groups, gare = [], ""
+        for r in blocks["dodo"]:
+            k = r[0].strip()
+            if k == "Nom" or not groups: groups.append({"rows": [], "nom": "", "adresse": ""})
+            if k == "Nom": groups[-1]["nom"] = r[2].strip()
+            elif k.startswith("Adresse"): groups[-1]["adresse"] = r[2].strip()
+            elif k.startswith("Gare"): gare = r[2].strip()
+            else: groups[-1]["rows"].append(r)
+        nuits = []
+        prev_n = old.get("hebergement", {}).get("nuits") or [old.get("hebergement") or {}]
+        for i, g in enumerate(groups):
+            blocks["dodo_g"] = g["rows"]
+            n = {"nom": g["nom"], "adresse": g["adresse"], "items": items("dodo_g", prev_n[i] if i < len(prev_n) else {})}
+            if g["adresse"]:
+                q = (g["nom"] + ", " + g["adresse"]) if g["nom"] and g["nom"].lower() not in g["adresse"].lower() else g["adresse"]
+                n["maps"] = "https://www.google.com/maps/search/?api=1&query=" + urllib.parse.quote(q)
+            elif g["nom"] and not re.search(r"airbnb|location|appart|chez ", g["nom"], re.I):
+                n["maps"] = "https://www.google.com/maps/search/?api=1&query=" + urllib.parse.quote(g["nom"] + " " + e.get("ville", ""))
+            if n["nom"] or n["items"]: nuits.append(n)
+        hb = dict(nuits[0]) if nuits else {}
+        hb["nuits"] = nuits
+        hb["gare"] = gare
+        if gare: hb["gare_maps"] = "https://www.google.com/maps/search/?api=1&query=" + urllib.parse.quote(gare)
+        else: hb.pop("gare_maps", None)
+        e["hebergement"] = hb if nuits else {}
     if "acc" in blocks: e["acces"] = {"items": items("acc", old.get("acces"))}
     if "cont" in blocks: e["contacts"] = [{"nom": r[0].strip(), "role": r[2].strip(), "tel": r[3].strip()} for r in blocks["cont"] if r[0].strip()]
     if "set" in blocks:

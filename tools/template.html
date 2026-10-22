@@ -143,6 +143,17 @@ textarea{width:100%;min-height:90px;border:2px solid var(--line);border-radius:1
 .jb{display:inline-block;margin-top:6px;border:0;border-radius:10px;padding:8px 12px;font-weight:700;font-size:15px;text-decoration:none;background:#fff;color:#2e3bb2;cursor:pointer}.jb.dark{background:#2e3bb2;color:#fff}
 .jw{margin-top:6px;font-size:14px;font-weight:700;color:#7a4700}
 .jprat{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:6px}.jprat .jb{margin:0;text-align:center;padding:12px 8px;background:var(--bg);color:var(--fg);font-size:16px}.jprat .jb small{display:block;font-weight:400;font-size:14px;color:var(--muted)}.jprat .jb.call{background:#1f6b5e;color:#fff}.jprat .jb.call small{color:#e6f4f1}
+.dchips{display:flex;gap:6px}.dchips button{flex:1;border:0;border-radius:999px;padding:7px 4px;font-weight:700;font-size:15px;background:var(--bg);color:var(--fg)}.dchips button.j{background:#f7a42b;color:#1d2033}
+.dcard{border-radius:20px;overflow:hidden;background:var(--card);border:2px solid var(--line);scroll-margin-top:60px}.dcard.j{border:3px solid #f7a42b}
+.dhead{background:#e3e5f7;color:#1d2033;padding:9px 14px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}.dcard.j .dhead{background:#f7a42b}
+.dhead h3{margin:0;font-family:"Fredoka";font-weight:600;font-size:20px}.dhead small{font-weight:700;font-size:13.5px;color:#2e3bb2}
+.dbody{padding:10px 14px 14px;display:flex;flex-direction:column;gap:8px}
+.dlab{font-size:12.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-top:4px}.dlab.gv{color:#4b57d6}.dlab.gs{color:#b06a00}.dlab.gd{color:#2a8a78}
+.drow{display:grid;grid-template-columns:60px minmax(0,1fr);column-gap:10px}.dh{font-family:"Fredoka";font-weight:700;font-size:19px;line-height:1.2}
+.drow.star{background:#fde7c2;color:#1d2033;border-radius:12px;padding:8px 10px;margin:0 -10px}.drow.star .jti{font-size:19px}
+.dtag{font-size:13px;font-weight:700;color:#2a8a78}.dmut{color:var(--muted)}
+.dnuit{background:#dff2ee;color:#1d2033;border-radius:14px;padding:10px 12px}.dnuit .jb{background:#fff}
+.dbtns{display:flex;flex-wrap:wrap;gap:6px}
 .k-run{--c:#1877d2;--s:#dbeafc}.k-dodo{--c:#7246d6;--s:#e9e1fb}.k-cont{--c:#0f8a8a;--s:#d3f1ef}.k-acc{--c:#8d5a2b;--s:#f1e4d8}.k-set{--c:#c2187a;--s:#fbdcee}.k-ten{--c:#4a5a9a;--s:#e1e5f4}.k-inf{--c:#5b6478;--s:#e8eaf1}
 .cbody .itb{color:var(--c)}
 
@@ -266,44 +277,64 @@ function tmin(x){const s=String(x||"").toLowerCase();const m=s.match(/(\d{1,2})\
   if(/soir|d[iî]ner/.test(s))return 1140;if(/apr[eè]s|fin|retour/.test(s))return 1400;if(/nuit/.test(s))return 1430;return null}
 function dnum(x){const m=String(x||"").match(/\b(\d{1,2})(?:\/\d{1,2})?\b/);return m?+m[1]:null}
 function kindOf(x){const s=String(x||"").toLowerCase();return /balance|concert|spectacle|chansign|show|atelier|conf[ée]rence|table ronde|line ?check|speech|r[ée]p[ée]t|filage|captation|tournage|interview|lecture|pl[ée]ni[èe]re|prestation|soundcheck/.test(s)?"p":"i"}
-function journeeHTML(e,pub){
+function daysHTML(e,pub){
   const ev=new Date(pub.date+"T12:00:00"),evD=ev.getDate();
   const off=d=>{if(d==null)return 0;let o=d-evD;if(o<-20)o+=31;if(o>20)o-=31;return o};
-  const it=[];const btn=(href,lab,cls)=>`<a class="jb ${cls||""}" href="${esc(href)}" target="_blank" rel="noopener">${lab}</a>`;
+  const it=[];const hb=e.hebergement||{};
   let T=e.trajets||[];const me=st.me&&st.me.nom?st.me.nom.toLowerCase():"";
   const mine=me?T.filter(l=>String(l.qui).toLowerCase().includes(me)):[];if(mine.length)T=mine;
-  const many=new Set(T.map(l=>l.qui)).size>1;
-  let arrAller=null;
-  for(const l of T){const ret=l.sens==="Retour";const o=off(dnum(l.date)??(ret?evD+1:evD));const m=tmin(l.dep)??(ret?1439:300);
-    const txt=(l.de+" "+l.vers+" "+(l.detail||"")).toLowerCase();const mode=/vol |avion|a[ée]roport|orly|cdg|roissy/.test(txt)?"AVION":l.sansbillet?"VOITURE":"TRAIN";
-    if(!ret&&o===0){const a=tmin(l.arr);if(a!=null)arrAller=Math.max(arrAller??0,a)}
-    const sub=[];if(l.arr)sub.push("Arrivée "+esc(l.arr));if(l.detail)sub.push(telify(l.detail));
-    const bl=(l.billets||[]).map(id=>e.billets&&e.billets[id]?`<button class="jb dark" data-billet="${id}">Ouvrir le billet</button>`:"").join("")||(!l.sansbillet&&l.etat!=="orga"?`<div class="jw">Billet pas encore dans l'appli</div>`:"");
-    it.push({o,m,k:"t",h:l.dep||"",tag:"TRANSPORT · "+mode+(many?" · "+String(l.qui).toUpperCase():""),title:(l.de?esc(l.de)+" → "+esc(l.vers||"?"):esc(l.sens)),sub,x:bl})}
+  const team=new Set((e.trajets||[]).map(l=>l.qui)).size;
+  // trajets identiques fusionnés (plusieurs personnes, même train)
+  const G={};for(const l of T){const ret=l.sens==="Retour";const k=[l.date,l.dep,l.arr,l.de,l.vers].join("|");(G[k]=G[k]||{l,ret,qui:[],b:[]}).qui.push(l.qui);for(const id of l.billets||[])if(e.billets&&e.billets[id])G[k].b.push([l.qui,id])}
+  let arrAller=null;const tday={};
+  for(const k in G){const g=G[k],l=g.l;const o=off(dnum(l.date)??(g.ret?evD+1:evD));const m=tmin(l.dep)??(g.ret?1439:300);
+    (tday[o]=tday[o]||new Set());g.qui.forEach(q=>tday[o].add(q));
+    if(!g.ret&&o===0){const a=tmin(l.arr);if(a!=null)arrAller=Math.max(arrAller??0,a)}
+    const txt=(l.de+" "+l.vers+" "+(l.detail||"")).toLowerCase();const mode=/vol |avion|a[ée]roport|orly|cdg|roissy/.test(txt)?"Avion":l.sansbillet?"Trajet":"Train";
+    const sub=[];if(l.arr)sub.push(`<b>Arrivée ${esc(l.arr)}</b>`);if(l.detail)sub.push(telify(l.detail));if(team>1&&!mine.length)sub.push(`<span class="dmut">${esc(g.qui.join(" et "))}</span>`);
+    const seen=new Set();const bl=g.b.filter(x=>!seen.has(x[1])&&seen.add(x[1])).map(x=>`<button class="jb dark" data-billet="${x[1]}">${g.b.length>1&&!mine.length?"Billet "+esc(x[0]):"Billet"}</button>`).join("")||(!l.sansbillet&&l.etat!=="ok"&&l.etat!=="orga"?`<div class="jw">Billet pas encore dans l'appli</div>`:"");
+    it.push({o,m,g:"v",h:l.dep||"",title:mode+" "+(l.de?esc(l.de)+" → "+esc(l.vers||"?"):esc(l.sens)),sub,x:bl?`<div class="dbtns">${bl}</div>`:""})}
   for(const r of (Array.isArray(e.run)?e.run:[])){const pubT=isPub(r);const lab=String(r.b||"");const o=off(dnum(lab)??evD);
     let m=tmin(lab.replace(/^\S+\s+\d{1,2}\/\d{1,2}\s*·?\s*/,""));const s=lab.toLowerCase();
     if(m==null)m=(/apr[eè]s|retour|soir|fin|nuit|h[ôo]tel/.test(s)&&!/gare\s*→/.test(s))?1400:(arrAller!=null?arrAller+1:500);
-    const ttl=lab.replace(/^\S+\s+\d{1,2}\/\d{1,2}\s*·\s*/,"");
-    it.push({o,m,k:"t",h:"",tag:pubT?"TRANSPORT · "+(/🚇/u.test(r.ic||"")?"MÉTRO":/🚊/u.test(r.ic||"")?"TRAM":"BUS")+" · AUTONOME":"TRANSPORT · RUN (l'orga t'emmène)",title:esc(ttl),sub:(r.l||[]).map(x=>telify(x)),x:""})}
+    it.push({o,m,g:"v",h:"",title:esc(lab.replace(/^\S+\s+\d{1,2}\/\d{1,2}\s*·\s*/,"")),tag:pubT?"Tu y vas seul(e)":"Run : l'orga t'emmène",sub:(r.l||[]).map(x=>telify(x)),x:""})}
   let prev=-1;for(const p of (e.planning||[])){const hh=String(p.heure||"");const dd=/^(lun|mar|mer|jeu|ven|sam|dim)/i.test(hh)?dnum(hh):null;const o=off(dd??evD);
+    if(/arriv[\wéè]*\s+(en|à la)\s+gare|^train|train (retour|aller)|retour en train/i.test(p.quoi)&&tday[o])continue;
+    if(/^fin\b/i.test(p.quoi)){const ls=[...it].reverse().find(x=>x.o===o&&x.star);if(ls){ls.sub.push(`<b>Fin ${esc(hh)}</b>`);continue}}
     let m=dd!=null?tmin(hh.replace(/^\S+\s*\d{1,2}\/\d{1,2}/,"")):tmin(hh);if(m==null)m=dd!=null?420:prev+1;if(o===0)prev=m;
-    const k=kindOf(p.quoi+" "+(p.detail||""));const star=/concert|spectacle|table ronde|show/i.test(p.quoi);
-    it.push({o,m,k,h:dd!=null?"":hh,tag:k==="p"?"PRESTA":"INFOS",title:telify(p.quoi),sub:p.detail?[telify(p.detail)]:[],x:"",star})}
-  const hb=e.hebergement||{};
-  if(hb.nom){const sub=[];if(hb.adresse)sub.push(esc(hb.adresse));for(const x of hb.items||[])sub.push(`<b>${esc(x.b)} :</b> ${telify(x.t)}`);
-    it.push({o:0,m:1430,k:"i",h:"Nuit",tag:"INFOS · HÉBERGEMENT",title:esc(hb.nom),sub,x:""})}
+    const k=kindOf(p.quoi+" "+(p.detail||""));const star=/concert|spectacle|table ronde|show/i.test(p.quoi)&&!/^fin\b/i.test(p.quoi);
+    it.push({o,m,g:"s",k,h:dd!=null?"":hh,title:telify(p.quoi),sub:p.detail?[telify(p.detail)]:[],x:"",star})}
+  const N=(hb.nuits&&hb.nuits.length)?hb.nuits:(hb.nom?[hb]:[]);
+  N.forEach((n,i)=>{const its=n.items||[];const ni=its.find(x=>/nuit/i.test(x.b));const ai=its.find(x=>/arriv/i.test(x.b));
+    const o=off(dnum(ni&&ni.t)??dnum(ai&&ai.t)??(evD+(i&&N.length>1?i:0)));
+    const di=its.find(x=>/d[ée]part/i.test(x.b));
+    const rest=its.filter(x=>x!==di).map(x=>`<b>${esc(x.b)} :</b> ${telify(x.t)}`);
+    const sub=[n.adresse?esc(n.adresse):`<span class="jw">Adresse à ajouter</span>`].concat(rest);
+    it.push({o,m:3000,g:"d",h:"",title:esc(n.nom||"Logement"),sub,x:n.maps?`<div class="dbtns"><a class="jb" href="${esc(n.maps)}" target="_blank" rel="noopener">Aller au logement (Maps)</a></div>`:"",box:true});
+    if(di)it.push({o:off(dnum(di.t)??(evD+o+1)),m:-1,g:"v",h:"Matin",title:"Quitter "+esc(n.nom||"le logement"),sub:[telify(di.t)],x:""})});
   if(!it.length)return "";
   it.sort((a,b)=>a.o-b.o||a.m-b.m);
-  const dlab=o=>{const d=new Date(ev);d.setDate(d.getDate()+o);const s=d.toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"short"});return (o===0?"Jour J · ":o<0?"La veille · ":"")+s.charAt(0).toUpperCase()+s.slice(1)};
-  let out=`<div class="jleg"><span class="jt">Transport</span><span class="jp">Presta</span><span class="ji">Infos</span></div>`;let cur=null;
-  for(const x of it){if(x.o!==cur){if(cur!==null||x.o!==0)out+=`<div class="jday"><span>${esc(dlab(x.o))}</span></div>`;cur=x.o}
-    out+=`<div class="jrow k${x.k}${x.star?" star":""}"><div class="jh">${esc(x.h)}</div><div class="jc"><div class="jtag">${esc(x.tag)}</div><div class="jti">${x.title}</div>${x.sub.map(s=>`<div class="js">${s}</div>`).join("")}${x.x}</div></div>`}
-  const g=hb.gare||(((e.trajets||[]).find(t=>t.sens==="Aller"&&t.vers)||{}).vers?"Gare SNCF de "+((e.trajets||[]).find(t=>t.sens==="Aller"&&t.vers)).vers:"");
+  const days=[...new Set(it.map(x=>x.o))];
+  const dlab=o=>{const d=new Date(ev);d.setDate(d.getDate()+o);const s=d.toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"short"});return s.charAt(0).toUpperCase()+s.slice(1)};
+  const short=o=>{const d=new Date(ev);d.setDate(d.getDate()+o);return d.toLocaleDateString("fr-FR",{weekday:"short",day:"numeric"}).replace(".","")};
+  let out="";
+  if(days.length>1)out+=`<div class="dchips">${days.map(o=>`<button class="${o===0?"j":""}" data-go="day${o+50}">${esc(short(o))}${o===0?" · J":""}</button>`).join("")}</div>`;
+  const GL={v:"Je voyage",s:"Sur place",d:"Je dors"};
+  for(const o of days){const X=it.filter(x=>x.o===o);
+    const who=tday[o]&&team>1&&!mine.length&&tday[o].size<team?[...tday[o]].join(" et ")+(tday[o].size===1?" seul(e)":""):"";
+    out+=`<div class="dcard${o===0?" j":""}" id="day${o+50}"><div class="dhead"><h3>${esc(dlab(o))}${o===0?" · Jour J":""}</h3>${who?`<small>${esc(who)}</small>`:""}</div><div class="dbody">`;
+    let cg=null;
+    for(const x of X){if(x.g!==cg){cg=x.g;out+=`<div class="dlab g${x.g}">${x.g==="s"?(o===0?"Sur place"+(e.lieu?" · "+esc(e.lieu):""):"Infos"):GL[x.g]}</div>`}
+      out+=x.box?`<div class="dnuit"><div class="jti">${x.title}</div>${x.sub.map(s=>`<div class="js">${s}</div>`).join("")}${x.x}</div>`
+        :`<div class="drow${x.star?" star":""}"><div class="dh">${esc(x.h)}</div><div>${x.tag?`<div class="dtag">${esc(x.tag)}</div>`:""}<div class="jti">${x.title}</div>${x.sub.map(s=>`<div class="js">${s}</div>`).join("")}${x.x}</div></div>`}
+    out+=`</div></div>`}
+  const AJ=(e.trajets||[]).filter(t=>t.sens==="Aller"&&t.vers);const aj=AJ.filter(t=>off(dnum(t.date)??evD)===0).pop()||AJ.pop();
+  const g=hb.gare||(aj?"Gare SNCF de "+aj.vers:"");
   const gm=hb.gare_maps||(g?"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(g):"");
-  const hm=hb.maps||(hb.adresse?"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent((hb.nom?hb.nom+", ":"")+hb.adresse):"");
   const lm="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent((e.lieu||"")+" "+(e.adresse||e.ville||""));
   const c=(e.contacts||[]).find(c=>/\d{2}/.test(c.tel||""));const ct=c?(c.tel.split("/")[0]||"").trim():"";
-  out+=`<div class="jprat">${btn(lm,`Le lieu<small>${esc(e.lieu||"")}</small>`)}${gm?btn(gm,`La gare<small>${esc(g.replace(/^Gare (SNCF )?(de |d')?/i,""))}</small>`):""}${hm?btn(hm,`L'hôtel<small>${esc(hb.nom||"")}</small>`):""}${c?`<a class="jb call" href="tel:${telNorm(ct)}">Appeler<small>${esc(c.nom)}</small></a>`:""}</div>`;
+  const btn=(href,lab)=>`<a class="jb" href="${esc(href)}" target="_blank" rel="noopener">${lab}</a>`;
+  out+=`<div class="jprat">${btn(lm,`Le lieu<small>${esc(e.lieu||"")}</small>`)}${gm?btn(gm,`La gare<small>${esc(g.replace(/^Gare (SNCF )?(de |d')?/i,""))}</small>`):""}${c?`<a class="jb call" href="tel:${telNorm(ct)}">Appeler<small>${esc(c.nom)}</small></a>`:""}</div>`;
   return out}
 
 function eventHTML(id){
@@ -312,7 +343,7 @@ function eventHTML(id){
   const SM=sums(e);const add=(k,lab,html,cls)=>{if(html){navs.push([k,lab]);S.push(CATS[k]?cat(k,lab,html,SM[k]):sec(k,lab,html,cls))}};
   const rems=st.rem.filter(r=>r.event===id);
   add("chg","⚠️ Changements",(e.changements||[]).map(c=>`<div>• ${telify(c)}</div>`).join(""),"chg");
-  add("journee","🗓️ Ma journée",journeeHTML(e,pub),"journee");
+  add("journee","🗓️ Programme",daysHTML(e,pub),"journee");
   const run=Array.isArray(e.run)?e.run:[];
   let tr="";const byWho={};for(const l of e.trajets){(byWho[l.qui]=byWho[l.qui]||[]).push(l)}
   const legOrder=l=>l.sens==="Aller"?0:l.sens==="Retour"?2:1;
