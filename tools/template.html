@@ -131,6 +131,18 @@ textarea{width:100%;min-height:90px;border:2px solid var(--line);border-radius:1
 .cat>summary .ch{font-size:24px;transition:transform .2s}.cat[open]>summary .ch{transform:rotate(90deg)}
 .cbody{background:var(--card);margin:0 6px 6px;border-radius:0 0 14px 14px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
 .rtag{display:inline-block;font-size:.8em;font-weight:700;color:var(--c);background:var(--s);border-radius:99px;padding:1px 9px;margin:2px 0 4px}
+.journee h2{font-size:24px}
+.jleg{display:flex;gap:6px;flex-wrap:wrap}.jleg span{border-radius:999px;padding:3px 12px;font-weight:700;font-size:14px}
+.jleg .jt{background:#2e3bb2;color:#fff}.jleg .jp{background:#f7a42b;color:#1d2033}.jleg .ji{background:#87cabe;color:#1d2033}
+.jday{display:flex;align-items:center;gap:8px;margin:4px 2px 0;font-family:"Fredoka";font-weight:600;font-size:16px;color:var(--muted)}.jday:after{content:"";flex:1;border-top:2px dashed var(--line)}
+.jrow{display:grid;grid-template-columns:64px minmax(0,1fr);column-gap:10px;border-radius:16px;padding:12px;color:#1d2033}
+.jrow.kt{background:#e3e5f7}.jrow.kp{background:#fde7c2}.jrow.ki{background:#dff2ee}.jrow.kp.star{background:#f7a42b}
+.jh{font-family:"Fredoka";font-weight:700;font-size:21px;line-height:1.15}.kt .jh,.kt .jtag{color:#2e3bb2}.kp .jh,.kp .jtag{color:#7a4700}.ki .jh,.ki .jtag{color:#1f5a50}.kp.star .jh,.kp.star .jtag{color:#1d2033}
+.jtag{font-size:12.5px;font-weight:700;letter-spacing:.04em}.jti{font-weight:700}.star .jti{font-size:20px}.js{font-size:15.5px}
+.jrow .btn{margin-top:6px}.jrow a.btn.light{background:#fff;color:#2e3bb2}
+.jb{display:inline-block;margin-top:6px;border:0;border-radius:10px;padding:8px 12px;font-weight:700;font-size:15px;text-decoration:none;background:#fff;color:#2e3bb2;cursor:pointer}.jb.dark{background:#2e3bb2;color:#fff}
+.jw{margin-top:6px;font-size:14px;font-weight:700;color:#7a4700}
+.jprat{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:6px}.jprat .jb{margin:0;text-align:center;padding:12px 8px;background:var(--bg);color:var(--fg);font-size:16px}.jprat .jb small{display:block;font-weight:400;font-size:14px;color:var(--muted)}.jprat .jb.call{background:#1f6b5e;color:#fff}.jprat .jb.call small{color:#e6f4f1}
 .k-run{--c:#1877d2;--s:#dbeafc}.k-dodo{--c:#7246d6;--s:#e9e1fb}.k-cont{--c:#0f8a8a;--s:#d3f1ef}.k-acc{--c:#8d5a2b;--s:#f1e4d8}.k-set{--c:#c2187a;--s:#fbdcee}.k-ten{--c:#4a5a9a;--s:#e1e5f4}.k-inf{--c:#5b6478;--s:#e8eaf1}
 .cbody .itb{color:var(--c)}
 
@@ -249,15 +261,59 @@ function sums(e){const pl=(n,w)=>n+" "+w+(n>1?"s":"");const run=Array.isArray(e.
    tenue:isConf(e)?"Tenue habillée noire ou sombre":"Tee-shirt + pull 10 DEC · tenue concert",
    infos:pl((e.remarques||[]).length,"info")}}
 
+function tmin(x){const s=String(x||"").toLowerCase();const m=s.match(/(\d{1,2})\s*h\s*(\d{0,2})/);if(m)return (+m[1])*60+(+(m[2]||0));
+  if(/apr[eè]s-midi|aprem/.test(s))return 840;if(/matin/.test(s))return 480;if(/midi/.test(s))return 720;if(/journ/.test(s))return 600;
+  if(/soir|d[iî]ner/.test(s))return 1140;if(/apr[eè]s|fin|retour/.test(s))return 1400;if(/nuit/.test(s))return 1430;return null}
+function dnum(x){const m=String(x||"").match(/\b(\d{1,2})(?:\/\d{1,2})?\b/);return m?+m[1]:null}
+function kindOf(x){const s=String(x||"").toLowerCase();return /balance|concert|spectacle|chansign|show|atelier|conf[ée]rence|table ronde|line ?check|speech|r[ée]p[ée]t|filage|captation|tournage|interview|lecture|pl[ée]ni[èe]re|prestation|soundcheck/.test(s)?"p":"i"}
+function journeeHTML(e,pub){
+  const ev=new Date(pub.date+"T12:00:00"),evD=ev.getDate();
+  const off=d=>{if(d==null)return 0;let o=d-evD;if(o<-20)o+=31;if(o>20)o-=31;return o};
+  const it=[];const btn=(href,lab,cls)=>`<a class="jb ${cls||""}" href="${esc(href)}" target="_blank" rel="noopener">${lab}</a>`;
+  let T=e.trajets||[];const me=st.me&&st.me.nom?st.me.nom.toLowerCase():"";
+  const mine=me?T.filter(l=>String(l.qui).toLowerCase().includes(me)):[];if(mine.length)T=mine;
+  const many=new Set(T.map(l=>l.qui)).size>1;
+  let arrAller=null;
+  for(const l of T){const ret=l.sens==="Retour";const o=off(dnum(l.date)??(ret?evD+1:evD));const m=tmin(l.dep)??(ret?1439:300);
+    const txt=(l.de+" "+l.vers+" "+(l.detail||"")).toLowerCase();const mode=/vol |avion|a[ée]roport|orly|cdg|roissy/.test(txt)?"AVION":l.sansbillet?"VOITURE":"TRAIN";
+    if(!ret&&o===0){const a=tmin(l.arr);if(a!=null)arrAller=Math.max(arrAller??0,a)}
+    const sub=[];if(l.arr)sub.push("Arrivée "+esc(l.arr));if(l.detail)sub.push(telify(l.detail));
+    const bl=(l.billets||[]).map(id=>e.billets&&e.billets[id]?`<button class="jb dark" data-billet="${id}">Ouvrir le billet</button>`:"").join("")||(!l.sansbillet&&l.etat!=="orga"?`<div class="jw">Billet pas encore dans l'appli</div>`:"");
+    it.push({o,m,k:"t",h:l.dep||"",tag:"TRANSPORT · "+mode+(many?" · "+String(l.qui).toUpperCase():""),title:(l.de?esc(l.de)+" → "+esc(l.vers||"?"):esc(l.sens)),sub,x:bl})}
+  for(const r of (Array.isArray(e.run)?e.run:[])){const pubT=isPub(r);const lab=String(r.b||"");const o=off(dnum(lab)??evD);
+    let m=tmin(lab.replace(/^\S+\s+\d{1,2}\/\d{1,2}\s*·?\s*/,""));const s=lab.toLowerCase();
+    if(m==null)m=(/apr[eè]s|retour|soir|fin|nuit|h[ôo]tel/.test(s)&&!/gare\s*→/.test(s))?1400:(arrAller!=null?arrAller+1:500);
+    const ttl=lab.replace(/^\S+\s+\d{1,2}\/\d{1,2}\s*·\s*/,"");
+    it.push({o,m,k:"t",h:"",tag:pubT?"TRANSPORT · "+(/🚇/u.test(r.ic||"")?"MÉTRO":/🚊/u.test(r.ic||"")?"TRAM":"BUS")+" · AUTONOME":"TRANSPORT · RUN (l'orga t'emmène)",title:esc(ttl),sub:(r.l||[]).map(x=>telify(x)),x:""})}
+  let prev=-1;for(const p of (e.planning||[])){const hh=String(p.heure||"");const dd=/^(lun|mar|mer|jeu|ven|sam|dim)/i.test(hh)?dnum(hh):null;const o=off(dd??evD);
+    let m=dd!=null?tmin(hh.replace(/^\S+\s*\d{1,2}\/\d{1,2}/,"")):tmin(hh);if(m==null)m=dd!=null?420:prev+1;if(o===0)prev=m;
+    const k=kindOf(p.quoi+" "+(p.detail||""));const star=/concert|spectacle|table ronde|show/i.test(p.quoi);
+    it.push({o,m,k,h:dd!=null?"":hh,tag:k==="p"?"PRESTA":"INFOS",title:telify(p.quoi),sub:p.detail?[telify(p.detail)]:[],x:"",star})}
+  const hb=e.hebergement||{};
+  if(hb.nom){const sub=[];if(hb.adresse)sub.push(esc(hb.adresse));for(const x of hb.items||[])sub.push(`<b>${esc(x.b)} :</b> ${telify(x.t)}`);
+    it.push({o:0,m:1430,k:"i",h:"Nuit",tag:"INFOS · HÉBERGEMENT",title:esc(hb.nom),sub,x:""})}
+  if(!it.length)return "";
+  it.sort((a,b)=>a.o-b.o||a.m-b.m);
+  const dlab=o=>{const d=new Date(ev);d.setDate(d.getDate()+o);const s=d.toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"short"});return (o===0?"Jour J · ":o<0?"La veille · ":"")+s.charAt(0).toUpperCase()+s.slice(1)};
+  let out=`<div class="jleg"><span class="jt">Transport</span><span class="jp">Presta</span><span class="ji">Infos</span></div>`;let cur=null;
+  for(const x of it){if(x.o!==cur){if(cur!==null||x.o!==0)out+=`<div class="jday"><span>${esc(dlab(x.o))}</span></div>`;cur=x.o}
+    out+=`<div class="jrow k${x.k}${x.star?" star":""}"><div class="jh">${esc(x.h)}</div><div class="jc"><div class="jtag">${esc(x.tag)}</div><div class="jti">${x.title}</div>${x.sub.map(s=>`<div class="js">${s}</div>`).join("")}${x.x}</div></div>`}
+  const g=hb.gare||(((e.trajets||[]).find(t=>t.sens==="Aller"&&t.vers)||{}).vers?"Gare SNCF de "+((e.trajets||[]).find(t=>t.sens==="Aller"&&t.vers)).vers:"");
+  const gm=hb.gare_maps||(g?"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(g):"");
+  const hm=hb.maps||(hb.adresse?"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent((hb.nom?hb.nom+", ":"")+hb.adresse):"");
+  const lm="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent((e.lieu||"")+" "+(e.adresse||e.ville||""));
+  const c=(e.contacts||[]).find(c=>/\d{2}/.test(c.tel||""));const ct=c?(c.tel.split("/")[0]||"").trim():"";
+  out+=`<div class="jprat">${btn(lm,`Le lieu<small>${esc(e.lieu||"")}</small>`)}${gm?btn(gm,`La gare<small>${esc(g.replace(/^Gare (SNCF )?(de |d')?/i,""))}</small>`):""}${hm?btn(hm,`L'hôtel<small>${esc(hb.nom||"")}</small>`):""}${c?`<a class="jb call" href="tel:${telNorm(ct)}">Appeler<small>${esc(c.nom)}</small></a>`:""}</div>`;
+  return out}
+
 function eventHTML(id){
   const e=st.ev[id],pub=DATA.events.find(x=>x.id===id);
   const navs=[];const S=[];
   const SM=sums(e);const add=(k,lab,html,cls)=>{if(html){navs.push([k,lab]);S.push(CATS[k]?cat(k,lab,html,SM[k]):sec(k,lab,html,cls))}};
   const rems=st.rem.filter(r=>r.event===id);
   add("chg","⚠️ Changements",(e.changements||[]).map(c=>`<div>• ${telify(c)}</div>`).join(""),"chg");
-  add("jour","⏰ Jour J",e.planning.length?`<div class="tl">${e.planning.map(p=>`<div style="display:contents" class="${/concert|table ronde/i.test(p.quoi)?"star":""}"><div class="h">${esc(p.heure)}</div><div class="w"><b>${telify(p.quoi)}</b><small>${telify(p.detail||"")}</small></div></div>`).join("")}</div>`:"");
+  add("journee","🗓️ Ma journée",journeeHTML(e,pub),"journee");
   const run=Array.isArray(e.run)?e.run:[];
-  add("run","🚕 Run / transports",run.map(r=>`<div class="it"><span class="ic">${r.ic||"🚕"}</span><div><b class="itb">${esc(r.b)}</b><div class="rtag">${isPub(r)?"🚶 Transport autonome":"🚕 Run : l'orga vient te chercher"}</div>${(r.l||[]).map(x=>`<div>${telify(x)}</div>`).join("")}</div></div>`).join(""));
   let tr="";const byWho={};for(const l of e.trajets){(byWho[l.qui]=byWho[l.qui]||[]).push(l)}
   const legOrder=l=>l.sens==="Aller"?0:l.sens==="Retour"?2:1;
   for(const w in byWho){const L=byWho[w].sort((a,b)=>legOrder(a)-legOrder(b));const miss=L.some(l=>!(l.billets||[]).length&&!l.sansbillet);const worst=L.some(l=>l.etat==="a_faire")?"a_faire":(miss||L.some(l=>l.etat==="a_verifier"))?"a_verifier":"ok";
@@ -267,7 +323,6 @@ function eventHTML(id){
   const hb=e.hebergement||{};
   const a=e.acces||{};
   add("acces","🚗 Accès / accréditations",((a.items||[]).map(x=>`<div class="it"><span class="ic">${x.ic}</span><div><b class="itb">${esc(x.b)}</b><div>${telify(x.t)}</div></div></div>`).join(""))+`<a class="btn light" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.lieu+" "+e.adresse)}" target="_blank" rel="noopener">📍 Le lieu dans Maps</a>`);
-  add("dodo","🛏️ Hébergement",hb.nom?`<div class="route">🏠 ${esc(hb.nom)}</div>${hb.adresse?`<div class="det">📍 ${esc(hb.adresse)}</div>`:""}${(hb.items||[]).map(x=>`<div class="it"><span class="ic">${x.ic}</span><div><b class="itb">${esc(x.b)}</b><div>${telify(x.t)}</div></div></div>`).join("")}${(()=>{const g=hb.gare||(((e.trajets||[]).find(t=>t.sens==="Aller"&&t.vers)||{}).vers?"Gare SNCF de "+((e.trajets||[]).find(t=>t.sens==="Aller"&&t.vers)).vers:"");const gm=hb.gare_maps||(g?"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(g):"");const hm=hb.maps||(hb.adresse?"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent((hb.nom?hb.nom+", ":"")+hb.adresse):"");return (gm?`<a class="btn light" href="${esc(gm)}" target="_blank" rel="noopener">🚉 ${esc(g)}</a>`:"")+(hm?`<a class="btn light" href="${esc(hm)}" target="_blank" rel="noopener">🏨 ${esc(hb.nom||"L'hôtel")}</a>`:"")})()}`:"");
   add("contacts","📞 Contacts sur place",``+(e.contacts||[]).map(c=>{const nums=(c.tel||"").split("/").map(x=>x.trim()).filter(x=>/\d{2}/.test(x)&&!/signature/i.test(x));return `<div class="contact"><div><b>${esc(c.nom)}</b><small>${esc(c.role)}</small></div><div class="tels">${nums.map(n=>telA(n)).join("")}</div></div>`}).join(""));
   add("setlist","🎵 Setlist",e.setlist.length?`${e.setlist_note?`<div class="note">${esc(e.setlist_note)}</div>`:""}<table><thead><tr><th>#</th><th>Titre</th><th>Qui</th><th></th></tr></thead><tbody>${e.setlist.map(s=>`<tr><td class="n">${s.n}</td><td class="t">${esc(s.titre)}</td><td>${s.qui?(()=>{const m=s.qui.match(/^([^(]*)(\(.*\))?/);const nm=m[1].trim();return `<span class="pill" style="${pillStyle(nm)}">${esc(nm)}</span>${m[2]?`<small class="pq">${esc(m[2].slice(1,-1))}</small>`:""}`})():""}</td><td>${s.doc?`<a class="lyr" href="${esc(s.doc)}" target="_blank" rel="noopener">Paroles ↗</a>`:""}</td></tr>`).join("")}</tbody></table>`:"");
   add("tenue","👕 Tenue",isConf(e)?`<div class="it"><span class="ic">🖤</span><div><b class="itb">Habillée</b><div>Tenue habillée. Noire ou couleur sombre.${e.tenue?" "+esc(e.tenue):""}</div></div></div>`:`<div class="it"><span class="ic">☀️</span><div><b class="itb">Journée</b><div>Tee-shirt + pull 10 DEC. Bas au choix (habillé).</div></div></div><div class="it"><span class="ic">🌙</span><div><b class="itb">Concert</b><div>Tenue de concert, raccord entre chansigneurs.${e.tenue?" "+esc(e.tenue):""}</div></div></div>`);
