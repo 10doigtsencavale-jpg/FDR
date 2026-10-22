@@ -76,3 +76,5 @@ Quand l'Agenda, un mail ou la fiche donne le NOM d'un hôtel (ou d'un logement) 
 - L'appli fait alors seule le bouton « 📍 Ouvrir dans Maps » vers la bonne adresse.
 - JSON d'un nouvel événement : `"hebergement":{"nom":"Hôtel L'Ambassadeur","adresse":"22 Quai Caligny, 50100 Cherbourg-en-Cotentin","maps":"https://www.google.com/maps/search/?api=1&query=<nom + adresse encodés>", ...}`.
 - Plusieurs hôtels du même nom dans la ville, ou adresse introuvable → n'invente rien : laisse « à vérifier » et dis-le.
+- TOUJOURS deux boutons Maps dans l'hébergement (règle d'Aurélie du 22/10/2026) : remplis aussi la ligne « Gare (GPS) » de la partie « 🛏️ HÉBERGEMENT » avec la gare d'arrivée de l'équipe (ex. « Gare SNCF de Cherbourg », « Gare de Paris Gare de Lyon ») ; JSON : `"gare":"Gare SNCF de Cherbourg"`. L'appli affiche alors « 🚉 <gare> » et « 🏨 <hôtel> ». (Sans ligne Gare, l'appli prend la gare d'arrivée du trajet Aller.)
+- PAS de doublon : le nom et l'adresse de l'hôtel ne s'écrivent QUE dans « Nom » et « Adresse (GPS) ». Pas de ligne « 📍 Hôtel » qui répète le nom. Les autres lignes = infos pratiques (🛏️ Nuit, 🍳 Petit-déjeuner, 🔑 Arrivée, 🔢 code…).

@@ -65,7 +65,7 @@ for r in run or [{"b": "", "l": [""]}]:
 R("gap", [])
 section("dodo", "🛏️ HÉBERGEMENT")
 hb = e.get("hebergement") or {}
-kv("Nom", hb.get("nom", "")); kv("Adresse (GPS)", hb.get("adresse", ""))
+kv("Nom", hb.get("nom", "")); kv("Adresse (GPS)", hb.get("adresse", "")); kv("Gare (GPS)", hb.get("gare", ""))
 for it in hb.get("items") or [{"ic": "🔑", "b": "Arrivée", "t": ""}, {"ic": "🚪", "b": "Départ", "t": ""}, {"ic": "🔢", "b": "Code", "t": ""}]:
     kv(f'{it.get("ic","")} {it.get("b","")}'.strip(), it.get("t", "").replace("**", ""))
 R("gap", [])

@@ -172,10 +172,13 @@ def sheet(ev_id, path):
             if k == "Nom": hb["nom"] = v
             elif k.startswith("Adresse"):
                 hb["adresse"] = v
+            elif k.startswith("Gare"):
+                hb["gare"] = v
+                if v: hb["gare_maps"] = "https://www.google.com/maps/search/?api=1&query=" + urllib.parse.quote(v)
         if hb.get("adresse"):
             q = (hb.get("nom", "") + ", " + hb["adresse"]) if hb.get("nom") and hb["nom"].lower() not in hb["adresse"].lower() else hb["adresse"]
             hb["maps"] = "https://www.google.com/maps/search/?api=1&query=" + urllib.parse.quote(q)
-        blocks["dodo2"] = [r for r in blocks["dodo"] if r[0].strip() not in ("Nom",) and not r[0].strip().startswith("Adresse")]
+        blocks["dodo2"] = [r for r in blocks["dodo"] if r[0].strip() not in ("Nom",) and not r[0].strip().startswith("Adresse") and not r[0].strip().startswith("Gare")]
         hb["items"] = items("dodo2", old.get("hebergement"))
         e["hebergement"] = hb if (hb.get("nom") or hb["items"]) else {}
     if "acc" in blocks: e["acces"] = {"items": items("acc", old.get("acces"))}
