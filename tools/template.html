@@ -463,7 +463,7 @@ function repasHTML(id,pub){
         <label class="itb" for="pr-haut">👕 Taille haut</label><select class="pin" id="pr-haut"><option value="">—</option>${TAILLES.map(t=>`<option${p.haut===t?" selected":""}>${t}</option>`).join("")}</select>
         <label class="itb" for="pr-bas">👖 Taille bas</label><input class="pin" id="pr-bas" value="${esc(p.bas||"")}" placeholder="ex. 38 ou M">
         <div class="pbtns">${pre?`<button class="btn" data-prof-send="${id}">✓ C'est toujours bon</button>`:`<button class="btn" data-prof-send="${id}">Envoyer</button>`}</div>`;
-      sum="À remplir";
+      sum="À compléter";
     }
   }
   if(st.admin){
