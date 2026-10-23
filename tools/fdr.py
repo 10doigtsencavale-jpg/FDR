@@ -17,6 +17,8 @@ Commandes (dossier de travail : $FDR_WORK, par défaut /tmp/fdr_work, jamais dan
   fdr.py fiches                             -> {id de fiche Sheets: id événement}
   fdr.py meta get|set <clé> [valeur]        -> lit / écrit last_sync, last_gmail…
   fdr.py setev <event_id> <champ> <valeur>  -> ex. setev X fiche https://… ; setev X visible false
+  fdr.py profils <reponses.json>            -> régime et tailles saisis dans l'appli (réponses signées du formulaire)
+  fdr.py repasvalues <event_id> <out.json>  -> valeurs de l'onglet « REPAS & TAILLES » de la fiche
 """
 import json, os, sys, base64, secrets, random, re, shutil, glob, subprocess, urllib.parse, hashlib, datetime
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
@@ -273,6 +275,58 @@ def rmbillet(ev_id, fid):
     if fid not in S["billets_retires"]: S["billets_retires"].append(fid)
     save(STATE, S); print("ok retiré", ev_id, fid, n)
 
+# ---------- régime et tailles (saisis dans l'appli, via le formulaire) ----------
+def _pk(S, C, slug):
+    c = S["keys"].get("pk_cache", {}).get(slug)
+    if c: return base64.b64decode(c["k"])
+    if slug in (C or {}):
+        return PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=base64.b64decode(S["keys"]["salt"]), iterations=ITER).derive(C[slug]["code"].encode())
+    return None
+def profils(path):
+    """Lit les réponses du formulaire (get_values A1:E du Sheet des réponses). Garde les lignes
+    « FDR:<id événement> » / « profil:<slug> », signées avec la clé personnelle de la personne.
+    Met à jour l'événement et le dernier profil de la personne. Affiche les événements modifiés."""
+    import hmac
+    S = load(STATE); C = load(os.path.join(WORK, "codes.json"), {})
+    rows = json.load(open(path)); rows = rows.get("values", rows) if isinstance(rows, dict) else rows
+    vus = set(S.get("profils_vus", [])); ev = {e["id"]: e for e in S["events"]}; changed, refus = set(), 0
+    for r in rows[1:]:
+        r = [str(x).strip() for x in (r + [""] * 5)[:5]]
+        horo, eid, pt, texte, src = r
+        if not eid.startswith("FDR:") or not pt.startswith("profil:"): continue
+        h = hashlib.sha256("|".join(r).encode()).hexdigest()[:16]
+        if h in vus: continue
+        vus.add(h); eid = eid[4:]; slug = pt[7:]
+        pk = _pk(S, C, slug)
+        attendu = hmac.new(pk, "|".join([eid, pt, texte]).encode(), hashlib.sha256).hexdigest()[:16] if pk else None
+        if eid not in ev or not attendu or src != "fdr:" + slug + ":" + attendu: refus += 1; continue
+        try: v = json.loads(texte)
+        except Exception: refus += 1; continue
+        v = {k: str(v.get(k, "")).strip()[:120] for k in ("regime", "haut", "bas")}
+        try: d = datetime.datetime.strptime(horo, "%d/%m/%Y %H:%M:%S").strftime("%Y-%m-%dT%H:%M:%S")
+        except Exception: d = horo
+        v["date"] = d
+        ev[eid].setdefault("profils", {})[slug] = v
+        P = S.setdefault("profils", {})
+        if (P.get(slug) or {}).get("date", "") <= d: P[slug] = v
+        changed.add(eid)
+    S["profils_vus"] = sorted(vus)[-3000:]
+    save(STATE, S)
+    print(json.dumps({"evenements": sorted(changed), "refusees": refus}, ensure_ascii=False))
+
+def repasvalues(ev_id, out):
+    """Valeurs de l'onglet « REPAS & TAILLES » de la fiche FDR (à écrire telles quelles en A1, 30 lignes)."""
+    S = load(STATE); C = load(os.path.join(WORK, "codes.json"), {})
+    e = next(x for x in S["events"] if x["id"] == ev_id); pr = e.get("profils") or {}
+    nom = lambda s: (C.get(s) or {}).get("nom") or s.capitalize()
+    V = [["🍽️ REPAS & TAILLES · rempli par chaque personne dans l'appli FDR. Confidentiel : équipe 10 Doigts seulement.", "", "", "", ""],
+         ["Nom", "Régime alimentaire / allergies", "Taille haut", "Taille bas", "Mis à jour"]]
+    for s in e.get("qui", []):
+        v = pr.get(s) or {}
+        V.append([nom(s), v.get("regime", "") or ("" if v else "pas encore répondu"), v.get("haut", ""), v.get("bas", ""), (v.get("date", "")[:10] if v else "")])
+    while len(V) < 30: V.append([""] * 5)
+    json.dump(V, open(out, "w"), ensure_ascii=False); print("ok", len(e.get("qui", [])), "personnes")
+
 # ---------- construction de l'appli ----------
 def build():
     S = load(STATE); C = load(os.path.join(WORK, "codes.json"))
@@ -290,7 +344,8 @@ def build():
     for s in list(cache):
         if s not in C: cache.pop(s)
     noms = {s: c["nom"] for s, c in C.items()}; noms.setdefault("aurelie", "Aurélie"); noms.setdefault("perinne", "Périnne")
-    persons = [enc(pkeys[s], json.dumps({"slug": s, "nom": noms[s], **({"adm": enc(pkeys[s], admin)} if C[s]["admin"] else {})}).encode()) for s in pkeys]
+    P = S.get("profils", {})
+    persons = [enc(pkeys[s], json.dumps({"slug": s, "nom": noms[s], **({"prof": P[s]} if s in P else {}), **({"adm": enc(pkeys[s], admin)} if C[s]["admin"] else {})}, ensure_ascii=False).encode()) for s in pkeys]
     random.shuffle(persons)
     teamkey = secrets.token_bytes(32)
     tw = [enc(k, teamkey) for k in list(pkeys.values()) + [admin]]; random.shuffle(tw)
@@ -305,7 +360,7 @@ def build():
                 if not name or not os.path.exists(os.path.join(REPO, "b", name + ".txt")): continue
                 used.add(name + ".txt")
                 bil[b] = {"f": "b/" + name + ".txt", "t": titles.get(b, "Billet").replace(".pdf", "").split(" (")[0]}
-        payload = {k: v for k, v in e.items() if k not in ("id", "date", "fin", "qui")}; payload["billets"] = bil
+        payload = {k: v for k, v in e.items() if k not in ("id", "date", "fin", "qui", "profils")}; payload["billets"] = bil
         prive = bool(e.get("prive"))
         wr = ([] if prive else [enc(pkeys[s], ek) for s in e["qui"] if s in pkeys]) + [enc(admin, ek)]; random.shuffle(wr)
         # Rien en clair : l'en-tête (id, date, qui, catégorie) est chiffré.
@@ -314,6 +369,12 @@ def build():
         head = {"id": e["id"], "date": e["date"], "fin": e.get("fin", e["date"]), "qui": [] if prive else e["qui"], "c": e.get("cat") or ("tb" if prive else "")}
         if prive: head["a"] = 1
         item = {"h": enc(admin if prive else teamkey, json.dumps(head, ensure_ascii=False).encode()), "wraps": wr, "data": enc(ek, json.dumps(payload, ensure_ascii=False).encode())}
+        # Régime et tailles : donnée personnelle. Lisible seulement par la personne (sa clé) et par Aurélie et Périnne (clé admin).
+        pr = e.get("profils") or {}
+        if pr:
+            pf = [enc(pkeys[s], json.dumps({"ev": e["id"], **v}, ensure_ascii=False).encode()) for s, v in pr.items() if s in pkeys]
+            random.shuffle(pf); item["pf"] = pf
+            item["pa"] = enc(admin, json.dumps(pr, ensure_ascii=False).encode())
         pub.append(item)
     random.shuffle(pub)
     DATA = {"salt": K["salt"], "iter": ITER, "persons": persons, "team": {"wraps": tw, "data": enc(teamkey, json.dumps(S["memo"], ensure_ascii=False).encode()), "noms": enc(teamkey, json.dumps(noms, ensure_ascii=False).encode())}, "events": pub}
@@ -354,4 +415,4 @@ def lst():
 
 if __name__ == "__main__":
     c, a = sys.argv[1], sys.argv[2:]
-    {"unlock": unlock, "lock": lock, "codes": codes, "sheet": sheet, "addevent": addevent, "addbillet": addbillet, "rmbillet": rmbillet, "build": build, "sheetgen": sheetgen, "list": lst, "meta": meta, "setev": setev, "fiches": fiches}[c](*a)
+    {"unlock": unlock, "lock": lock, "codes": codes, "sheet": sheet, "addevent": addevent, "addbillet": addbillet, "rmbillet": rmbillet, "build": build, "sheetgen": sheetgen, "list": lst, "meta": meta, "setev": setev, "fiches": fiches, "profils": profils, "repasvalues": repasvalues}[c](*a)

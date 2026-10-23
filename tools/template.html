@@ -17,6 +17,8 @@ a{color:inherit}
 .top h1{font-size:28px;line-height:1.1}
 .top .hi{font-size:18px;opacity:.95}
 .login{display:flex;flex-direction:column;gap:8px}
+.pin{width:100%;border:2px solid #e2e4ee;border-radius:12px;padding:11px 12px;font:inherit;font-size:17px;background:#fff;color:#1d2033;margin:4px 0 10px}
+.pbtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
 .login label{font-weight:700}
 .login .row{display:flex;gap:8px}
 .login input{flex:1;min-width:0;border:0;border-radius:12px;padding:12px 14px;font:inherit;font-size:18px;background:#fff;color:#1d2033}
@@ -185,7 +187,7 @@ const te=new TextEncoder(),td=new TextDecoder();
 const b64d=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 const b64e=u=>{let s="";u.forEach(c=>s+=String.fromCharCode(c));return btoa(s)};
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const st={me:null,admin:false,keys:{},ev:{},memo:null,rem:[],db:null,tk:null};let NOMS={};
+const st={me:null,admin:false,keys:{},ev:{},memo:null,rem:[],db:null,tk:null,pk:null,pkRaw:null,ak:null,pf:{},pa:{}};let NOMS={};
 let curOpen=null;
 
 async function imp(raw){return crypto.subtle.importKey("raw",raw,"AES-GCM",false,["decrypt"])}
@@ -196,12 +198,16 @@ async function derive(code){
 }
 async function unlockWith(raw,isAdmin){
   const k=await imp(raw);let who=null;
-  if(!isAdmin){for(const p of DATA.persons){const r=await dec(k,b64d(p));if(r){who=JSON.parse(td.decode(r));break}}if(!who)return false;st.me=who;
+  if(!isAdmin){for(const p of DATA.persons){const r=await dec(k,b64d(p));if(r){who=JSON.parse(td.decode(r));break}}if(!who)return false;st.me=who;st.pk=k;st.pkRaw=raw;
     if(who.adm){const a=await dec(k,b64d(who.adm));if(a)await unlockWith(a,true)}}
-  else st.admin=true;
+  else{st.admin=true;st.ak=k}
   if(!st.tk)for(const w of DATA.team.wraps){const r=await dec(k,b64d(w));if(r){const tk=await imp(r);st.tk=tk;st.memo=JSON.parse(td.decode(await dec(tk,b64d(DATA.team.data))));NOMS=JSON.parse(td.decode(await dec(tk,b64d(DATA.team.noms))));break}}
   for(const e of DATA.events){if(e.id)continue;let r=st.tk?await dec(st.tk,b64d(e.h)):null;if(!r&&isAdmin)r=await dec(k,b64d(e.h));if(r)Object.assign(e,JSON.parse(td.decode(r)))}
   for(const e of DATA.events){if(!e.id||st.ev[e.id])continue;for(const w of e.wraps){const r=await dec(k,b64d(w));if(r){const ek=await imp(r);st.keys[e.id]=ek;st.ev[e.id]=JSON.parse(td.decode(await dec(ek,b64d(e.data))));break}}}
+  /* Régime et tailles : la personne lit seulement la sienne, Aurélie et Périnne lisent tout. */
+  for(const e of DATA.events){if(!e.id)continue;
+    if(!isAdmin&&e.pf&&!st.pf[e.id])for(const x of e.pf){const r=await dec(k,b64d(x));if(r){const o=JSON.parse(td.decode(r));if(o.ev===e.id){st.pf[e.id]=o;break}}}
+    if(isAdmin&&e.pa&&!st.pa[e.id]){const r=await dec(k,b64d(e.pa));if(r)st.pa[e.id]=JSON.parse(td.decode(r))}}
   return true;
 }
 function toast(m){const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
@@ -359,7 +365,7 @@ function daysHTML(e,pub){
 function eventHTML(id){
   const e=st.ev[id],pub=DATA.events.find(x=>x.id===id);
   const navs=[];const S=[];
-  const SM=sums(e);const TI=[];const TK={contacts:1,setlist:1,tenue:1,infos:1};
+  const SM=sums(e);const TI=[];const TK={contacts:1,setlist:1,tenue:1,infos:1,repas:1};
   const add=(k,lab,html,cls)=>{if(!html)return;navs.push([k,lab]);if(TK[k]){TI.push([k,lab,html]);if(TI.length===1)S.push("@@TILES@@");return}S.push(CATS[k]?cat(k,lab,html,SM[k]):sec(k,lab,html,cls))};
   const rems=st.rem.filter(r=>r.event===id);
   add("chg","⚠️ Changements",(e.changements||[]).map(c=>`<div>• ${telify(c)}</div>`).join(""),"chg");
@@ -377,6 +383,7 @@ function eventHTML(id){
   add("contacts","📞 Contacts sur place",``+(e.contacts||[]).map(c=>{const nums=(c.tel||"").split("/").map(x=>x.trim()).filter(x=>/\d{2}/.test(x)&&!/signature/i.test(x));return `<div class="contact"><div><b>${esc(c.nom)}</b><small>${esc(c.role)}</small></div><div class="tels">${nums.map(n=>telA(n)).join("")}</div></div>`}).join(""));
   add("setlist","🎵 Setlist",e.setlist.length?`${e.setlist_note?`<div class="note">${esc(e.setlist_note)}</div>`:""}<table><thead><tr><th>#</th><th>Titre</th><th>Qui</th><th></th></tr></thead><tbody>${e.setlist.map(s=>`<tr><td class="n">${s.n}</td><td class="t">${esc(s.titre)}</td><td>${s.qui?(()=>{const m=s.qui.match(/^([^(]*)(\(.*\))?/);const nm=m[1].trim();return `<span class="pill" style="${pillStyle(nm)}">${esc(nm)}</span>${m[2]?`<small class="pq">${esc(m[2].slice(1,-1))}</small>`:""}`})():""}</td><td>${s.doc?`<a class="lyr" href="${esc(s.doc)}" target="_blank" rel="noopener">Paroles ↗</a>`:""}</td></tr>`).join("")}</tbody></table>`:"");
   add("tenue","👕 Tenue",isConf(e)?`<div class="it"><span class="ic">🖤</span><div><b class="itb">Habillée</b><div>Tenue habillée. Noire ou couleur sombre.${e.tenue?" "+esc(e.tenue):""}</div></div></div>`:`<div class="it"><span class="ic">☀️</span><div><b class="itb">Journée</b><div>Tee-shirt + pull 10 DEC. Bas au choix (habillé).</div></div></div><div class="it"><span class="ic">🌙</span><div><b class="itb">Concert</b><div>Tenue de concert, raccord entre chansigneurs.${e.tenue?" "+esc(e.tenue):""}</div></div></div>`);
+  const rp=repasHTML(id,pub);if(rp){SM.repas=rp.sum;add("repas","🍽️ Repas & tailles",rp.html)}
   add("infos","📝 Infos & remarques",(e.remarques||[]).map(r=>`<div class="it"><span class="ic">•</span><div>${telify(r)}</div></div>`).join(""));
   if(st.admin&&!st.db){
     add("admin","✍️ Admin",`<div class="note">Pour ajouter une remarque ou corriger une info : écris dans la fiche FDR du Drive. L'appli se met à jour toute seule chaque heure.</div>${e.fiche?`<a class="btn light" href="${esc(e.fiche)}" target="_blank" rel="noopener">📄 Ouvrir la fiche FDR (Drive)</a>`:""}`);
@@ -432,6 +439,54 @@ async function openBillet(eid,bid,btn){
   }catch(err){toast("Impossible d'ouvrir le billet 😕")}
   btn.disabled=false;btn.textContent=old;
 }
+/* ===== Repas & tailles : saisie par chaque personne, signée avec sa clé, envoyée par le formulaire ===== */
+const FORM={url:"https://docs.google.com/forms/d/e/1FAIpQLSduVfDHGsYRQjoz9kRyZXjB6o-_KfHsIu15AlCrXnDhPfM7kA/formResponse",ev:"338904261",pt:"1150754807",rep:"1563863016",src:"591334309"};
+const TAILLES=["XS","S","M","L","XL","XXL","3XL"];
+const lsGet=k=>{try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}};
+const lsSet=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+function repasHTML(id,pub){
+  const inTeam=st.me&&(pub.qui||[]).includes(st.me.slug);
+  if(!inTeam&&!st.admin)return null;
+  let h="",sum="";
+  if(inTeam){
+    const mine=st.pf[id],sent=lsGet("fdr-prof-"+id+"-"+st.me.slug),cur=(sent&&(!mine||sent.date>mine.date))?sent:mine;
+    const val=(lab,v)=>`<div class="it"><span class="ic">•</span><div><b class="itb">${lab}</b><div>${esc(v||"—")}</div></div></div>`;
+    if(cur&&!st.editProf){
+      h+=`<div class="note">🔒 Visible seulement par toi, Aurélie et Périnne.</div>${val("Régime / allergies",cur.regime)}${val("Taille haut",cur.haut)}${val("Taille bas",cur.bas)}
+        ${cur===sent&&(!mine||sent.date>mine.date)?`<div class="note">✓ Envoyé. Ajouté à la fiche à la prochaine mise à jour.</div>`:""}
+        <button class="btn light" data-prof-edit="${id}">✏️ Modifier</button>`;
+      sum="✓ Rempli";
+    }else{
+      const p=cur||st.me.prof||{};const pre=!cur&&st.me.prof;
+      h+=`<div class="note">🔒 Visible seulement par toi, Aurélie et Périnne.${pre?"<br>Tes réponses d'avant. Vérifie.":""}</div>
+        <label class="itb" for="pr-reg">🍽️ Régime alimentaire / allergies</label><input class="pin" id="pr-reg" value="${esc(p.regime||"")}" placeholder="ex. végétarien, sans gluten, aucun">
+        <label class="itb" for="pr-haut">👕 Taille haut</label><select class="pin" id="pr-haut"><option value="">—</option>${TAILLES.map(t=>`<option${p.haut===t?" selected":""}>${t}</option>`).join("")}</select>
+        <label class="itb" for="pr-bas">👖 Taille bas</label><input class="pin" id="pr-bas" value="${esc(p.bas||"")}" placeholder="ex. 38 ou M">
+        <div class="pbtns">${pre?`<button class="btn" data-prof-send="${id}">✓ C'est toujours bon</button>`:`<button class="btn" data-prof-send="${id}">Envoyer</button>`}</div>`;
+      sum="À remplir";
+    }
+  }
+  if(st.admin){
+    const all=st.pa[id]||{};
+    h+=`${inTeam?"<hr>":""}<div class="note">Vue admin · toute l'équipe de la date.</div><table><thead><tr><th>Nom</th><th>Régime</th><th>Haut</th><th>Bas</th></tr></thead><tbody>${(pub.qui||[]).map(s=>{const v=all[s];return `<tr><td>${esc(NOMS[s]||s)}</td><td>${v?esc(v.regime||"—"):"<i>pas encore</i>"}</td><td>${v?esc(v.haut||"—"):""}</td><td>${v?esc(v.bas||"—"):""}</td></tr>`}).join("")}</tbody></table>`;
+    if(!inTeam){const n=(pub.qui||[]).filter(s=>all[s]).length;sum=n+"/"+(pub.qui||[]).length}
+  }
+  return {html:h,sum};
+}
+async function sendProf(id){
+  const v={regime:document.getElementById("pr-reg").value.trim(),haut:document.getElementById("pr-haut").value,bas:document.getElementById("pr-bas").value.trim()};
+  if(!v.regime&&!v.haut&&!v.bas){toast("Remplis au moins une case 🙂");return}
+  if(!v.regime)v.regime="Aucun";
+  const pt="profil:"+st.me.slug,texte=JSON.stringify(v);
+  const hk=await crypto.subtle.importKey("raw",st.pkRaw,{name:"HMAC",hash:"SHA-256"},false,["sign"]);
+  const sg=[...new Uint8Array(await crypto.subtle.sign("HMAC",hk,te.encode([id,pt,texte].join("|"))))].map(b=>b.toString(16).padStart(2,"0")).join("").slice(0,16);
+  const body=new URLSearchParams();body.append("entry."+FORM.ev,"FDR:"+id);body.append("entry."+FORM.pt,pt);body.append("entry."+FORM.rep,texte);body.append("entry."+FORM.src,"fdr:"+st.me.slug+":"+sg);
+  try{await fetch(FORM.url,{method:"POST",mode:"no-cors",body});lsSet("fdr-prof-"+id+"-"+st.me.slug,{...v,date:new Date().toISOString().slice(0,19)});st.editProf=false;toast("Envoyé ✓");openSheet(id,true)}
+  catch(e){toast("Pas pu envoyer 😕 Vérifie ta connexion.")}
+}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-prof-send],[data-prof-edit]");if(!b)return;
+  if(b.dataset.profSend){b.disabled=true;sendProf(b.dataset.profSend).finally(()=>{b.disabled=false})}
+  else{st.editProf=true;openSheet(b.dataset.profEdit,true)}});
 async function saveRem(id){
   const t=document.getElementById("remtxt").value.trim();if(!t||!st.db)return;
   try{await st.db.collection("remarques").add({event:id,texte:t,date:new Date().toISOString(),statut:"nouveau"});toast("Remarque enregistrée ✓");document.getElementById("remtxt").value=""}
