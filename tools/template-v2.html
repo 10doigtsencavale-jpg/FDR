@@ -179,15 +179,15 @@ textarea{width:100%;min-height:90px;border:2px solid var(--line);border-radius:1
 .legend span{border-left:8px solid var(--cc);background:var(--card);border-radius:8px;padding:3px 8px;font-size:13px;font-weight:700}
 
 /* ===== V2 · « Soleil » : liste → cartes des jours → vue du jour (une étape ouverte à la fois) ===== */
-:root{--bg:#fffbef;--card:#ffffff;--fg:#1d2033;--muted:#5d6280;--line:#f3e3b8;--chip:#fbf0d2;
+:root{--t-ink:#8a5300;--p-ink:#17734a;--d-fill:#7a45e6;--d-ink:#6a36d6;--todo:#2f3cff;--todo-fg:#ffd257;--bg:#fffbef;--card:#ffffff;--fg:#1d2033;--muted:#5d6280;--line:#f3e3b8;--chip:#fbf0d2;
   --hero:linear-gradient(150deg,#ffd93d 0%,#ffa94d 50%,#ff7eb6 100%);--hero-fg:#1d2033;--hero-acc:#2a1f5c;
   --ink:#2a1f5c;--ink-fg:#ffffff;--c-blue:#2f6bff;--c-pink:#e8338a;--c-vio:#7a45e6;--c-sun:#ff8a1f;--c-todo-fg:#2a1f5c;--soft:15%}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17141f;--card:#221f2d;--fg:#f2eff8;--muted:#b0aac4;--line:#3a3448;--chip:#2c2838;
   --hero:linear-gradient(150deg,#6b5310 0%,#6b3a1a 50%,#6a2448 100%);--hero-fg:#fff7e0;--hero-acc:#ffd93d;
-  --ink:#ffd93d;--ink-fg:#17141f;--c-blue:#6f98ff;--c-pink:#ff6fb0;--c-vio:#ab86ff;--c-sun:#ffa94d;--soft:24%;color-scheme:dark}}
+  --ink:#ffd93d;--ink-fg:#17141f;--t-ink:#f7b955;--p-ink:#6fe3a3;--d-ink:#b493ff;--todo:#4d58ff;--c-blue:#6f98ff;--c-pink:#ff6fb0;--c-vio:#ab86ff;--c-sun:#ffa94d;--soft:24%;color-scheme:dark}}
 :root[data-theme="dark"]{--bg:#17141f;--card:#221f2d;--fg:#f2eff8;--muted:#b0aac4;--line:#3a3448;--chip:#2c2838;
   --hero:linear-gradient(150deg,#6b5310 0%,#6b3a1a 50%,#6a2448 100%);--hero-fg:#fff7e0;--hero-acc:#ffd93d;
-  --ink:#ffd93d;--ink-fg:#17141f;--c-blue:#6f98ff;--c-pink:#ff6fb0;--c-vio:#ab86ff;--c-sun:#ffa94d;--soft:24%;color-scheme:dark}
+  --ink:#ffd93d;--ink-fg:#17141f;--t-ink:#f7b955;--p-ink:#6fe3a3;--d-ink:#b493ff;--todo:#4d58ff;--c-blue:#6f98ff;--c-pink:#ff6fb0;--c-vio:#ab86ff;--c-sun:#ffa94d;--soft:24%;color-scheme:dark}
 .r2{font-family:"Fredoka",system-ui,sans-serif}
 .top2{padding:20px max(16px,env(safe-area-inset-left,0px)) 6px;display:flex;flex-direction:column;gap:8px}
 .top2 .row2{display:flex;justify-content:space-between;align-items:center;gap:8px}
@@ -225,14 +225,14 @@ textarea{width:100%;min-height:90px;border:2px solid var(--line);border-radius:1
 .eh2 .back{align-self:flex-start}
 .eh2 .when{font:600 15px "Fredoka",sans-serif;text-transform:uppercase;letter-spacing:.06em;color:#2a1f5c}
 .eh2 h1{font:700 30px/1.05 "Fredoka",sans-serif;text-wrap:balance}
-.chg2{background:var(--c-sun);color:#1d2033;border-radius:18px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;font-weight:700}
+.chg2{background:var(--ink);color:var(--ink-fg);border-radius:18px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;font-weight:700}
 .dc2{border:0;border-radius:24px;padding:16px;display:flex;flex-direction:column;gap:8px;text-align:left;width:100%;background:color-mix(in srgb,var(--c) var(--soft),var(--card));color:var(--fg)}
 .dc2 .hd{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%}
 .dc2 h2{font:700 22px "Fredoka",sans-serif}
-.dc2 .tag2{border-radius:999px;padding:3px 10px;font:600 14px "Fredoka",sans-serif;background:var(--c);color:#fff;white-space:nowrap}
+.dc2 .tag2{border-radius:999px;padding:3px 10px;font:600 14px "Fredoka",sans-serif;background:var(--c);color:var(--cf);white-space:nowrap}
 .dc2 .mi{display:grid;grid-template-columns:12px 54px minmax(0,1fr);align-items:center;gap:8px}.dc2 .mi b{font-family:"Fredoka",sans-serif}
 .dot2{width:12px;height:12px;border-radius:50%;background:var(--c)}
-.dc2 .more{align-self:flex-end;font:600 16px "Fredoka",sans-serif;color:var(--c)}
+.dc2 .more{align-self:flex-end;font:600 16px "Fredoka",sans-serif;color:var(--ci)}
 .dc2.today{outline:3px solid var(--ink);outline-offset:2px}
 .steps2{display:flex;flex-direction:column;gap:8px}
 .st2{border-radius:20px;border:2px solid transparent;overflow:hidden;background:color-mix(in srgb,var(--c) var(--soft),var(--card))}
@@ -241,17 +241,17 @@ textarea{width:100%;min-height:90px;border:2px solid var(--line);border-radius:1
 .st2 .dot2{width:14px;height:14px}
 .st2.done{background:var(--chip);opacity:.72}
 .st2.open{background:var(--card);border-color:var(--c);opacity:1}
-.st2 .now{color:#fff;background:var(--c);border-radius:999px;padding:3px 10px;font:600 13px "Fredoka",sans-serif;white-space:nowrap}
+.st2 .now{color:var(--cf);background:var(--c);border-radius:999px;padding:3px 10px;font:600 13px "Fredoka",sans-serif;white-space:nowrap}
 .det2{padding:0 16px 16px;display:flex;flex-direction:column;gap:8px}
-.det2 .hh{font:700 48px/1 "Fredoka",sans-serif;color:var(--c)}
-.det2 .tg{align-self:flex-start;background:var(--c);color:#fff;border-radius:999px;padding:2px 10px;font:600 13.5px "Fredoka",sans-serif}
+.det2 .hh{font:700 48px/1 "Fredoka",sans-serif;color:var(--ci)}
+.det2 .tg{align-self:flex-start;background:var(--c);color:var(--cf);border-radius:999px;padding:2px 10px;font:600 13.5px "Fredoka",sans-serif}
 .det2 .jti{font:700 21px/1.2 "Fredoka",sans-serif}
 .det2 .js{font-size:17px}
 .det2 .dbtns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:4px}
-.det2 .jb{margin:0;min-height:48px;display:flex;align-items:center;justify-content:center;text-align:center;border-radius:14px;background:var(--c);color:#fff;font:600 16px "Fredoka",sans-serif;border:0}
-.det2 .jb+.jb{background:var(--card);color:var(--c);border:2px solid var(--c)}
-.det2 .jw{color:var(--c-sun);font-weight:700}
-.det2 .tlink,.det2 a.btn.light{color:var(--c)}
+.det2 .jb{margin:0;min-height:48px;display:flex;align-items:center;justify-content:center;text-align:center;border-radius:14px;background:var(--c);color:var(--cf);font:600 16px "Fredoka",sans-serif;border:0}
+.det2 .jb+.jb{background:var(--card);color:var(--ci);border:2px solid var(--c)}
+.det2 .jw{color:var(--ci);font-weight:700}
+.det2 .tlink,.det2 a.btn.light{color:var(--ci)}
 .next2{min-height:52px;border:0;border-radius:16px;background:var(--ink);color:var(--ink-fg);font:600 17px "Fredoka",sans-serif;width:100%}
 .prat2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .prat2 a{min-height:52px;border-radius:16px;background:var(--card);border:2px solid var(--line);color:var(--fg);text-decoration:none;display:flex;flex-direction:column;align-items:center;justify-content:center;font:600 16px "Fredoka",sans-serif;padding:6px;text-align:center}
@@ -259,8 +259,8 @@ textarea{width:100%;min-height:90px;border:2px solid var(--line);border-radius:1
 .tiles2{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .ti2{min-height:76px;border:0;border-radius:18px;padding:10px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center;background:color-mix(in srgb,var(--c) var(--soft),var(--card));color:var(--fg)}
 .ti2 .e{font-size:24px;line-height:1}.ti2 b{font:600 15px/1.15 "Fredoka",sans-serif}.ti2 small{font-size:12.5px;color:var(--muted);line-height:1.2}
-.ti2.todo{grid-column:1/-1;flex-direction:row;justify-content:space-between;min-height:54px;padding:0 16px;background:var(--c-sun);color:#2a1f5c}
-.ti2.todo b{font-size:17px}.ti2.todo small{color:#2a1f5c;font-weight:800;font-size:15px}
+.ti2.todo{grid-column:1/-1;flex-direction:row;justify-content:space-between;min-height:54px;padding:0 16px;background:var(--todo);color:#fff}
+.ti2.todo b{font-size:17px}.ti2.todo small{color:var(--todo-fg);font-weight:800;font-size:15px}
 .pan2{background:var(--card);border-radius:22px;border:2px solid var(--line);padding:14px;display:flex;flex-direction:column;gap:8px}
 .pan2 h2{font:700 22px "Fredoka",sans-serif}
 .pb2{align-self:flex-start;border:0;background:var(--chip);border-radius:999px;min-height:44px;padding:0 16px;font:600 16px "Fredoka",sans-serif;color:var(--fg)}
@@ -460,11 +460,12 @@ function pratHTML(e,M){
   const lm="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent((e.lieu||"")+" "+(e.adresse||e.ville||""));
   return `<div class="prat2"><a href="${esc(lm)}" target="_blank" rel="noopener">📍 Le lieu<small>${esc(e.lieu||"")}</small></a>${gm?`<a href="${esc(gm)}" target="_blank" rel="noopener">🚉 La gare<small>${esc(g.replace(/^Gare (SNCF )?(de |d')?/i,""))}</small></a>`:""}</div>`;
 }
-const COL={v:"var(--c-blue)",s:"var(--c-pink)",d:"var(--c-vio)"};
+const COL={v:"--c:#f7a42b;--ci:var(--t-ink);--cf:#1d2033",s:"--c:#5bdc93;--ci:var(--p-ink);--cf:#1d2033",d:"--c:var(--d-fill);--ci:var(--d-ink);--cf:#ffffff"};
+const NEU="--c:var(--muted);--ci:var(--fg);--cf:#ffffff";
 function todayOff(pub){const t=todayStr();if(t<pub.date&&Math.round((dd(pub.date)-dd(t))/864e5)>3)return null;return Math.round((dd(t)-dd(pub.date))/864e5)}
 function dayName(ev,o,short){const d=new Date(ev);d.setDate(d.getDate()+o);const s=d.toLocaleDateString("fr-FR",short?{weekday:"short",day:"numeric"}:{weekday:"long",day:"numeric",month:"short"}).replace(".","");return s.charAt(0).toUpperCase()+s.slice(1)}
 function dayTag(o,X){if(o===0)return "Jour J";return o<0?"Aller":(X.some(x=>x.g==="v")?"Retour":"Sur place")}
-function dayColor(o){return o===0?"var(--c-pink)":"var(--c-blue)"}
+function dayColor(o){return o===0?COL.s:COL.v}
 
 /* ===== V2 : fiche d'une date ===== */
 const EV={id:null};
@@ -489,13 +490,13 @@ function sections(id,e,pub){
       :`<div class="note">Pour ajouter une remarque ou corriger une info : écris dans la fiche FDR du Drive. L'appli se met à jour toute seule chaque heure.</div>${e.fiche?`<a class="btn light" href="${esc(e.fiche)}" target="_blank" rel="noopener">📄 Ouvrir la fiche FDR (Drive)</a>`:""}`,"Fiche Drive")}
   return O;
 }
-const TCOL={trajets:"var(--c-blue)",acces:"var(--c-vio)",contacts:"var(--c-pink)",setlist:"var(--c-pink)",tenue:"var(--c-vio)",infos:"var(--c-blue)",admin:"var(--c-vio)"};
+const TCOL={trajets:COL.v,setlist:COL.s,acces:NEU,contacts:NEU,tenue:NEU,infos:NEU,admin:NEU};
 function tilesHTML(O){
   const ks=["trajets","setlist","contacts","acces","tenue","infos","admin"].filter(k=>O[k]);
   let h=`<div class="tiles2">`;
   if(O.repas){const todo=/compl/i.test(O.repas.sum);h+=todo?`<button class="ti2 todo" data-panel="repas"><b>🍽️ Régime + tailles</b><small>À compléter</small></button>`:""}
-  h+=ks.map(k=>`<button class="ti2" data-panel="${k}" style="--c:${TCOL[k]}"><span class="e">${O[k].ic}</span><b>${esc(O[k].lab)}</b>${O[k].sum?`<small>${esc(O[k].sum)}</small>`:""}</button>`).join("");
-  if(O.repas&&!/compl/i.test(O.repas.sum))h+=`<button class="ti2" data-panel="repas" style="--c:var(--c-sun)"><span class="e">🍽️</span><b>Régime + tailles</b><small>${esc(O.repas.sum)}</small></button>`;
+  h+=ks.map(k=>`<button class="ti2" data-panel="${k}" style="${TCOL[k]}"><span class="e">${O[k].ic}</span><b>${esc(O[k].lab)}</b>${O[k].sum?`<small>${esc(O[k].sum)}</small>`:""}</button>`).join("");
+  if(O.repas&&!/compl/i.test(O.repas.sum))h+=`<button class="ti2" data-panel="repas" style="${NEU}"><span class="e">🍽️</span><b>Régime + tailles</b><small>${esc(O.repas.sum)}</small></button>`;
   return h+`</div>`;
 }
 function eventHTML(id){
@@ -511,8 +512,8 @@ function eventHTML(id){
   if(E.v==="days"){
     for(const o of days){const X=M.it.filter(x=>x.o===o);
       const pick=[X.find(x=>x.g==="v"),X.find(x=>x.star)||X.find(x=>x.g==="s"),X.find(x=>x.g==="d")].filter(Boolean);
-      h+=`<button class="dc2${T===o?" today":""}" data-day="${o}" style="--c:${dayColor(o)}"><span class="hd"><h2>${esc(dayName(M.ev,o))}</h2><span class="tag2">${T===o?"Aujourd'hui":esc(dayTag(o,X))}</span></span>
-        ${pick.map(x=>`<span class="mi"><span class="dot2" style="--c:${COL[x.g]}"></span><b>${esc(stepTxt(x).hh)}</b><span>${esc(stepTxt(x).ti)}</span></span>`).join("")}
+      h+=`<button class="dc2${T===o?" today":""}" data-day="${o}" style="${dayColor(o)}"><span class="hd"><h2>${esc(dayName(M.ev,o))}</h2><span class="tag2">${T===o?"Aujourd'hui":esc(dayTag(o,X))}</span></span>
+        ${pick.map(x=>`<span class="mi"><span class="dot2" style="${COL[x.g]}"></span><b>${esc(stepTxt(x).hh)}</b><span>${esc(stepTxt(x).ti)}</span></span>`).join("")}
         <span class="more">${X.length} étape${X.length>1?"s":""} →</span></button>`}
     if(!days.length)h+=`<p class="note">Le programme arrive bientôt.</p>`;
     h+=pratHTML(e,M)+tilesHTML(O);
@@ -526,7 +527,7 @@ function eventHTML(id){
   if(E.open[o]===undefined)E.open[o]=nowI>=0?Math.min(nowI,X.length-1):0;
   h+=`<div class="steps2">${X.map((x,i)=>{const open=E.open[o]===i,done=past||(nowI>=0&&i<nowI),now=nowI===i;
     const S_=stepTxt(x),hh=S_.hh;
-    return `<div class="st2${done&&!open?" done":""}${open?" open":""}" style="--c:${x.star?"var(--c-sun)":COL[x.g]}"><button data-step="${i}" aria-expanded="${open}"><span class="h">${esc(hh)}</span><span class="dot2"></span><span class="t">${esc(S_.ti)}</span><span>${now?`<span class="now">Maintenant</span>`:done?`<span aria-label="Fait">✓</span>`:""}</span></button>
+    return `<div class="st2${done&&!open?" done":""}${open?" open":""}" style="${COL[x.g]}"><button data-step="${i}" aria-expanded="${open}"><span class="h">${esc(hh)}</span><span class="dot2"></span><span class="t">${esc(S_.ti)}</span><span>${now?`<span class="now">Maintenant</span>`:done?`<span aria-label="Fait">✓</span>`:""}</span></button>
       ${open?`<div class="det2">${/\d/.test(hh)?`<div class="hh">${esc(hh)}</div>`:""}${x.tag?`<span class="tg">${esc(x.tag)}</span>`:""}<div class="jti">${S_.full}</div>${S_.sub.map(s=>`<div class="js">${s}</div>`).join("")}${x.x||""}</div>`:""}</div>`}).join("")}</div>`;
   if(!X.length)h+=`<p class="note">Le programme arrive bientôt.</p>`;
   const ni=days.indexOf(o);if(ni>=0&&ni<days.length-1){const n=days[ni+1];h+=`<button class="next2" data-day="${n}">${n-o===1?"Demain":esc(dayName(M.ev,n,true))} : ${esc(dayTag(n,M.it.filter(x=>x.o===n)))} →</button>`}
@@ -542,22 +543,30 @@ function openSheet(id,fromPop,keepScroll){
   const root=document.getElementById("sheet-root");
   const old=document.getElementById("sheet");const y=old?old.scrollTop:0;
   root.innerHTML=`<div class="sheet" id="sheet">${id==="__memo"?memoHTML():eventHTML(id)}</div>`;
-  if(!fromPop){try{history.pushState({sheet:id},"")}catch(e){}}
+  if(!fromPop)navPush(id);
   const sh=document.getElementById("sheet");if(keepScroll)sh.scrollTop=y;
   const re=(k)=>openSheet(id,true,k);
   sh.querySelector("[data-back]").onclick=closeSheet;
-  sh.querySelectorAll("[data-day]").forEach(b=>b.onclick=()=>{EV.v="day";EV.day=+b.dataset.day;re(false)});
+  sh.querySelectorAll("[data-day]").forEach(b=>b.onclick=()=>{EV.v="day";EV.day=+b.dataset.day;re(false);navPush(id)});
   sh.querySelectorAll("[data-step]").forEach(b=>b.onclick=()=>{const i=+b.dataset.step;EV.open[EV.day]=EV.open[EV.day]===i?-1:i;re(true)});
-  sh.querySelectorAll("[data-panel]").forEach(b=>b.onclick=()=>{EV.prev=EV.v;EV.v="panel";EV.panel=b.dataset.panel;re(false)});
-  sh.querySelectorAll("[data-pback]").forEach(b=>b.onclick=()=>{EV.v=EV.prev||"days";re(false)});
-  sh.querySelectorAll("[data-alldays]").forEach(b=>b.onclick=()=>{EV.v="days";re(false)});
+  sh.querySelectorAll("[data-panel]").forEach(b=>b.onclick=()=>{EV.prev=EV.v;EV.v="panel";EV.panel=b.dataset.panel;re(false);navPush(id)});
+  sh.querySelectorAll("[data-pback]").forEach(b=>b.onclick=()=>{if(history.state&&history.state.v==="panel"){history.back();return}EV.v=EV.prev||"days";re(false)});
+  sh.querySelectorAll("[data-alldays]").forEach(b=>b.onclick=()=>{EV.v="days";re(false);navPush(id)});
   sh.querySelectorAll("[data-billet]").forEach(b=>b.onclick=()=>openBillet(id,b.dataset.billet,b));
   const rg=document.getElementById("remgo");if(rg)rg.onclick=()=>saveRem(id);
 }
 
 function removeSheet(){curOpen=null;document.getElementById("sheet-root").innerHTML=""}
-function closeSheet(){if(history.state&&history.state.sheet){try{history.back();return}catch(e){}}removeSheet()}
-window.addEventListener("popstate",ev=>{if(window._pdfOv){window._pdfOv.remove();window._pdfOv=null;if(ev.state&&ev.state.sheet)return}const s=ev.state&&ev.state.sheet;if(s&&(st.ev[s]||s==="__memo"))openSheet(s,true);else removeSheet()});
+function navPush(id){try{const n=((history.state&&history.state.n)||0)+1;history.pushState({sheet:id,n,v:EV.v,day:EV.day,panel:EV.panel,prev:EV.prev},"")}catch(e){}}
+function closeSheet(){const n=history.state&&history.state.n;if(n){try{history.go(-n);return}catch(e){}}removeSheet()}
+window.addEventListener("popstate",ev=>{const S=ev.state||{};
+  if(window._pdfOv){window._pdfOv.remove();window._pdfOv=null;if(S.sheet)return}
+  if(S.guard){try{history.pushState({n:0},"")}catch(e){}removeSheet();return}
+  const s=S.sheet;
+  if(s&&(st.ev[s]||s==="__memo")){if(s!=="__memo"&&S.v)Object.assign(EV,{open:EV.id===s?EV.open:{},id:s,v:S.v,day:S.day,panel:S.panel,prev:S.prev});openSheet(s,true)}
+  else removeSheet()});
+/* Glisser vers la droite = écran d'avant. Sur la liste, l'appli ne se ferme pas. */
+try{if(!(history.state&&("n" in history.state))){history.replaceState({guard:1},"");history.pushState({n:0},"")}}catch(e){}
 
 const pdfCache={};let pdfjsP=null;
 function loadPdfjs(){if(!pdfjsP)pdfjsP=new Promise((ok,ko)=>{const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";s.onload=()=>{pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";ok(pdfjsLib)};s.onerror=()=>{pdfjsP=null;ko()};document.head.appendChild(s)});return pdfjsP}
