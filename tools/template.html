@@ -381,6 +381,8 @@ function dnum(x){const m=String(x||"").match(/\b(\d{1,2})(?:\/\d{1,2})?\b/);retu
 function kindOf(x){const s=String(x||"").toLowerCase();return /balance|concert|spectacle|chansign|show|atelier|conf[ée]rence|table ronde|line ?check|speech|r[ée]p[ée]t|filage|captation|tournage|interview|lecture|pl[ée]ni[èe]re|prestation|soundcheck/.test(s)?"p":"i"}
 /* ===== V2 : liste « ma prochaine date » ===== */
 const V2={filter:null};
+/* Titre trop long pour une ligne : coupé au tiret, une partie par ligne (« Du livre à la série » / « Table ronde »). */
+function titre2(s){s=String(s||"");const m=s.match(/^(.+?)\s+[–—-]\s+(.+)$/);return m&&s.length>22?esc(m[1])+"<br>"+esc(m[2]):esc(s)}
 const TY={salles:{mot:"Salle",c:"#ff7eb6",cf:"#1d2033"},festivals:{mot:"Festival",c:"#ffd93d",cf:"#1d2033"},interpretation:{mot:"ILS",c:"#4a4f63",cf:"#ffffff"},ateliers:{mot:"Atelier",c:"#c9917f",cf:"#1d2033"},tb:{mot:"TB",c:"#a58cf0",cf:"#1d2033"},prod:{mot:"Prod",c:"#6d8ce8",cf:"#ffffff"},projets:{mot:"Projet",c:"#7cc8d4",cf:"#1d2033"},x:{mot:"Date",c:"#e4dccb",cf:"#1d2033"}};
 const MS2=["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."];
 /* Une info = une seule fois : pas l'heure ni le titre déjà écrits en haut de l'étape, pas de phrase répétée. */
@@ -424,7 +426,7 @@ function render(){
       const nd=p?((dd(f.fin||f.date)-dd(f.date))/864e5)+1:1;
       h+=`<div class="lab2">Prochaine</div><button class="hero2 ev2" data-id="${f.id}">
         <span class="pills2"><span class="pill2">${esc(relTxt(f))}</span>${TY[f.c]?`<span class="pill2" style="background:${TY[f.c].c};color:${TY[f.c].cf}">${TY[f.c].mot}</span>`:""}</span>
-        <span class="t2">${p?esc(p.titre):"🔒 Événement"}</span>
+        <span class="t2">${p?titre2(p.titre):"🔒 Événement"}</span>
         ${p?`<span>📍 ${esc(p.lieu||"")}${p.ville?" · "+esc(p.ville):""}</span>`:""}
         <span class="w2">${esc(longDate(f))}</span>
         <span class="bot">${chipsTeam(f)}<b>${nd>1?nd+" jours · ":""}Ouvrir →</b></span></button>`;
@@ -435,7 +437,7 @@ function render(){
             h+=`<div class="mo3"><b>${MOIS[d.getMonth()]}${d.getFullYear()!==new Date().getFullYear()?" "+d.getFullYear():""}</b><span>${nb} date${nb>1?"s":""}</span></div>`;last=mk}
           const q=st.ev[e.id];const T=TY[e.c]||TY.x;
           h+=`<button class="row3 ev2 ${q?"":"locked"}" data-id="${e.id}"><span class="cal3" style="--c:${T.c};--cf:${T.cf}"><span class="top">${T.mot}</span><b>${d.getDate()}</b><small>${JOURS[d.getDay()]}.</small></span>
-            <span class="tt"><b>${q?esc(q.titre):"🔒 Événement"}</b><span>${q?esc(q.ville||"")+(q.type?" · "+esc(q.type):""):"🔒"}</span><span class="who2">${teamOf(e).map(s=>`<i class="${st.me&&st.me.slug===s?"me":""}">${esc(NOMS[s]||s)}</i>`).join("")}</span></span></button>`}
+            <span class="tt"><b>${q?titre2(q.titre):"🔒 Événement"}</b><span>${q?esc(q.ville||"")+(q.type?" · "+esc(q.type):""):"🔒"}</span><span class="who2">${teamOf(e).map(s=>`<i class="${st.me&&st.me.slug===s?"me":""}">${esc(NOMS[s]||s)}</i>`).join("")}</span></span></button>`}
         }
     }
     if(st.memo)h+=`<button class="memo2" id="memo">📋 Mémo 10 Doigts (tenue, attitude, interviews)</button>`;
