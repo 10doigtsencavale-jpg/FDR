@@ -381,6 +381,10 @@ def build():
     DATA = {"salt": K["salt"], "iter": ITER, "persons": persons, "team": {"wraps": tw, "data": enc(teamkey, json.dumps(S["memo"], ensure_ascii=False).encode()), "noms": enc(teamkey, json.dumps(noms, ensure_ascii=False).encode())}, "events": pub}
     html = open(os.path.join(TOOLS, "template.html")).read().replace("__DATA__", json.dumps(DATA, ensure_ascii=False)).replace("__PHOTOS__", "{}")
     open(os.path.join(REPO, "index.html"), "w").write(html)
+    # Version test (nouvelle mise en page « Soleil ») : mêmes données chiffrées, page à part test.html
+    v2 = os.path.join(TOOLS, "template-v2.html")
+    if os.path.exists(v2):
+        open(os.path.join(REPO, "test.html"), "w").write(open(v2).read().replace("__DATA__", json.dumps(DATA, ensure_ascii=False)).replace("__PHOTOS__", "{}"))
     for f in ("manifest.json", "icon-192.png", "icon-512.png", "icon-maskable-512.png"): shutil.copy(os.path.join(TOOLS, f), os.path.join(REPO, f))
     sw = open(os.path.join(TOOLS, "sw.js")).read().replace('const C="fdr-v1"', 'const C="fdr-' + secrets.token_hex(4) + '"')
     open(os.path.join(REPO, "sw.js"), "w").write(sw)
