@@ -220,6 +220,17 @@ textarea{width:100%;min-height:90px;border:2px solid var(--line);border-radius:1
 .mo2{padding:8px 14px 4px;font:600 13px "Fredoka",sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;background:var(--chip)}
 .tb2{background:var(--ink);color:var(--ink-fg);border-radius:6px;padding:1px 7px;font-size:13px;letter-spacing:.05em}
 .ok2{color:var(--c-pink);font-weight:700;font-size:14px}
+
+.pills2{display:flex;gap:6px;flex-wrap:wrap}
+.mo3{margin-top:6px;background:var(--hero);color:#2a1f5c;border-radius:22px;padding:14px 18px;display:flex;justify-content:space-between;align-items:baseline}
+.mo3 b{font:700 32px/1 "Fredoka",sans-serif;text-transform:capitalize}.mo3 span{font:600 15px "Fredoka",sans-serif}
+.row3{display:grid;grid-template-columns:76px minmax(0,1fr);gap:12px;align-items:center;background:var(--card);border-radius:20px;padding:10px;border:1px solid var(--line);text-align:left;width:100%;color:var(--fg)}
+.row3.locked{opacity:.6}
+.row3 .tt{min-width:0;display:flex;flex-direction:column;gap:2px}.row3 .tt b{font:600 19px/1.15 "Fredoka",sans-serif}.row3 .tt>span{color:var(--muted);font-size:15px}
+.cal3{border-radius:14px;overflow:hidden;background:var(--card);box-shadow:0 5px 14px -8px rgba(42,31,92,.5);border:1px solid var(--line);text-align:center;line-height:1;display:flex;flex-direction:column}
+.cal3 .top{background:var(--c);color:var(--cf);min-height:28px;display:flex;align-items:center;justify-content:center;padding:3px 2px;font:700 13px "Fredoka",sans-serif;letter-spacing:.04em;text-transform:uppercase}
+.cal3 b{display:block;font:700 34px "Fredoka",sans-serif;padding:6px 0 2px}
+.cal3 small{display:block;font-size:13px;color:var(--muted);padding-bottom:6px}
 .memo2{border:2px dashed var(--line);background:none;border-radius:16px;min-height:48px;font:600 16px "Fredoka",sans-serif;color:var(--muted)}
 /* fiche d'une date */
 .eh2{background:var(--hero);color:#1d2033;padding:12px max(16px,env(safe-area-inset-left,0px)) 18px;border-radius:0 0 26px 26px;display:flex;flex-direction:column;gap:4px}
@@ -352,6 +363,7 @@ function dnum(x){const m=String(x||"").match(/\b(\d{1,2})(?:\/\d{1,2})?\b/);retu
 function kindOf(x){const s=String(x||"").toLowerCase();return /balance|concert|spectacle|chansign|show|atelier|conf[ée]rence|table ronde|line ?check|speech|r[ée]p[ée]t|filage|captation|tournage|interview|lecture|pl[ée]ni[èe]re|prestation|soundcheck/.test(s)?"p":"i"}
 /* ===== V2 : liste « ma prochaine date » ===== */
 const V2={filter:null};
+const TY={salles:{mot:"Salle",c:"#ff7eb6",cf:"#1d2033"},festivals:{mot:"Festival",c:"#ffd93d",cf:"#1d2033"},interpretation:{mot:"ILS",c:"#4a4f63",cf:"#ffffff"},ateliers:{mot:"Atelier",c:"#c9917f",cf:"#1d2033"},tb:{mot:"TB",c:"#a58cf0",cf:"#1d2033"},prod:{mot:"Prod",c:"#6d8ce8",cf:"#ffffff"},projets:{mot:"Projet",c:"#7cc8d4",cf:"#1d2033"},x:{mot:"Date",c:"#e4dccb",cf:"#1d2033"}};
 const MS2=["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."];
 function stepTxt(x){let hh=x.h||(x.g==="d"?"Nuit":"");let ti=strip2(x.title),full=x.title,sub=x.sub;if(!x.h&&/^\d{1,2}h\d{0,2}$/.test(ti)){hh=ti;ti=sub[0]?strip2(sub[0]):(x.tag||"Trajet");full=sub[0]||esc(ti);sub=sub.slice(1)}return {hh,ti,full,sub}}
 const strip2=h=>String(h||"").replace(/<[^>]*>/g,"").replace(/&#39;/g,"'").replace(/&quot;/g,'"').replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&amp;/g,"&").trim();
@@ -381,20 +393,20 @@ function render(){
       const [f,...rest]=list;const p=st.ev[f.id];
       const nd=p?((dd(f.fin||f.date)-dd(f.date))/864e5)+1:1;
       h+=`<div class="lab2">Prochaine</div><button class="hero2 ev2" data-id="${f.id}">
-        <span class="pill2">${esc(relTxt(f))}</span>
+        <span class="pills2"><span class="pill2">${esc(relTxt(f))}</span>${TY[f.c]?`<span class="pill2" style="background:${TY[f.c].c};color:${TY[f.c].cf}">${TY[f.c].mot}</span>`:""}</span>
         <span class="t2">${p?esc(p.titre):"🔒 Événement"}</span>
         ${p?`<span>📍 ${esc(p.lieu||"")}${p.ville?" · "+esc(p.ville):""}</span>`:""}
         <span class="w2">${esc(longDate(f))}</span>
         <span class="bot">${chipsTeam(f)}<b>${nd>1?nd+" jours · ":""}Ouvrir →</b></span></button>`;
       if(rest.length){
-        h+=`<div class="lab2">Ensuite</div><div class="list2">`;let last="";
+        h+=`<div class="lab2">Ensuite</div>`;let last="";
         for(const e of rest){const d=dd(e.date);const mk=`${MOIS[d.getMonth()]} ${d.getFullYear()}`;
-          if(mk!==last){h+=`<div class="mo2">${mk}</div>`;last=mk}
-          const q=st.ev[e.id];
-          h+=`<button class="li2 ev2 ${q?"":"locked"}" data-id="${e.id}"><span class="dt"><small>${JOURS[d.getDay()]}.</small><b>${d.getDate()}</b><small>${MS2[d.getMonth()]}</small></span>
-            <span class="tt"><b>${q?esc(q.titre):"🔒 Événement"}</b><span>${q?esc(q.ville||"")+(q.type?" · "+esc(q.type):""):"🔒"}</span><span class="who2">${teamOf(e).map(s=>`<i class="${st.me&&st.me.slug===s?"me":""}">${esc(NOMS[s]||s)}</i>`).join("")}</span></span>
-            <span>${e.a?`<span class="tb2">TB</span>`:V2.filter==="all"&&isMine(e)?`<span class="ok2">✓ Toi</span>`:"›"}</span></button>`}
-        h+=`</div>`}
+          if(mk!==last){const nb=rest.filter(x=>{const y=dd(x.date);return y.getMonth()===d.getMonth()&&y.getFullYear()===d.getFullYear()}).length;
+            h+=`<div class="mo3"><b>${MOIS[d.getMonth()]}${d.getFullYear()!==new Date().getFullYear()?" "+d.getFullYear():""}</b><span>${nb} date${nb>1?"s":""}</span></div>`;last=mk}
+          const q=st.ev[e.id];const T=TY[e.c]||TY.x;
+          h+=`<button class="row3 ev2 ${q?"":"locked"}" data-id="${e.id}"><span class="cal3" style="--c:${T.c};--cf:${T.cf}"><span class="top">${T.mot}</span><b>${d.getDate()}</b><small>${JOURS[d.getDay()]}.</small></span>
+            <span class="tt"><b>${q?esc(q.titre):"🔒 Événement"}</b><span>${q?esc(q.ville||"")+(q.type?" · "+esc(q.type):""):"🔒"}</span><span class="who2">${teamOf(e).map(s=>`<i class="${st.me&&st.me.slug===s?"me":""}">${esc(NOMS[s]||s)}</i>`).join("")}</span></span></button>`}
+        }
     }
     if(st.memo)h+=`<button class="memo2" id="memo">📋 Mémo 10 Doigts (tenue, attitude, interviews)</button>`;
     h+=`</div>`;
