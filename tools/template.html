@@ -232,11 +232,11 @@ textarea{width:100%;min-height:90px;border:2px solid var(--line);border-radius:1
 .cal3 b{display:block;font:700 34px "Fredoka",sans-serif;padding:6px 0 2px}
 .cal3 small{display:block;font-size:13px;color:var(--muted);padding-bottom:6px}
 
-.cx3{display:grid;grid-template-columns:54px minmax(0,1fr) auto;column-gap:10px;row-gap:3px;align-items:center}
-.cx3 .h{font:700 18px "Fredoka",sans-serif}.cx3 .g{font:600 17px/1.2 "Fredoka",sans-serif;min-width:0}.cx3 .g2{grid-column:2/4}
-.cx3 .arrow{grid-column:1;text-align:center;color:var(--t-ink);font-weight:700}.cx3 .sm{grid-column:2/4;color:var(--muted);font-size:14px;line-height:1.35}
+.cx3{display:grid;grid-template-columns:62px minmax(0,1fr) auto;column-gap:12px;row-gap:6px;align-items:center}
+.cx3 .h{font:700 20px "Fredoka",sans-serif;color:var(--t-ink)}.cx3 .g{font:600 19px/1.2 "Fredoka",sans-serif;min-width:0}.cx3 .g2{grid-column:2/4}
+.cx3 .arrow{grid-column:1;text-align:center;color:var(--t-ink);font-weight:700}.cx3 .sm{grid-column:2/4;color:var(--muted);font-size:15px;line-height:1.35}
 .cx3 .bks{justify-self:end;display:flex;flex-direction:column;gap:4px;align-items:flex-end}
-.bk{display:inline-flex;align-items:center;min-height:36px;padding:0 12px;border-radius:12px;border:0;background:#8ee7dc;color:#1d2033;font:600 14.5px "Fredoka",sans-serif;cursor:pointer}
+.bk{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:14px;border:0;background:#8ee7dc;color:#1d2033;font:600 16px "Fredoka",sans-serif;cursor:pointer;white-space:nowrap}
 .bkm{font-size:12.5px;color:var(--muted);text-align:right;max-width:90px;line-height:1.2}
 .who3{font-style:normal;font-weight:700;color:var(--fg)}.nt3{color:var(--fg)}
 .chg3{grid-column:1/-1;margin:4px 0;background:color-mix(in srgb,#8ee7dc 22%,var(--card));border:1.5px solid #8ee7dc;color:var(--t-ink);border-radius:12px;padding:7px 10px;font:600 15px "Fredoka",sans-serif}
@@ -245,6 +245,8 @@ textarea{width:100%;min-height:90px;border:2px solid var(--line);border-radius:1
 .chg3 .ch{transition:transform .2s}.chg3[open] .ch{transform:rotate(180deg)}
 .chg3 .how{display:flex;flex-direction:column;gap:5px;margin-top:8px;font:400 16px "Atkinson Hyperlegible",sans-serif;color:var(--fg)}
 .chg3 .how .btn{margin-top:4px}
+.st2.jr{padding-top:0}.st2.jr .det2{padding-top:0}
+.st2>button.jclose{width:100%;min-height:32px;border:0;background:none;display:flex;justify-content:space-between;align-items:center;padding:6px 14px 0;color:var(--t-ink);font:700 16px "Fredoka",sans-serif;cursor:pointer}
 .memo2{border:2px dashed var(--line);background:none;border-radius:16px;min-height:48px;font:600 16px "Fredoka",sans-serif;color:var(--muted)}
 /* fiche d'une date */
 .eh2{background:var(--hero);color:#1d2033;padding:12px max(16px,env(safe-area-inset-left,0px)) 18px;border-radius:0 0 26px 26px;display:flex;flex-direction:column;gap:4px}
@@ -587,6 +589,7 @@ function eventHTML(id){
   h+=`<div class="steps2">${X.map((x,i)=>{const open=E.open[o]===i,done=past||(nowI>=0&&i<nowI),now=nowI===i;
     const S_=stepTxt(x),hh=S_.hh;
     if(x.legs){const L0=x.legs[0].l,LN=x.legs[x.legs.length-1].l,nc=x.conns.length;S_.ti=L0.de+" → "+LN.vers+(nc?" · "+nc+" changement"+(nc>1?"s":""):"")}
+    if(open&&x.legs)return `<div class="st2 open jr" style="${COL[x.g]}"><button class="jclose" data-step="${i}" aria-expanded="true" aria-label="Fermer le trajet"><span>${now?`<span class="now">Maintenant</span>`:""}</span><span class="ch">▴</span></button>${journeyHTML(x)}</div>`;
     return `<div class="st2${done&&!open?" done":""}${open?" open":""}" style="${COL[x.g]}"><button data-step="${i}" aria-expanded="${open}"><span class="h">${esc(hh)}</span><span class="dot2"></span><span class="t">${esc(S_.ti)}</span><span>${now?`<span class="now">Maintenant</span>`:done?`<span aria-label="Fait">✓</span>`:""}</span></button>
       ${open&&x.legs?journeyHTML(x):open?(()=>{const L=cleanSub(S_.sub,S_.ti,hh);const body=(x.tag?`<span class="tg">${esc(x.tag)}</span>`:"")+L.map(s=>`<div class="js">${s}</div>`).join("")+(x.x||"");return body?`<div class="det2">${body}</div>`:""})():""}</div>`}).join("")}</div>`;
   if(!X.length)h+=`<p class="note">Le programme arrive bientôt.</p>`;
@@ -605,10 +608,10 @@ function legIcon(l,info){const s=(info+" "+l.detail).toLowerCase();return /\bcar
 function mins(n){return n>=60?Math.floor(n/60)+"h"+String(n%60).padStart(2,"0"):n+" min"}
 function journeyHTML(x){
   const many=x.leg.qui.length>1&&!(st.me&&x.leg.qui.length===1);
-  let h=`<div class="det2"><div class="cx3">`;
+  let h=`<div class="det2"><div class="cx3">`;const cnt={};
   x.legs.forEach((g,i)=>{const l=g.l;
     const seen=new Set();const bil=g.b.filter(y=>!seen.has(y[1])&&seen.add(y[1]));
-    const bt=bil.length?bil.map(y=>`<button class="bk" data-billet="${y[1]}">🎫 ${bil.length>1&&g.qui.length>1?esc(y[0]):"Billet"}</button>`).join(""):(!l.sansbillet&&l.etat!=="ok"&&l.etat!=="orga"?`<span class="bkm">Billet pas encore là</span>`:"");
+    const bt=bil.length?bil.map(y=>{cnt[y[0]]=(cnt[y[0]]||0)+1;const nb=x.legs.length>1?" "+cnt[y[0]]:"";return `<button class="bk" data-billet="${y[1]}">🎫 ${g.qui.length>1?esc(y[0])+nb:"Billet"+nb}</button>`}).join(""):(!l.sansbillet&&l.etat!=="ok"&&l.etat!=="orga"?`<span class="bkm">Billet pas encore là</span>`:"");
     h+=`<span class="h">${esc(l.dep||"")}</span><span class="g${bt?"":" g2"}">${esc(l.de)}</span>${bt?`<span class="bks">${bt}</span>`:""}`;
     const infos=g.all.map(r=>({q:r.qui,...legInfo(r)}));const I0=infos[0];
     const filled=infos.filter(z=>z.info);const diff=new Set(filled.map(z=>z.info)).size>1;if(!I0.info&&filled.length)I0.info=filled[0].info;
