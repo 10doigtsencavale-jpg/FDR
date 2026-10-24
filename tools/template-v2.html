@@ -179,15 +179,15 @@ textarea{width:100%;min-height:90px;border:2px solid var(--line);border-radius:1
 .legend span{border-left:8px solid var(--cc);background:var(--card);border-radius:8px;padding:3px 8px;font-size:13px;font-weight:700}
 
 /* ===== V2 · « Soleil » : liste → cartes des jours → vue du jour (une étape ouverte à la fois) ===== */
-:root{--t-ink:#8a5300;--p-ink:#17734a;--d-fill:#7a45e6;--d-ink:#6a36d6;--todo:#2f3cff;--todo-fg:#ffd257;--bg:#fffbef;--card:#ffffff;--fg:#1d2033;--muted:#5d6280;--line:#f3e3b8;--chip:#fbf0d2;
+:root{--t-ink:#0d6e63;--p-ink:#b23a30;--d-fill:#7a45e6;--d-ink:#6a36d6;--todo:#2f3cff;--todo-fg:#ffd257;--bg:#fffbef;--card:#ffffff;--fg:#1d2033;--muted:#5d6280;--line:#f3e3b8;--chip:#fbf0d2;
   --hero:linear-gradient(150deg,#ffd93d 0%,#ffa94d 50%,#ff7eb6 100%);--hero-fg:#1d2033;--hero-acc:#2a1f5c;
   --ink:#2a1f5c;--ink-fg:#ffffff;--c-blue:#2f6bff;--c-pink:#e8338a;--c-vio:#7a45e6;--c-sun:#ff8a1f;--c-todo-fg:#2a1f5c;--soft:15%}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17141f;--card:#221f2d;--fg:#f2eff8;--muted:#b0aac4;--line:#3a3448;--chip:#2c2838;
   --hero:linear-gradient(150deg,#6b5310 0%,#6b3a1a 50%,#6a2448 100%);--hero-fg:#fff7e0;--hero-acc:#ffd93d;
-  --ink:#ffd93d;--ink-fg:#17141f;--t-ink:#f7b955;--p-ink:#6fe3a3;--d-ink:#b493ff;--todo:#4d58ff;--c-blue:#6f98ff;--c-pink:#ff6fb0;--c-vio:#ab86ff;--c-sun:#ffa94d;--soft:24%;color-scheme:dark}}
+  --ink:#ffd93d;--ink-fg:#17141f;--t-ink:#8ee7dc;--p-ink:#ff9f95;--d-ink:#b493ff;--todo:#4d58ff;--c-blue:#6f98ff;--c-pink:#ff6fb0;--c-vio:#ab86ff;--c-sun:#ffa94d;--soft:24%;color-scheme:dark}}
 :root[data-theme="dark"]{--bg:#17141f;--card:#221f2d;--fg:#f2eff8;--muted:#b0aac4;--line:#3a3448;--chip:#2c2838;
   --hero:linear-gradient(150deg,#6b5310 0%,#6b3a1a 50%,#6a2448 100%);--hero-fg:#fff7e0;--hero-acc:#ffd93d;
-  --ink:#ffd93d;--ink-fg:#17141f;--t-ink:#f7b955;--p-ink:#6fe3a3;--d-ink:#b493ff;--todo:#4d58ff;--c-blue:#6f98ff;--c-pink:#ff6fb0;--c-vio:#ab86ff;--c-sun:#ffa94d;--soft:24%;color-scheme:dark}
+  --ink:#ffd93d;--ink-fg:#17141f;--t-ink:#8ee7dc;--p-ink:#ff9f95;--d-ink:#b493ff;--todo:#4d58ff;--c-blue:#6f98ff;--c-pink:#ff6fb0;--c-vio:#ab86ff;--c-sun:#ffa94d;--soft:24%;color-scheme:dark}
 .r2{font-family:"Fredoka",system-ui,sans-serif}
 .top2{padding:20px max(16px,env(safe-area-inset-left,0px)) 6px;display:flex;flex-direction:column;gap:8px}
 .top2 .row2{display:flex;justify-content:space-between;align-items:center;gap:8px}
@@ -460,7 +460,7 @@ function pratHTML(e,M){
   const lm="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent((e.lieu||"")+" "+(e.adresse||e.ville||""));
   return `<div class="prat2"><a href="${esc(lm)}" target="_blank" rel="noopener">📍 Le lieu<small>${esc(e.lieu||"")}</small></a>${gm?`<a href="${esc(gm)}" target="_blank" rel="noopener">🚉 La gare<small>${esc(g.replace(/^Gare (SNCF )?(de |d')?/i,""))}</small></a>`:""}</div>`;
 }
-const COL={v:"--c:#f7a42b;--ci:var(--t-ink);--cf:#1d2033",s:"--c:#5bdc93;--ci:var(--p-ink);--cf:#1d2033",d:"--c:var(--d-fill);--ci:var(--d-ink);--cf:#ffffff"};
+const COL={v:"--c:#8ee7dc;--ci:var(--t-ink);--cf:#1d2033",s:"--c:#ff9f95;--ci:var(--p-ink);--cf:#1d2033",d:"--c:var(--d-fill);--ci:var(--d-ink);--cf:#ffffff"};
 const NEU="--c:var(--muted);--ci:var(--fg);--cf:#ffffff";
 function todayOff(pub){const t=todayStr();if(t<pub.date&&Math.round((dd(pub.date)-dd(t))/864e5)>3)return null;return Math.round((dd(t)-dd(pub.date))/864e5)}
 function dayName(ev,o,short){const d=new Date(ev);d.setDate(d.getDate()+o);const s=d.toLocaleDateString("fr-FR",short?{weekday:"short",day:"numeric"}:{weekday:"long",day:"numeric",month:"short"}).replace(".","");return s.charAt(0).toUpperCase()+s.slice(1)}
