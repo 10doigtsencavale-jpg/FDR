@@ -228,7 +228,7 @@ textarea{width:100%;min-height:90px;border:2px solid var(--line);border-radius:1
 .row3.locked{opacity:.6}
 .row3 .tt{min-width:0;display:flex;flex-direction:column;gap:2px}.row3 .tt b{font:600 19px/1.15 "Fredoka",sans-serif}.row3 .tt>span{color:var(--muted);font-size:15px}
 .cal3{border-radius:14px;overflow:hidden;background:var(--card);box-shadow:0 5px 14px -8px rgba(42,31,92,.5);border:1px solid var(--line);text-align:center;line-height:1;display:flex;flex-direction:column}
-.cal3 .top{background:var(--c);color:var(--cf);min-height:28px;display:flex;align-items:center;justify-content:center;padding:3px 2px;font:700 13px "Fredoka",sans-serif;letter-spacing:.04em;text-transform:uppercase}
+.cal3 .top{background:var(--c);color:var(--cf);min-height:28px;display:flex;align-items:center;justify-content:center;padding:3px 1px;font:700 11.5px "Fredoka",sans-serif;letter-spacing:0;text-transform:uppercase;white-space:nowrap;overflow:hidden}
 .cal3 b{display:block;font:700 34px "Fredoka",sans-serif;padding:6px 0 2px}
 .cal3 small{display:block;font-size:13px;color:var(--muted);padding-bottom:6px}
 
@@ -266,6 +266,11 @@ textarea{width:100%;min-height:90px;border:2px solid var(--line);border-radius:1
 .row3 b{font:600 17px "Fredoka",sans-serif;display:block}
 .row3.txt .e{font-size:26px;color:var(--fg)}
 .lieu3{min-height:52px;border-radius:16px;background:color-mix(in srgb,#ff9f95 22%,var(--card));color:var(--p-ink);text-decoration:none;display:flex;align-items:center;justify-content:center;font:600 16px "Fredoka",sans-serif}
+
+.bl3{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;border-top:1px solid var(--line);padding-top:8px;font:600 16px "Fredoka",sans-serif}
+.bl3 .rl{font:400 14.5px "Atkinson Hyperlegible",sans-serif;color:var(--muted)}
+.bl3 .bks{display:flex;flex-direction:column;gap:4px;align-items:flex-end}
+.old3{font-size:16px}.old3 .itb{font-family:"Fredoka",sans-serif}.old3 .btn{border-radius:14px;min-height:48px}
 .memo2{border:2px dashed var(--line);background:none;border-radius:16px;min-height:48px;font:600 16px "Fredoka",sans-serif;color:var(--muted)}
 /* fiche d'une date */
 .eh2{background:var(--hero);color:#1d2033;padding:12px max(16px,env(safe-area-inset-left,0px)) 18px;border-radius:0 0 26px 26px;display:flex;flex-direction:column;gap:4px}
@@ -575,6 +580,14 @@ function sections(id,e,pub){
     return `<div class="sl3"><span class="n">${esc(s.n)}</span><span class="ti">${esc(s.titre)}${nm?`<br><span class="pill" style="${pillStyle(nm)}">${esc(nm)}</span>${m[2]?` <small class="pq">${esc(m[2].slice(1,-1))}</small>`:""}`:""}</span>${s.doc?`<a href="${esc(s.doc)}" target="_blank" rel="noopener">Paroles ↗</a>`:"<span></span>"}</div>`}).join("");
   if(O.tenue)O.tenue.html3=isConf(e)?card("🖤","Habillée","Noire ou couleur sombre."+(e.tenue?" "+esc(e.tenue):"")):card("☀️","Journée","Tee-shirt + pull 10 DEC. Bas au choix (habillé).")+card("🌙","Concert","Tenue de concert, raccord entre chansigneurs."+(e.tenue?" "+esc(e.tenue):""));
   if(O.acces)O.acces.html3=((e.acces||{}).items||[]).map(x=>card(x.ic,x.b,telify(x.t))).join("")+`<a class="lieu3" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((e.lieu||"")+" "+(e.adresse||""))}" target="_blank" rel="noopener">📍 Le lieu dans Maps</a>`;
+  if(O.trajets){const byW={};for(const l of e.trajets||[])(byW[l.qui]=byW[l.qui]||[]).push(l);
+    O.trajets.html3=Object.entries(byW).map(([w,L])=>{const rows=L.map(l=>{const ids=(l.billets||[]).filter(b=>e.billets&&e.billets[b]);
+        const lab=`${esc(l.sens)}${l.date?" · "+esc(l.date):""}${l.de?`<br><span class="rl">${esc(l.de)} → ${esc(l.vers||"")}</span>`:l.detail?`<br><span class="rl">${esc(l.detail)}</span>`:""}`;
+        const bt=ids.length?ids.map((b,k)=>`<button class="bk" data-billet="${b}">🎫 Billet${ids.length>1?" "+(k+1):""}</button>`).join(""):(l.sansbillet?`<span class="rl">${esc(l.badge||"Pas de billet")}</span>`:`<span class="bkm">Billet pas encore là</span>`);
+        return `<div class="bl3"><span>${lab}</span><span class="bks">${bt}</span></div>`}).join("");
+      return `<div class="item3"><span class="nm">👤 ${esc(w)}</span>${rows}</div>`}).join("")}
+  if(O.repas)O.repas.html3=`<div class="item3 old3">${O.repas.html}</div>`;
+  if(O.admin)O.admin.html3=`<div class="item3 old3">${O.admin.html}</div>`;
   if(O.infos)O.infos.html3=(e.remarques||[]).map(r=>`<div class="row3 txt"><span class="e">•</span><span>${telify(r)}</span></div>`).join("");
   return O;
 }
@@ -618,8 +631,9 @@ function eventHTML(id){
   if(E.open[o]===undefined)E.open[o]=nowI>=0?Math.min(nowI,X.length-1):0;
   h+=`<div class="steps2">${X.map((x,i)=>{const open=E.open[o]===i,done=past||(nowI>=0&&i<nowI),now=nowI===i;
     const S_=stepTxt(x),hh=S_.hh;
-    if(x.legs){const L0=x.legs[0].l,LN=x.legs[x.legs.length-1].l,nc=x.conns.length;S_.ti=L0.de+" → "+LN.vers+(nc?" · "+nc+" changement"+(nc>1?"s":""):"")}
-    return `<div class="st2${done&&!open?" done":""}${open?" open":""}" style="${COL[x.g]}"><button data-step="${i}" aria-expanded="${open}"><span class="h">${esc(hh)}</span><span class="dot2"></span><span class="t">${esc(S_.ti)}</span><span>${now?`<span class="now">Maintenant</span>`:done?`<span aria-label="Fait">✓</span>`:""}</span></button>
+    if(x.legs){const L0=x.legs[0].l,LN=x.legs[x.legs.length-1].l,nc=x.conns.length,ch=nc?nc+" changement"+(nc>1?"s":""):"direct";
+      if(open){S_.ti=(legIcon(L0,"")==="🚌"?"Car":"Train")+" · "+ch;S_.hh=""}else S_.ti=L0.de+" → "+LN.vers+(nc?" · "+ch:"")}
+    return `<div class="st2${done&&!open?" done":""}${open?" open":""}" style="${COL[x.g]}"><button data-step="${i}" aria-expanded="${open}"><span class="h">${esc(S_.hh)}</span><span class="dot2"></span><span class="t">${esc(S_.ti)}</span><span>${now?`<span class="now">Maintenant</span>`:done?`<span aria-label="Fait">✓</span>`:""}</span></button>
       ${open&&x.legs?journeyHTML(x):open?(()=>{const L=cleanSub(S_.sub,S_.ti,hh);const body=(x.tag?`<span class="tg">${esc(x.tag)}</span>`:"")+L.map(s=>`<div class="js">${s}</div>`).join("")+(x.x||"");return body?`<div class="det2">${body}</div>`:""})():""}</div>`}).join("")}</div>`;
   if(!X.length)h+=`<p class="note">Le programme arrive bientôt.</p>`;
   const ni=days.indexOf(o);if(ni>=0&&ni<days.length-1){const n=days[ni+1];h+=`<button class="next2" data-day="${n}">${n-o===1?"Demain":esc(dayName(M.ev,n,true))} : ${esc(dayTag(n,M.it.filter(x=>x.o===n)))} →</button>`}
