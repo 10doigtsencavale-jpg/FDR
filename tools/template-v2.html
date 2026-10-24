@@ -216,6 +216,7 @@ textarea{width:100%;min-height:90px;border:2px solid var(--line);border-radius:1
 .li2 .dt{display:flex;flex-direction:column;align-items:center;line-height:1}.li2 .dt small{font-size:13px;color:var(--muted)}.li2 .dt b{font:700 24px "Fredoka",sans-serif}
 .li2 .tt{min-width:0}.li2 .tt b{display:block;font:600 18px/1.15 "Fredoka",sans-serif}.li2 .tt span{color:var(--muted);font-size:15px}
 .li2.locked{opacity:.6}
+.who2{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}.who2 i{font-style:normal;font-size:13.5px;font-weight:700;background:var(--chip);color:var(--fg);border-radius:999px;padding:1px 9px}.who2 i.me{background:var(--ink);color:var(--ink-fg)}
 .mo2{padding:8px 14px 4px;font:600 13px "Fredoka",sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;background:var(--chip)}
 .tb2{background:var(--ink);color:var(--ink-fg);border-radius:6px;padding:1px 7px;font-size:13px;letter-spacing:.05em}
 .ok2{color:var(--c-pink);font-weight:700;font-size:14px}
@@ -391,7 +392,7 @@ function render(){
           if(mk!==last){h+=`<div class="mo2">${mk}</div>`;last=mk}
           const q=st.ev[e.id];
           h+=`<button class="li2 ev2 ${q?"":"locked"}" data-id="${e.id}"><span class="dt"><small>${JOURS[d.getDay()]}.</small><b>${d.getDate()}</b><small>${MS2[d.getMonth()]}</small></span>
-            <span class="tt"><b>${q?esc(q.titre):"🔒 Événement"}</b><span>${q?esc(q.ville||"")+(q.type?" · "+esc(q.type):""):esc(teamOf(e).map(s=>NOMS[s]||s).join(", "))}</span></span>
+            <span class="tt"><b>${q?esc(q.titre):"🔒 Événement"}</b><span>${q?esc(q.ville||"")+(q.type?" · "+esc(q.type):""):"🔒"}</span><span class="who2">${teamOf(e).map(s=>`<i class="${st.me&&st.me.slug===s?"me":""}">${esc(NOMS[s]||s)}</i>`).join("")}</span></span>
             <span>${e.a?`<span class="tb2">TB</span>`:V2.filter==="all"&&isMine(e)?`<span class="ok2">✓ Toi</span>`:"›"}</span></button>`}
         h+=`</div>`}
     }
