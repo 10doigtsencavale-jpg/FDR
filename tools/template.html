@@ -446,7 +446,8 @@ const TAILLES=["XS","S","M","L","XL","XXL","3XL"];
 const lsGet=k=>{try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}};
 const lsSet=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
 function repasHTML(id,pub){
-  const inTeam=st.me&&(pub.qui||[]).includes(st.me.slug);
+  const team=(pub.qui&&pub.qui.length)?pub.qui:((st.ev[id]||{}).equipe||[]);
+  const inTeam=st.me&&team.includes(st.me.slug);
   if(!inTeam&&!st.admin)return null;
   let h="",sum="";
   if(inTeam){
@@ -469,8 +470,8 @@ function repasHTML(id,pub){
   }
   if(st.admin){
     const all=st.pa[id]||{};
-    h+=`${inTeam?"<hr>":""}<div class="note">Vue admin · toute l'équipe de la date.</div><table><thead><tr><th>Nom</th><th>Régime</th><th>Haut</th><th>Bas</th></tr></thead><tbody>${(pub.qui||[]).map(s=>{const v=all[s];return `<tr><td>${esc(NOMS[s]||s)}</td><td>${v?esc(v.regime||"—"):"<i>pas encore</i>"}</td><td>${v?esc(v.haut||"—"):""}</td><td>${v?esc(v.bas||"—"):""}</td></tr>`}).join("")}</tbody></table>`;
-    if(!inTeam){const n=(pub.qui||[]).filter(s=>all[s]).length;sum=n+"/"+(pub.qui||[]).length}
+    h+=`${inTeam?"<hr>":""}<div class="note">Vue admin · toute l'équipe de la date.</div><table><thead><tr><th>Nom</th><th>Régime</th><th>Haut</th><th>Bas</th></tr></thead><tbody>${team.map(s=>{const v=all[s];return `<tr><td>${esc(NOMS[s]||s)}</td><td>${v?esc(v.regime||"—"):"<i>pas encore</i>"}</td><td>${v?esc(v.haut||"—"):""}</td><td>${v?esc(v.bas||"—"):""}</td></tr>`}).join("")}</tbody></table>`;
+    if(!inTeam){const n=team.filter(s=>all[s]).length;sum=n+"/"+team.length}
   }
   return {html:h,sum};
 }

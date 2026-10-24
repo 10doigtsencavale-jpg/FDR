@@ -361,6 +361,7 @@ def build():
                 used.add(name + ".txt")
                 bil[b] = {"f": "b/" + name + ".txt", "t": titles.get(b, "Billet").replace(".pdf", "").split(" (")[0]}
         payload = {k: v for k, v in e.items() if k not in ("id", "date", "fin", "qui", "profils")}; payload["billets"] = bil
+        payload["equipe"] = e.get("qui", [])  # liste de l'équipe, aussi pour les dates privées (en-tête sans « qui »)
         prive = bool(e.get("prive"))
         wr = ([] if prive else [enc(pkeys[s], ek) for s in e["qui"] if s in pkeys]) + [enc(admin, ek)]; random.shuffle(wr)
         # Rien en clair : l'en-tête (id, date, qui, catégorie) est chiffré.
