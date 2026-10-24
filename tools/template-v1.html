@@ -1,6 +1,6 @@
 <!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>10DEC - FDR</title>
-<link rel="manifest" href="manifest.json?v=2"><meta name="theme-color" content="#ffd93d"><link rel="icon" href="icon-192.png?v=2"><link rel="apple-touch-icon" href="icon-192.png?v=2"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="10DEC - FDR"><meta name="robots" content="noindex,nofollow">
+<link rel="manifest" href="manifest.json?v=2"><meta name="theme-color" content="#fde2b0"><link rel="icon" href="icon-192.png?v=2"><link rel="apple-touch-icon" href="icon-192.png?v=2"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="10DEC - FDR"><meta name="robots" content="noindex,nofollow">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Fredoka:wght@500;600;700&display=swap">
 <style>
 :root{--bg:#fffaf5;--card:#fff;--fg:#1d2033;--muted:#646a85;--line:#f0e6df;--hero:linear-gradient(160deg,#fde2b0 0%,#f9c2b4 50%,#cdd1f3 100%);--hero-fg:#1d2033;--hero-acc:#b3311f;
@@ -177,110 +177,6 @@ textarea{width:100%;min-height:90px;border:2px solid var(--line);border-radius:1
 .catchip{align-self:flex-start;background:var(--cs);color:#1d2033;border-radius:999px;padding:1px 9px;font-size:12.5px;font-weight:700;letter-spacing:.02em}
 .legend{display:flex;flex-wrap:wrap;gap:6px;margin:14px 14px 0}
 .legend span{border-left:8px solid var(--cc);background:var(--card);border-radius:8px;padding:3px 8px;font-size:13px;font-weight:700}
-
-/* ===== V2 · « Soleil » : liste → cartes des jours → vue du jour (une étape ouverte à la fois) ===== */
-:root{--sun-s:#fff4c7;--sun-i:#7a5a00;--t-ink:#0d6e63;--p-ink:#b23a30;--d-fill:#d19ded;--d-ink:#8a3fae;--todo:#2f3cff;--todo-fg:#ffd257;--bg:#fffbef;--card:#ffffff;--fg:#1d2033;--muted:#5d6280;--line:#f3e3b8;--chip:#fbf0d2;
-  --hero:linear-gradient(150deg,#ffd93d 0%,#ffa94d 50%,#ff7eb6 100%);--hero-fg:#1d2033;--hero-acc:#2a1f5c;
-  --ink:#2a1f5c;--ink-fg:#ffffff;--c-blue:#2f6bff;--c-pink:#e8338a;--c-vio:#7a45e6;--c-sun:#ff8a1f;--c-todo-fg:#2a1f5c;--soft:15%}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17141f;--card:#221f2d;--fg:#f2eff8;--muted:#b0aac4;--line:#3a3448;--chip:#2c2838;
-  --hero:linear-gradient(150deg,#6b5310 0%,#6b3a1a 50%,#6a2448 100%);--hero-fg:#fff7e0;--hero-acc:#ffd93d;
-  --ink:#ffd93d;--ink-fg:#17141f;--sun-s:#3d3416;--sun-i:#ffd93d;--t-ink:#8ee7dc;--p-ink:#ff9f95;--d-ink:#d19ded;--todo:#4d58ff;--c-blue:#6f98ff;--c-pink:#ff6fb0;--c-vio:#ab86ff;--c-sun:#ffa94d;--soft:24%;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#17141f;--card:#221f2d;--fg:#f2eff8;--muted:#b0aac4;--line:#3a3448;--chip:#2c2838;
-  --hero:linear-gradient(150deg,#6b5310 0%,#6b3a1a 50%,#6a2448 100%);--hero-fg:#fff7e0;--hero-acc:#ffd93d;
-  --ink:#ffd93d;--ink-fg:#17141f;--sun-s:#3d3416;--sun-i:#ffd93d;--t-ink:#8ee7dc;--p-ink:#ff9f95;--d-ink:#d19ded;--todo:#4d58ff;--c-blue:#6f98ff;--c-pink:#ff6fb0;--c-vio:#ab86ff;--c-sun:#ffa94d;--soft:24%;color-scheme:dark}
-.r2{font-family:"Fredoka",system-ui,sans-serif}
-.top2{padding:20px max(16px,env(safe-area-inset-left,0px)) 6px;display:flex;flex-direction:column;gap:8px}
-.top2 .row2{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.top2 h1{font-size:30px}.top2 .hi{color:var(--muted)}
-.top2 .login{background:var(--hero);border-radius:22px;padding:16px;color:#1d2033}
-.top2 .login button{background:var(--ink);color:var(--ink-fg)}
-.top2 .small-btn{background:var(--chip);color:var(--fg)}
-.pad2{padding:0 max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:12px}
-.seg2{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--chip);border-radius:16px;padding:4px}
-.seg2 button{min-height:48px;border:0;border-radius:13px;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.15;font:600 16px "Fredoka",sans-serif}
-.seg2 button small{font:400 13.5px "Atkinson Hyperlegible",sans-serif}
-.seg2 button[aria-pressed="true"]{background:var(--ink);color:var(--ink-fg)}
-.seg2.many{display:flex;overflow-x:auto}.seg2.many button{flex:1 0 auto;padding:0 12px}
-.lab2{font:600 14px "Fredoka",sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:4px}
-.hero2{border:0;text-align:left;background:var(--hero);color:#1d2033;border-radius:26px;padding:20px;display:flex;flex-direction:column;gap:6px;width:100%}
-.hero2 .pill2{align-self:flex-start;background:#2a1f5c;color:#fff;border-radius:999px;padding:4px 12px;font:600 15px "Fredoka",sans-serif}
-.hero2 .t2{font:700 32px/1.05 "Fredoka",sans-serif;text-wrap:balance}
-.hero2 .w2{font:700 20px "Fredoka",sans-serif;color:#2a1f5c}
-.hero2 .bot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px}
-.hero2 .bot b{font:600 17px "Fredoka",sans-serif}
-.chips2{display:flex;flex-wrap:wrap;gap:6px}.chips2 span{background:rgba(255,255,255,.75);border-radius:999px;padding:3px 10px;font-size:14.5px;font-weight:700;color:#1d2033}
-.chips2 span.me{background:#2a1f5c;color:#fff}
-.list2{background:var(--card);border:1px solid var(--line);border-radius:20px;display:flex;flex-direction:column;overflow:hidden}
-.li2{display:grid;grid-template-columns:52px minmax(0,1fr) auto;align-items:center;gap:12px;padding:12px 14px;border:0;background:none;text-align:left;width:100%;color:var(--fg)}
-.li2+.li2,.mo2+.li2{border-top:1px solid var(--line)}
-.li2 .dt{display:flex;flex-direction:column;align-items:center;line-height:1}.li2 .dt small{font-size:13px;color:var(--muted)}.li2 .dt b{font:700 24px "Fredoka",sans-serif}
-.li2 .tt{min-width:0}.li2 .tt b{display:block;font:600 18px/1.15 "Fredoka",sans-serif}.li2 .tt span{color:var(--muted);font-size:15px}
-.li2.locked{opacity:.6}
-.who2{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}.who2 i{font-style:normal;font-size:13.5px;font-weight:700;background:var(--chip);color:var(--fg);border-radius:999px;padding:1px 9px}.who2 i.me{background:var(--ink);color:var(--ink-fg)}
-.mo2{padding:8px 14px 4px;font:600 13px "Fredoka",sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;background:var(--chip)}
-.tb2{background:var(--ink);color:var(--ink-fg);border-radius:6px;padding:1px 7px;font-size:13px;letter-spacing:.05em}
-.ok2{color:var(--c-pink);font-weight:700;font-size:14px}
-
-.pills2{display:flex;gap:6px;flex-wrap:wrap}
-.mo3{margin-top:6px;background:var(--hero);color:#2a1f5c;border-radius:22px;padding:14px 18px;display:flex;justify-content:space-between;align-items:baseline}
-.mo3 b{font:700 32px/1 "Fredoka",sans-serif;text-transform:capitalize}.mo3 span{font:600 15px "Fredoka",sans-serif}
-.row3{display:grid;grid-template-columns:76px minmax(0,1fr);gap:12px;align-items:center;background:var(--card);border-radius:20px;padding:10px;border:1px solid var(--line);text-align:left;width:100%;color:var(--fg)}
-.row3.locked{opacity:.6}
-.row3 .tt{min-width:0;display:flex;flex-direction:column;gap:2px}.row3 .tt b{font:600 19px/1.15 "Fredoka",sans-serif}.row3 .tt>span{color:var(--muted);font-size:15px}
-.cal3{border-radius:14px;overflow:hidden;background:var(--card);box-shadow:0 5px 14px -8px rgba(42,31,92,.5);border:1px solid var(--line);text-align:center;line-height:1;display:flex;flex-direction:column}
-.cal3 .top{background:var(--c);color:var(--cf);min-height:28px;display:flex;align-items:center;justify-content:center;padding:3px 2px;font:700 13px "Fredoka",sans-serif;letter-spacing:.04em;text-transform:uppercase}
-.cal3 b{display:block;font:700 34px "Fredoka",sans-serif;padding:6px 0 2px}
-.cal3 small{display:block;font-size:13px;color:var(--muted);padding-bottom:6px}
-.memo2{border:2px dashed var(--line);background:none;border-radius:16px;min-height:48px;font:600 16px "Fredoka",sans-serif;color:var(--muted)}
-/* fiche d'une date */
-.eh2{background:var(--hero);color:#1d2033;padding:12px max(16px,env(safe-area-inset-left,0px)) 18px;border-radius:0 0 26px 26px;display:flex;flex-direction:column;gap:4px}
-.eh2 .back{align-self:flex-start}
-.eh2 .when{font:600 15px "Fredoka",sans-serif;text-transform:uppercase;letter-spacing:.06em;color:#2a1f5c}
-.eh2 h1{font:700 30px/1.05 "Fredoka",sans-serif;text-wrap:balance}
-.chg2{background:var(--ink);color:var(--ink-fg);border-radius:18px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;font-weight:700}
-.dc2{border:0;border-radius:24px;padding:16px;display:flex;flex-direction:column;gap:8px;text-align:left;width:100%;background:color-mix(in srgb,var(--c) var(--soft),var(--card));color:var(--fg)}
-.dc2 .hd{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%}
-.dc2 h2{font:700 22px "Fredoka",sans-serif}
-.dc2 .tag2{border-radius:999px;padding:3px 10px;font:600 14px "Fredoka",sans-serif;background:var(--c);color:var(--cf);white-space:nowrap}
-.dc2 .mi{display:grid;grid-template-columns:12px 54px minmax(0,1fr);align-items:center;gap:8px}.dc2 .mi b{font-family:"Fredoka",sans-serif}
-.dot2{width:12px;height:12px;border-radius:50%;background:var(--c)}
-.dc2 .more{align-self:flex-end;font:600 16px "Fredoka",sans-serif;color:var(--ci)}
-.dc2.today{outline:3px solid var(--ink);outline-offset:2px}
-.steps2{display:flex;flex-direction:column;gap:8px}
-.st2{border-radius:20px;border:2px solid transparent;overflow:hidden;background:color-mix(in srgb,var(--c) var(--soft),var(--card))}
-.st2>button{width:100%;min-height:58px;border:0;background:none;display:grid;grid-template-columns:62px 14px minmax(0,1fr) auto;align-items:center;gap:10px;padding:8px 14px;text-align:left;color:var(--fg)}
-.st2 .h{font:700 19px "Fredoka",sans-serif}.st2 .t{font:600 17.5px/1.2 "Fredoka",sans-serif;min-width:0;overflow:hidden;text-overflow:ellipsis}
-.st2 .dot2{width:14px;height:14px}
-.st2.done{background:var(--chip);opacity:.72}
-.st2.open{background:var(--card);border-color:var(--c);opacity:1}
-.st2 .now{color:var(--cf);background:var(--c);border-radius:999px;padding:3px 10px;font:600 13px "Fredoka",sans-serif;white-space:nowrap}
-.det2{padding:0 16px 16px;display:flex;flex-direction:column;gap:8px}
-.st2.open>button .h,.st2.open>button .t{font-size:22px}.st2.open>button .h{color:var(--ci)}
-.det2 .hh{font:700 48px/1 "Fredoka",sans-serif;color:var(--ci)}
-.det2 .tg{align-self:flex-start;background:var(--c);color:var(--cf);border-radius:999px;padding:2px 10px;font:600 13.5px "Fredoka",sans-serif}
-.det2 .jti{font:700 21px/1.2 "Fredoka",sans-serif}
-.det2 .js{font-size:17px}
-.det2 .dbtns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:4px}
-.det2 .jb{margin:0;min-height:48px;display:flex;align-items:center;justify-content:center;text-align:center;border-radius:14px;background:var(--c);color:var(--cf);font:600 16px "Fredoka",sans-serif;border:0}
-.det2 .jb+.jb{background:var(--card);color:var(--ci);border:2px solid var(--c)}
-.det2 .jw{color:var(--ci);font-weight:700}
-.det2 .tlink,.det2 a.btn.light{color:var(--ci)}
-.next2{min-height:54px;border:2px solid #ffd93d;border-radius:16px;background:var(--sun-s);color:var(--sun-i);font:600 17px "Fredoka",sans-serif;width:100%}
-.prat2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.prat2 a{min-height:56px;border-radius:16px;background:var(--card);border:0;color:var(--fg);text-decoration:none;display:flex;flex-direction:column;align-items:center;justify-content:center;font:600 16px "Fredoka",sans-serif;padding:6px;text-align:center}
-.prat2 a.l{background:color-mix(in srgb,#ff9f95 22%,var(--card));color:var(--p-ink)}.prat2 a.g{background:color-mix(in srgb,#8ee7dc 25%,var(--card));color:var(--t-ink)}
-.prat2 a small{font:400 13.5px "Atkinson Hyperlegible",sans-serif;color:var(--muted)}
-.tiles2{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.ti2{min-height:84px;border:1px solid var(--line);border-radius:18px;padding:8px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-align:center;background:var(--card);color:var(--fg)}
-.ti2 .e{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;line-height:1;background:color-mix(in srgb,var(--c) 28%,var(--card))}.ti2 b{font:600 15px/1.15 "Fredoka",sans-serif}.ti2 small{font-size:12.5px;color:var(--muted);line-height:1.2}
-.ti2.todo{grid-column:1/-1;flex-direction:row;justify-content:space-between;min-height:54px;padding:0 16px;background:var(--card);border:2px dashed #d19ded;color:var(--fg)}
-.ti2.todo b{font-size:17px}.ti2.todo small{background:#d19ded;color:#1d2033;border-radius:999px;padding:3px 10px;font:600 14px "Fredoka",sans-serif}
-.pan2{background:var(--card);border-radius:22px;border:2px solid var(--line);padding:14px;display:flex;flex-direction:column;gap:8px}
-.pan2 h2{font:700 22px "Fredoka",sans-serif}
-.pb2{align-self:flex-start;border:0;background:var(--chip);border-radius:999px;min-height:44px;padding:0 16px;font:600 16px "Fredoka",sans-serif;color:var(--fg)}
-.sheet .wrap2{padding-bottom:40px;display:flex;flex-direction:column;gap:14px}
-
-.back{min-height:40px}
 </style></head><body>
 <div class="wrap" id="app"></div>
 <div id="sheet-root"></div>
@@ -323,6 +219,43 @@ const JOURS=["dim","lun","mar","mer","jeu","ven","sam"];
 function dd(s){const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)}
 function longDate(e){const a=dd(e.date),b=dd(e.fin);const f=x=>`${JOURS[x.getDay()]} ${x.getDate()} ${MOIS[x.getMonth()]}`;return e.fin&&e.fin!==e.date?`${f(a)} → ${f(b)}`:f(a)}
 
+function render(){
+  const app=document.getElementById("app");
+  let h=`<header class="top"><h1>🤟 10DEC - FDR</h1>`;
+  if(st.me||st.admin){
+    h+=`<div class="hi">Bonjour ${esc(st.me?st.me.nom:"l'équipe admin")} 👋</div>`;
+    if(st.me)h+=`<button class="small-btn" id="logout">Changer de code</button>`;
+  }else{
+    h+=`<div class="login"><label for="code">🔑 Ton code personnel</label><div class="row"><input id="code" type="password" autocomplete="current-password" enterkeyhint="go"><button id="go">OK</button></div><div class="err" id="err"></div><div class="note">Ton téléphone s'en souviendra.</div></div>`;
+  }
+  h+=`</header>`;
+  if(st.me||st.admin)h+=`<div class="legend">${Object.entries(CAT).filter(([k])=>k!=="tb"||st.admin).map(([k,v])=>`<span class="cat-${k}">${v}</span>`).join("")}</div>`;
+  if(st.memo)h+=`<button class="memo-btn" id="memo">📋 Mémo 10 Doigts (tenue, attitude, interviews)</button>`;
+  let last="";
+  const evs=DATA.events.filter(e=>e.id).sort((a,b)=>a.date.localeCompare(b.date));
+  if(!evs.length&&(st.me||st.admin))h+=`<p class="empty">Aucun événement pour l'instant.</p>`;
+  for(const e of evs){
+    if(e.a&&!st.admin)continue;
+    const d=dd(e.date);const mk=`${MOIS[d.getMonth()]} ${d.getFullYear()}`;
+    if(mk!==last){h+=`<h3 class="month">${mk}</h3>`;last=mk}
+    const p=st.ev[e.id];const mine=st.me&&e.qui.includes(st.me.slug);
+    h+=`<button class="ev ${p?"":"locked"} ${mine?"mine":""} cat-${e.c||"x"}" data-id="${e.id}"><span class="d"><span>${JOURS[d.getDay()]}</span><b>${d.getDate()}</b><span>${MOIS[d.getMonth()].slice(0,4)}</span></span><span class="m">${CAT[e.c]?`<span class="catchip">${CAT[e.c]}</span>`:""}`;
+    h+=p?`<span class="t">${esc(p.titre)}</span><span class="v">📍 ${esc(p.ville)} · ${esc(p.type)}</span>`:`<span class="t">🔒 Événement</span>`;
+    h+=`<span class="faces">${e.qui.map(face).join("")}</span>${mine?`<span class="tag">✓ Tu y es</span>`:""}</span></button>`;
+  }
+  app.innerHTML=h;
+  const go=document.getElementById("go");
+  if(go){const inp=document.getElementById("code");
+    const tryCode=async()=>{const c=inp.value.trim();if(!c)return;go.disabled=true;document.getElementById("err").textContent="Je vérifie…";
+      const raw=await derive(c);
+      if(await unlockWith(raw,false)){try{localStorage.setItem(LS,b64e(raw))}catch(e){}render()}
+      else{document.getElementById("err").textContent="Code inconnu. Vérifie les majuscules.";go.disabled=false}};
+    go.onclick=tryCode;inp.onkeydown=e=>{if(e.key==="Enter")tryCode()}}
+  const lo=document.getElementById("logout");if(lo)lo.onclick=()=>{try{localStorage.removeItem(LS)}catch(e){}location.reload()};
+  const mb=document.getElementById("memo");if(mb)mb.onclick=()=>openSheet("__memo");
+  app.querySelectorAll(".ev").forEach(b=>b.onclick=()=>{const id=b.dataset.id;if(!st.ev[id]){toast(st.me||st.admin?"🔒 Ce n'est pas ton événement.":"Entre ton code d'abord 🔑");return}openSheet(id)});
+}
+
 function legHTML(l,e){
   const lab=l.badge||{ok:"✓ Réservé",a_faire:"Résa à faire",a_verifier:"À vérifier",orga:"Pris en charge"}[l.etat]||"";
   const ic=l.sens==="Aller"?"➡️":l.sens==="Retour"?"⬅️":"🛏️";
@@ -363,84 +296,7 @@ function tmin(x){const s=String(x||"").toLowerCase();const m=s.match(/(\d{1,2})\
   if(/soir|d[iî]ner/.test(s))return 1140;if(/apr[eè]s|fin|retour/.test(s))return 1400;if(/nuit/.test(s))return 1430;return null}
 function dnum(x){const m=String(x||"").match(/\b(\d{1,2})(?:\/\d{1,2})?\b/);return m?+m[1]:null}
 function kindOf(x){const s=String(x||"").toLowerCase();return /balance|concert|spectacle|chansign|show|atelier|conf[ée]rence|table ronde|line ?check|speech|r[ée]p[ée]t|filage|captation|tournage|interview|lecture|pl[ée]ni[èe]re|prestation|soundcheck/.test(s)?"p":"i"}
-/* ===== V2 : liste « ma prochaine date » ===== */
-const V2={filter:null};
-const TY={salles:{mot:"Salle",c:"#ff7eb6",cf:"#1d2033"},festivals:{mot:"Festival",c:"#ffd93d",cf:"#1d2033"},interpretation:{mot:"ILS",c:"#4a4f63",cf:"#ffffff"},ateliers:{mot:"Atelier",c:"#c9917f",cf:"#1d2033"},tb:{mot:"TB",c:"#a58cf0",cf:"#1d2033"},prod:{mot:"Prod",c:"#6d8ce8",cf:"#ffffff"},projets:{mot:"Projet",c:"#7cc8d4",cf:"#1d2033"},x:{mot:"Date",c:"#e4dccb",cf:"#1d2033"}};
-const MS2=["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."];
-/* Une info = une seule fois : pas l'heure ni le titre déjà écrits en haut de l'étape, pas de phrase répétée. */
-function cleanSub(sub,ti,hh){const norm=s=>strip2(s).toLowerCase().replace(/[\s.!,;:]+$/,"").replace(/\s+/g," ").trim();
-  const T=norm(ti),H=norm(hh).replace(/h00$/,"h"),seen=new Set([T]);const out=[];
-  for(const s of sub){const parts=String(s).split(/(?<=\.)\s+(?=[A-ZÀ-ÖØ-Ý0-9])/);const keep=[];
-    for(let p of parts){let n=norm(p);if(!n||seen.has(n)||n===norm(hh)||T.startsWith(n)||n.startsWith(T+" ")&&n.length<T.length+3)continue;
-      const m=n.match(/^(?:de\s+)?(\d{1,2})\s*h\s*(\d{0,2})\s*(?:à|-|–)\s*(\d{1,2}\s*h\s*\d{0,2})(.*)$/);
-      if(m&&H&&(m[1]+"h"+(m[2]&&m[2]!=="00"?m[2]:""))===H){p="Jusqu'à "+m[3].replace(/\s/g,"")+(m[4]?m[4].replace(/^[\s.]+/," "):"");n=norm(p)}
-      const w=new Set(n.split(" ").filter(x=>x.length>3));
-      if([...seen].some(o=>{const v=new Set(o.split(" ").filter(x=>x.length>3));const c=[...w].filter(x=>v.has(x)).length;return c>=3&&c/new Set([...w,...v]).size>=0.6}))continue;
-      seen.add(n);keep.push(p)}
-    if(keep.length)out.push(keep.join(" "))}
-  return out}
-function stepTxt(x){let hh=x.h||(x.g==="d"?"Nuit":"");let ti=strip2(x.title),full=x.title,sub=x.sub;if(!x.h&&/^\d{1,2}h\d{0,2}$/.test(ti)){hh=ti;ti=sub[0]?strip2(sub[0]):(x.tag||"Trajet");full=sub[0]||esc(ti);sub=sub.slice(1)}return {hh,ti,full,sub}}
-const strip2=h=>String(h||"").replace(/<[^>]*>/g,"").replace(/&#39;/g,"'").replace(/&quot;/g,'"').replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&amp;/g,"&").trim();
-function todayStr(){const t=new Date();return t.getFullYear()+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0")}
-function relTxt(e){const t=todayStr();if(e.date<=t&&(e.fin||e.date)>=t)return e.date===t?"Aujourd'hui":"En cours";
-  const n=Math.round((dd(e.date)-dd(t))/864e5);return n===1?"Demain":"Dans "+n+" jours"}
-function isMine(e){if(!st.me)return false;if((e.qui||[]).includes(st.me.slug))return true;const p=st.ev[e.id];return !!(p&&(p.equipe||[]).includes(st.me.slug))}
-function teamOf(e){return (e.qui&&e.qui.length)?e.qui:((st.ev[e.id]||{}).equipe||[])}
-function chipsTeam(e){return `<span class="chips2">${teamOf(e).map(s=>`<span class="${st.me&&st.me.slug===s?"me":""}">${esc(NOMS[s]||s)}</span>`).join("")}</span>`}
-
-function render(){
-  const app=document.getElementById("app");
-  const logged=st.me||st.admin;
-  let h=`<header class="top2"><div class="row2"><h1>${logged?(st.admin?"Les dates":"Mes dates"):"🤟 10DEC - FDR"}</h1>${st.me?`<button class="small-btn" id="logout">Changer de code</button>`:""}</div>`;
-  if(logged)h+=`<div class="hi">Bonjour ${esc(st.me?st.me.nom:"l'équipe admin")} 👋</div>`;
-  else h+=`<div class="login"><label for="code">🔑 Ton code personnel</label><div class="row"><input id="code" type="password" autocomplete="current-password" enterkeyhint="go"><button id="go">OK</button></div><div class="err" id="err"></div><div class="note" style="color:#1d2033">Ton téléphone s'en souviendra.</div></div>`;
-  h+=`</header>`;
-  if(logged){
-    const all=DATA.events.filter(e=>e.id&&!(e.a&&!st.admin)).sort((a,b)=>a.date.localeCompare(b.date));
-    const mine=all.filter(isMine);
-    if(V2.filter==null)V2.filter=(st.admin||!mine.length)?"all":"me";
-    const list=V2.filter==="me"?mine:all;
-    h+=`<div class="pad2">`;
-    if(st.me)h+=`<div class="seg2" role="group" aria-label="Filtre">${st.admin?`<button data-filter="all" aria-pressed="${V2.filter==="all"}">Toutes les dates</button><button data-filter="me" aria-pressed="${V2.filter==="me"}">Mes dates</button>`:`<button data-filter="me" aria-pressed="${V2.filter==="me"}">Mes dates</button><button data-filter="all" aria-pressed="${V2.filter==="all"}">Toute l'équipe</button>`}</div>`;
-    if(!list.length)h+=`<p class="empty">Aucune date pour l'instant.</p>`;
-    else{
-      const [f,...rest]=list;const p=st.ev[f.id];
-      const nd=p?((dd(f.fin||f.date)-dd(f.date))/864e5)+1:1;
-      h+=`<div class="lab2">Prochaine</div><button class="hero2 ev2" data-id="${f.id}">
-        <span class="pills2"><span class="pill2">${esc(relTxt(f))}</span>${TY[f.c]?`<span class="pill2" style="background:${TY[f.c].c};color:${TY[f.c].cf}">${TY[f.c].mot}</span>`:""}</span>
-        <span class="t2">${p?esc(p.titre):"🔒 Événement"}</span>
-        ${p?`<span>📍 ${esc(p.lieu||"")}${p.ville?" · "+esc(p.ville):""}</span>`:""}
-        <span class="w2">${esc(longDate(f))}</span>
-        <span class="bot">${chipsTeam(f)}<b>${nd>1?nd+" jours · ":""}Ouvrir →</b></span></button>`;
-      if(rest.length){
-        h+=`<div class="lab2">Ensuite</div>`;let last="";
-        for(const e of rest){const d=dd(e.date);const mk=`${MOIS[d.getMonth()]} ${d.getFullYear()}`;
-          if(mk!==last){const nb=rest.filter(x=>{const y=dd(x.date);return y.getMonth()===d.getMonth()&&y.getFullYear()===d.getFullYear()}).length;
-            h+=`<div class="mo3"><b>${MOIS[d.getMonth()]}${d.getFullYear()!==new Date().getFullYear()?" "+d.getFullYear():""}</b><span>${nb} date${nb>1?"s":""}</span></div>`;last=mk}
-          const q=st.ev[e.id];const T=TY[e.c]||TY.x;
-          h+=`<button class="row3 ev2 ${q?"":"locked"}" data-id="${e.id}"><span class="cal3" style="--c:${T.c};--cf:${T.cf}"><span class="top">${T.mot}</span><b>${d.getDate()}</b><small>${JOURS[d.getDay()]}.</small></span>
-            <span class="tt"><b>${q?esc(q.titre):"🔒 Événement"}</b><span>${q?esc(q.ville||"")+(q.type?" · "+esc(q.type):""):"🔒"}</span><span class="who2">${teamOf(e).map(s=>`<i class="${st.me&&st.me.slug===s?"me":""}">${esc(NOMS[s]||s)}</i>`).join("")}</span></span></button>`}
-        }
-    }
-    if(st.memo)h+=`<button class="memo2" id="memo">📋 Mémo 10 Doigts (tenue, attitude, interviews)</button>`;
-    h+=`</div>`;
-  }
-  app.innerHTML=h;
-  const go=document.getElementById("go");
-  if(go){const inp=document.getElementById("code");
-    const tryCode=async()=>{const c=inp.value.trim();if(!c)return;go.disabled=true;document.getElementById("err").textContent="Je vérifie…";
-      const raw=await derive(c);
-      if(await unlockWith(raw,false)){try{localStorage.setItem(LS,b64e(raw))}catch(e){}render()}
-      else{document.getElementById("err").textContent="Code inconnu. Vérifie les majuscules.";go.disabled=false}};
-    go.onclick=tryCode;inp.onkeydown=e=>{if(e.key==="Enter")tryCode()}}
-  const lo=document.getElementById("logout");if(lo)lo.onclick=()=>{try{localStorage.removeItem(LS)}catch(e){}location.reload()};
-  const mb=document.getElementById("memo");if(mb)mb.onclick=()=>openSheet("__memo");
-  app.querySelectorAll("[data-filter]").forEach(b=>b.onclick=()=>{V2.filter=b.dataset.filter;render()});
-  app.querySelectorAll(".ev2").forEach(b=>b.onclick=()=>{const id=b.dataset.id;if(!st.ev[id]){toast("🔒 Ce n'est pas ton événement.");return}openSheet(id)});
-}
-
-/* ===== V2 : les étapes de chaque jour (même lecture des données que la version d'avant) ===== */
-function dayModel(e,pub){
+function daysHTML(e,pub){
   const ev=new Date(pub.date+"T12:00:00"),evD=ev.getDate();
   const off=d=>{if(d==null)return 0;let o=d-evD;if(o<-20)o+=31;if(o>20)o-=31;return o};
   const it=[];const hb=e.hebergement||{};
@@ -455,7 +311,7 @@ function dayModel(e,pub){
     if(!g.ret&&o===0){const a=tmin(l.arr);if(a!=null)arrAller=Math.max(arrAller??0,a)}
     const txt=(l.de+" "+l.vers+" "+(l.detail||"")).toLowerCase();const mode=/vol |avion|a[ée]roport|orly|cdg|roissy/.test(txt)?"Avion":l.sansbillet?"Trajet":"Train";
     const sub=[];if(l.arr)sub.push(`<b>Arrivée ${esc(l.arr)}</b>`);if(l.detail)sub.push(telify(l.detail));if(team>1&&!mine.length)sub.push(`<span class="dmut">${esc(g.qui.join(" et "))}</span>`);
-    const seen=new Set();const bl=g.b.filter(x=>!seen.has(x[1])&&seen.add(x[1])).map((x,i,A)=>{const multi=new Set(A.map(y=>y[0])).size>1&&!mine.length;const same=A.filter(y=>y[0]===x[0]);const k=same.indexOf(x)+1;return `<button class="jb dark" data-billet="${x[1]}">${"Billet"+(multi?" "+esc(x[0]):"")+(same.length>1?" "+k:"")}</button>`}).join("")||(!l.sansbillet&&l.etat!=="ok"&&l.etat!=="orga"?`<div class="jw">Billet pas encore dans l'appli</div>`:"");
+    const seen=new Set();const bl=g.b.filter(x=>!seen.has(x[1])&&seen.add(x[1])).map(x=>`<button class="jb dark" data-billet="${x[1]}">${g.b.length>1&&!mine.length?"Billet "+esc(x[0]):"Billet"}</button>`).join("")||(!l.sansbillet&&l.etat!=="ok"&&l.etat!=="orga"?`<div class="jw">Billet pas encore dans l'appli</div>`:"");
     it.push({o,m,g:"v",ret:g.ret,h:l.dep||"",title:mode+" "+(l.de?esc(l.de)+" → "+esc(l.vers||"?"):esc(l.sens)),sub,x:bl?`<div class="dbtns">${bl}</div>`:""})}
   for(const r of (Array.isArray(e.run)?e.run:[])){const pubT=isPub(r);const lab=String(r.b||"");const o=off(dnum(lab)??evD);
     let m=tmin(lab.replace(/^\S+\s+\d{1,2}\/\d{1,2}\s*·?\s*/,""));const s=lab.toLowerCase();
@@ -475,129 +331,90 @@ function dayModel(e,pub){
     const sub=[n.adresse?esc(n.adresse):`<span class="jw">Adresse à ajouter</span>`].concat(rest);
     it.push({o,m:3000,g:"d",h:"",title:esc(n.nom||"Logement"),sub,x:(n.maps||hb.gare_maps)?`<div class="dbtns">${hb.gare_maps?`<a class="jb" href="${esc(hb.gare_maps)}" target="_blank" rel="noopener">🚉 La gare</a>`:""}${n.maps?`<a class="jb" href="${esc(n.maps)}" target="_blank" rel="noopener">🏨 Le logement</a>`:""}</div>`:"",box:true});
     if(di)it.push({o:off(dnum(di.t)??(evD+o+1)),m:-1,g:"v",h:"Matin",title:"Quitter "+esc(n.nom||"le logement"),sub:[telify(di.t)],x:""})});
-
+  if(!it.length)return "";
   it.sort((a,b)=>a.o-b.o||a.m-b.m);
-  /* Run qui part à l'heure d'arrivée d'un train : on le range dans le train (pas deux étapes pour la même chose). */
-  for(const r of it.filter(x=>x.tag&&x.g==="v")){const hh=stepTxt(r).hh;if(!/\d/.test(hh))continue;
-    const tr=it.find(x=>x!==r&&x.o===r.o&&x.g==="v"&&!x.tag&&x.sub.some(s=>strip2(s)==="Arrivée "+hh));
-    if(tr){const S_=stepTxt(r);tr.sub.push(...(S_.full!==esc(S_.ti)?[S_.full]:[]),...S_.sub);r.gone=1}}
-  for(let i=it.length-1;i>=0;i--)if(it[i].gone)it.splice(i,1);
-  return {it,ev,off,evD,tday,team,mine,hb};
-}
-function pratHTML(e,M){
-  const hb=M.hb,off=M.off,evD=M.evD;
+  const days=[...new Set(it.map(x=>x.o))];
+  const dlab=o=>{const d=new Date(ev);d.setDate(d.getDate()+o);const s=d.toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"short"});return s.charAt(0).toUpperCase()+s.slice(1)};
+  const short=o=>{const d=new Date(ev);d.setDate(d.getDate()+o);return d.toLocaleDateString("fr-FR",{weekday:"short",day:"numeric"}).replace(".","")};
+  let out="";
+  if(days.length>1)out+=`<div class="dchips">${days.map(o=>`<button class="${o===0?"j":""}" data-go="day${o+50}">${esc(short(o))}${o===0?" · J":""}</button>`).join("")}</div>`;
+  const txt=h=>String(h||"").replace(/<[^>]*>/g,"").replace(/&#39;/g,"'").replace(/&quot;/g,'"').replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&amp;/g,"&").trim();
+  for(const o of days){const X=it.filter(x=>x.o===o);
+    const who=tday[o]&&team>1&&!mine.length&&tday[o].size<team?[...tday[o]].join(" et ")+(tday[o].size===1?" seul(e)":""):"";
+    out+=`<div class="dcard${o===0?" j":""}" id="day${o+50}"><div class="dhead"><h3>${esc(dlab(o))}${o===0?" · Jour J":""}</h3>${who?`<small>${esc(who)}</small>`:""}</div><div class="dbody">`;
+    const grp=[];let seenS=false;
+    for(const x of X){const last=grp[grp.length-1];if(!last||last.g!==x.g)grp.push({g:x.g,X:[],after:seenS});grp[grp.length-1].X.push(x);if(x.g==="s")seenS=true}
+    for(const G of grp){let lab,cls,hint;
+      if(G.g==="v"){const ret=G.after||G.X.some(x=>x.ret);lab="Je voyage · "+(ret?"Retour":"Aller");cls="gv";
+        const f=G.X.find(x=>x.h&&x.h!=="Matin")||G.X[0];hint=(f.h&&f.h!=="Matin"?f.h+" · ":"")+txt(f.title)+(G.X.length>1?" +"+(G.X.length-1):"")}
+      else if(G.g==="s"){lab=o===0?"Sur place"+(e.lieu?" · "+e.lieu:""):"Infos";cls="gs";
+        const st_=G.X.find(x=>x.star);const hs=G.X.map(x=>x.h).filter(h=>/\d/.test(h));hint=st_?txt(st_.title)+(st_.h?" · "+st_.h:""):(hs.length?hs[0]+(hs.length>1?" → "+hs[hs.length-1]:""):txt(G.X[0].title))}
+      else{lab="Je dors";cls="gd";hint=G.X.map(x=>txt(x.title)).join(" · ")}
+      out+=`<details class="dgrp ${cls}"><summary><span class="dl">${esc(lab)}</span><span class="dhint">${esc(hint)}</span><span class="ch">›</span></summary><div class="dgb">`;
+      for(const x of G.X)out+=x.box?`<div class="dnuit"><div class="jti">${x.title}</div>${x.sub.map(s=>`<div class="js">${s}</div>`).join("")}${x.x}</div>`
+        :`<div class="drow${x.star?" star":""}"><div class="dh">${esc(x.h)}</div><div>${x.tag?`<div class="dtag">${esc(x.tag)}</div>`:""}<div class="jti">${x.title}</div>${x.sub.map(s=>`<div class="js">${s}</div>`).join("")}${x.x}</div></div>`;
+      out+=`</div></details>`}
+    out+=`</div></div>`}
   const AJ=(e.trajets||[]).filter(t=>t.sens==="Aller"&&t.vers);const aj=AJ.filter(t=>off(dnum(t.date)??evD)===0).pop()||AJ.pop();
   const g=hb.gare||(aj?"Gare SNCF de "+aj.vers:"");
   const gm=hb.gare_maps||(g?"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(g):"");
   const lm="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent((e.lieu||"")+" "+(e.adresse||e.ville||""));
-  return `<div class="prat2"><a class="l" href="${esc(lm)}" target="_blank" rel="noopener">📍 Le lieu<small>${esc(e.lieu||"")}</small></a>${gm?`<a class="g" href="${esc(gm)}" target="_blank" rel="noopener">🚉 La gare<small>${esc(g.replace(/^Gare (SNCF )?(de |d')?/i,""))}</small></a>`:""}</div>`;
-}
-const COL={v:"--c:#8ee7dc;--ci:var(--t-ink);--cf:#1d2033",s:"--c:#ff9f95;--ci:var(--p-ink);--cf:#1d2033",d:"--c:var(--d-fill);--ci:var(--d-ink);--cf:#1d2033"};
-const NEU="--c:#e9d3a6;--ci:var(--fg);--cf:#1d2033";
-function todayOff(pub){const t=todayStr();if(t<pub.date&&Math.round((dd(pub.date)-dd(t))/864e5)>3)return null;return Math.round((dd(t)-dd(pub.date))/864e5)}
-function dayName(ev,o,short){const d=new Date(ev);d.setDate(d.getDate()+o);const s=d.toLocaleDateString("fr-FR",short?{weekday:"short",day:"numeric"}:{weekday:"long",day:"numeric",month:"short"}).replace(".","");return s.charAt(0).toUpperCase()+s.slice(1)}
-function dayTag(o,X){if(o===0)return "Jour J";return o<0?"Aller":(X.some(x=>x.g==="v")?"Retour":"Sur place")}
-function dayColor(o){return o===0?COL.s:COL.v}
+  const btn=(href,lab)=>`<a class="jb" href="${esc(href)}" target="_blank" rel="noopener">${lab}</a>`;
+  out+=`<div class="jprat">${btn(lm,`Le lieu<small>${esc(e.lieu||"")}</small>`)}${gm?btn(gm,`La gare<small>${esc(g.replace(/^Gare (SNCF )?(de |d')?/i,""))}</small>`):""}</div>`;
+  return out}
 
-/* ===== V2 : fiche d'une date ===== */
-const EV={id:null};
-function evState(id){if(EV.id!==id)Object.assign(EV,{id,v:null,day:null,open:{},panel:null,prev:null});return EV}
-function sections(id,e,pub){
-  const O={};const SM=sums(e);
-  const put=(k,ic,lab,html,sum)=>{if(html)O[k]={ic,lab,html,sum:sum??SM[k]??""}};
-  let tr="";const byWho={};for(const l of e.trajets||[]){(byWho[l.qui]=byWho[l.qui]||[]).push(l)}
-  const legOrder=l=>l.sens==="Aller"?0:l.sens==="Retour"?2:1;let missing=0;
-  for(const w in byWho){const L=byWho[w].sort((a,b)=>legOrder(a)-legOrder(b));const miss=L.some(l=>!(l.billets||[]).length&&!l.sansbillet);if(miss)missing++;const worst=L.some(l=>l.etat==="a_faire")?"a_faire":(miss||L.some(l=>l.etat==="a_verifier"))?"a_verifier":"ok";
-    tr+=`<details class="pers ${worst}" style="${persStyle(w)}"><summary><span class="pn">👤 ${esc(w)}</span><span class="badge b-${worst}">${worst==="ok"?"✓ OK":worst==="a_faire"?"Résa à faire":miss?"🎫 Billet manquant":"À vérifier"}</span></summary><div class="pbody">${L.map(l=>legHTML(l,e)).join("")}</div></details>`}
-  put("trajets","🎫","Trajets & billets",tr,missing?missing+" billet"+(missing>1?"s":"")+" manquant"+(missing>1?"s":""):"Tout est là");
-  const a=e.acces||{};
-  put("acces","🚗","Accès",((a.items||[]).map(x=>`<div class="it"><span class="ic">${x.ic}</span><div><b class="itb">${esc(x.b)}</b><div>${telify(x.t)}</div></div></div>`).join(""))+`<a class="btn light" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((e.lieu||"")+" "+(e.adresse||""))}" target="_blank" rel="noopener">📍 Le lieu dans Maps</a>`,"Badges, scène");
-  put("contacts","📞","Contacts",(e.contacts||[]).map(c=>{const nums=(c.tel||"").split("/").map(x=>x.trim()).filter(x=>/\d{2}/.test(x)&&!/signature/i.test(x));return `<div class="contact"><div><b>${esc(c.nom)}</b><small>${esc(c.role)}</small></div><div class="tels">${nums.map(n=>telA(n)).join("")}</div></div>`}).join(""));
-  put("setlist","🎵","Setlist",(e.setlist||[]).length?`${e.setlist_note?`<div class="note">${esc(e.setlist_note)}</div>`:""}<table><thead><tr><th>#</th><th>Titre</th><th>Qui</th><th></th></tr></thead><tbody>${e.setlist.map(s=>`<tr><td class="n">${s.n}</td><td class="t">${esc(s.titre)}</td><td>${s.qui?(()=>{const m=s.qui.match(/^([^(]*)(\(.*\))?/);const nm=m[1].trim();return `<span class="pill" style="${pillStyle(nm)}">${esc(nm)}</span>${m[2]?`<small class="pq">${esc(m[2].slice(1,-1))}</small>`:""}`})():""}</td><td>${s.doc?`<a class="lyr" href="${esc(s.doc)}" target="_blank" rel="noopener">Paroles ↗</a>`:""}</td></tr>`).join("")}</tbody></table>`:"");
-  put("tenue","👕","Tenue",isConf(e)?`<div class="it"><span class="ic">🖤</span><div><b class="itb">Habillée</b><div>Tenue habillée. Noire ou couleur sombre.${e.tenue?" "+esc(e.tenue):""}</div></div></div>`:`<div class="it"><span class="ic">☀️</span><div><b class="itb">Journée</b><div>Tee-shirt + pull 10 DEC. Bas au choix (habillé).</div></div></div><div class="it"><span class="ic">🌙</span><div><b class="itb">Concert</b><div>Tenue de concert, raccord entre chansigneurs.${e.tenue?" "+esc(e.tenue):""}</div></div></div>`,isConf(e)?"Habillée, sombre":"Tee + pull 10 DEC");
-  put("infos","📝","Infos",(e.remarques||[]).map(r=>`<div class="it"><span class="ic">•</span><div>${telify(r)}</div></div>`).join(""));
-  const rp=repasHTML(id,pub);if(rp)put("repas","🍽️","Régime + tailles",rp.html,rp.sum);
-  if(st.admin){const rems=st.rem.filter(r=>r.event===id);
-    put("admin","✍️","Admin",st.db?`<div class="note">Elle sera ajoutée à la fiche FDR du Drive et visible par l'équipe à la prochaine mise à jour (toutes les heures).</div>${rems.map(r=>`<div class="rem">${esc(r.texte)}<small>${esc((r.date||"").slice(0,16).replace("T"," "))} · ${r.statut==="synchro"?"✓ envoyée":"⏳ en attente de mise à jour"}</small></div>`).join("")}<textarea id="remtxt" placeholder="Ex : balances décalées à 15h"></textarea><button class="btn" id="remgo">Enregistrer la remarque</button>${e.fiche?`<a class="btn light" href="${esc(e.fiche)}" target="_blank" rel="noopener">📄 Ouvrir la fiche FDR (Drive)</a>`:""}`
-      :`<div class="note">Pour ajouter une remarque ou corriger une info : écris dans la fiche FDR du Drive. L'appli se met à jour toute seule chaque heure.</div>${e.fiche?`<a class="btn light" href="${esc(e.fiche)}" target="_blank" rel="noopener">📄 Ouvrir la fiche FDR (Drive)</a>`:""}`,"Fiche Drive")}
-  return O;
-}
-const TCOL={trajets:COL.v,setlist:COL.s,acces:NEU,contacts:NEU,tenue:NEU,infos:NEU,admin:NEU};
-function tilesHTML(O){
-  const ks=["trajets","setlist","contacts","acces","tenue","infos","admin"].filter(k=>O[k]);
-  let h=`<div class="tiles2">`;
-  if(O.repas){const todo=/compl/i.test(O.repas.sum);h+=todo?`<button class="ti2 todo" data-panel="repas"><b>🍽️ Régime + tailles</b><small>À compléter</small></button>`:""}
-  h+=ks.map(k=>`<button class="ti2" data-panel="${k}" style="${TCOL[k]}"><span class="e">${O[k].ic}</span><b>${esc(O[k].lab)}</b>${O[k].sum?`<small>${esc(O[k].sum)}</small>`:""}</button>`).join("");
-  if(O.repas&&!/compl/i.test(O.repas.sum))h+=`<button class="ti2" data-panel="repas" style="${NEU}"><span class="e">🍽️</span><b>Régime + tailles</b><small>${esc(O.repas.sum)}</small></button>`;
-  return h+`</div>`;
-}
 function eventHTML(id){
-  const e=st.ev[id],pub=DATA.events.find(x=>x.id===id);const E=evState(id);
-  const M=dayModel(e,pub);const days=M.it.length?[...new Set(M.it.map(x=>x.o))]:[];
-  const T=todayOff(pub);const O=sections(id,e,pub);
-  if(E.v==null){if(days.length<=1){E.v="day";E.day=days[0]??0}else if(T!=null&&days.includes(T)){E.v="day";E.day=T}else E.v="days"}
-  let h=`<div class="eh2"><button class="back" data-back>← Mes dates</button><span class="when">${esc(longDate(pub))}</span><h1>${esc(e.titre)}</h1><span>📍 ${esc(e.lieu||"")}${e.ville?" · "+esc(e.ville):""}</span>${chipsTeam(pub)}</div><div class="pad2 wrap2" style="margin-top:4px">`;
-  if((e.changements||[]).length&&E.v!=="panel")h+=`<div class="chg2">⚠️ Changement${e.changements.length>1?"s":""}${e.changements.map(c=>`<div style="font-weight:400">${telify(c)}</div>`).join("")}</div>`;
-  if(E.v==="panel"&&O[E.panel]){const P=O[E.panel];
-    h+=`<button class="pb2" data-pback>← Retour</button><div class="pan2"><h2>${P.ic} ${esc(P.lab)}</h2><div class="cbody" style="margin:0;padding:0;background:none">${P.html}</div></div>`;
-    return h+`</div>`}
-  if(E.v==="days"){
-    for(const o of days){const X=M.it.filter(x=>x.o===o);
-      const pick=[X.find(x=>x.g==="v"),X.find(x=>x.star)||X.find(x=>x.g==="s"),X.find(x=>x.g==="d")].filter(Boolean);
-      h+=`<button class="dc2${T===o?" today":""}" data-day="${o}" style="${dayColor(o)}"><span class="hd"><h2>${esc(dayName(M.ev,o))}</h2><span class="tag2">${T===o?"Aujourd'hui":esc(dayTag(o,X))}</span></span>
-        ${pick.map(x=>`<span class="mi"><span class="dot2" style="${COL[x.g]}"></span><b>${esc(stepTxt(x).hh)}</b><span>${esc(stepTxt(x).ti)}</span></span>`).join("")}
-        <span class="more">${X.length} étape${X.length>1?"s":""} →</span></button>`}
-    if(!days.length)h+=`<p class="note">Le programme arrive bientôt.</p>`;
-    h+=pratHTML(e,M)+tilesHTML(O);
-    return h+`</div>`}
-  /* vue d'un jour */
-  const o=E.day;const X=M.it.filter(x=>x.o===o);
-  if(days.length>1)h+=`<div class="seg2${days.length>2?" many":""}" role="group" aria-label="Jour">${days.map(d=>`<button data-day="${d}" aria-pressed="${d===o}">${esc(dayName(M.ev,d,true))}<small>${esc(T===d?"Aujourd'hui":dayTag(d,M.it.filter(x=>x.o===d)))}</small></button>`).join("")}</div>`;
-  let nowI=-1;
-  if(T!=null&&T===o){const d=new Date(),nm=d.getHours()*60+d.getMinutes();nowI=X.reduce((k,x,i)=>x.m<=nm?i:k,-1);if(nowI<0)nowI=0}
-  const past=T!=null&&T>o;
-  if(E.open[o]===undefined)E.open[o]=nowI>=0?Math.min(nowI,X.length-1):0;
-  h+=`<div class="steps2">${X.map((x,i)=>{const open=E.open[o]===i,done=past||(nowI>=0&&i<nowI),now=nowI===i;
-    const S_=stepTxt(x),hh=S_.hh;
-    return `<div class="st2${done&&!open?" done":""}${open?" open":""}" style="${COL[x.g]}"><button data-step="${i}" aria-expanded="${open}"><span class="h">${esc(hh)}</span><span class="dot2"></span><span class="t">${esc(S_.ti)}</span><span>${now?`<span class="now">Maintenant</span>`:done?`<span aria-label="Fait">✓</span>`:""}</span></button>
-      ${open?(()=>{const L=cleanSub(S_.sub,S_.ti,hh);const body=(x.tag?`<span class="tg">${esc(x.tag)}</span>`:"")+L.map(s=>`<div class="js">${s}</div>`).join("")+(x.x||"");return body?`<div class="det2">${body}</div>`:""})():""}</div>`}).join("")}</div>`;
-  if(!X.length)h+=`<p class="note">Le programme arrive bientôt.</p>`;
-  const ni=days.indexOf(o);if(ni>=0&&ni<days.length-1){const n=days[ni+1];h+=`<button class="next2" data-day="${n}">${n-o===1?"Demain":esc(dayName(M.ev,n,true))} : ${esc(dayTag(n,M.it.filter(x=>x.o===n)))} →</button>`}
-  h+=pratHTML(e,M)+tilesHTML(O);
-  return h+`</div>`;
+  const e=st.ev[id],pub=DATA.events.find(x=>x.id===id);
+  const navs=[];const S=[];
+  const SM=sums(e);const TI=[];const TK={contacts:1,setlist:1,tenue:1,infos:1,repas:1};
+  const add=(k,lab,html,cls)=>{if(!html)return;navs.push([k,lab]);if(TK[k]){TI.push([k,lab,html]);if(TI.length===1)S.push("@@TILES@@");return}S.push(CATS[k]?cat(k,lab,html,SM[k]):sec(k,lab,html,cls))};
+  const rems=st.rem.filter(r=>r.event===id);
+  add("chg","⚠️ Changements",(e.changements||[]).map(c=>`<div>• ${telify(c)}</div>`).join(""),"chg");
+  add("journee","🗓️ Programme",daysHTML(e,pub),"journee");
+  const run=Array.isArray(e.run)?e.run:[];
+  let tr="";const byWho={};for(const l of e.trajets){(byWho[l.qui]=byWho[l.qui]||[]).push(l)}
+  const legOrder=l=>l.sens==="Aller"?0:l.sens==="Retour"?2:1;
+  for(const w in byWho){const L=byWho[w].sort((a,b)=>legOrder(a)-legOrder(b));const miss=L.some(l=>!(l.billets||[]).length&&!l.sansbillet);const worst=L.some(l=>l.etat==="a_faire")?"a_faire":(miss||L.some(l=>l.etat==="a_verifier"))?"a_verifier":"ok";
+    const mine=st.me&&w.toLowerCase().includes(st.me.nom.toLowerCase());
+    tr+=`<details class="pers ${worst}" style="${persStyle(w)}"><summary><span class="pn">👤 ${esc(w)}</span><span class="badge b-${worst}">${worst==="ok"?"✓ OK":worst==="a_faire"?"Résa à faire":miss?"🎫 Billet manquant":"À vérifier"}</span></summary><div class="pbody">${L.map(l=>legHTML(l,e)).join("")}</div></details>`}
+  add("trajets","🚆 Trajets & billets",tr);
+  const hb=e.hebergement||{};
+  const a=e.acces||{};
+  add("acces","🚗 Accès / accréditations",((a.items||[]).map(x=>`<div class="it"><span class="ic">${x.ic}</span><div><b class="itb">${esc(x.b)}</b><div>${telify(x.t)}</div></div></div>`).join(""))+`<a class="btn light" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.lieu+" "+e.adresse)}" target="_blank" rel="noopener">📍 Le lieu dans Maps</a>`);
+  add("contacts","📞 Contacts sur place",``+(e.contacts||[]).map(c=>{const nums=(c.tel||"").split("/").map(x=>x.trim()).filter(x=>/\d{2}/.test(x)&&!/signature/i.test(x));return `<div class="contact"><div><b>${esc(c.nom)}</b><small>${esc(c.role)}</small></div><div class="tels">${nums.map(n=>telA(n)).join("")}</div></div>`}).join(""));
+  add("setlist","🎵 Setlist",e.setlist.length?`${e.setlist_note?`<div class="note">${esc(e.setlist_note)}</div>`:""}<table><thead><tr><th>#</th><th>Titre</th><th>Qui</th><th></th></tr></thead><tbody>${e.setlist.map(s=>`<tr><td class="n">${s.n}</td><td class="t">${esc(s.titre)}</td><td>${s.qui?(()=>{const m=s.qui.match(/^([^(]*)(\(.*\))?/);const nm=m[1].trim();return `<span class="pill" style="${pillStyle(nm)}">${esc(nm)}</span>${m[2]?`<small class="pq">${esc(m[2].slice(1,-1))}</small>`:""}`})():""}</td><td>${s.doc?`<a class="lyr" href="${esc(s.doc)}" target="_blank" rel="noopener">Paroles ↗</a>`:""}</td></tr>`).join("")}</tbody></table>`:"");
+  add("tenue","👕 Tenue",isConf(e)?`<div class="it"><span class="ic">🖤</span><div><b class="itb">Habillée</b><div>Tenue habillée. Noire ou couleur sombre.${e.tenue?" "+esc(e.tenue):""}</div></div></div>`:`<div class="it"><span class="ic">☀️</span><div><b class="itb">Journée</b><div>Tee-shirt + pull 10 DEC. Bas au choix (habillé).</div></div></div><div class="it"><span class="ic">🌙</span><div><b class="itb">Concert</b><div>Tenue de concert, raccord entre chansigneurs.${e.tenue?" "+esc(e.tenue):""}</div></div></div>`);
+  const rp=repasHTML(id,pub);if(rp){SM.repas=rp.sum;add("repas","🍽️ Régime alimentaire + taille vêtement",rp.html)}
+  add("infos","📝 Infos & remarques",(e.remarques||[]).map(r=>`<div class="it"><span class="ic">•</span><div>${telify(r)}</div></div>`).join(""));
+  if(st.admin&&!st.db){
+    add("admin","✍️ Admin",`<div class="note">Pour ajouter une remarque ou corriger une info : écris dans la fiche FDR du Drive. L'appli se met à jour toute seule chaque heure.</div>${e.fiche?`<a class="btn light" href="${esc(e.fiche)}" target="_blank" rel="noopener">📄 Ouvrir la fiche FDR (Drive)</a>`:""}`);
+  }
+  if(st.admin&&st.db){
+    add("admin","✍️ Ajouter une remarque (admin)",`<div class="note">Elle sera ajoutée à la fiche FDR du Drive et visible par l'équipe à la prochaine mise à jour (toutes les heures).</div>${rems.map(r=>`<div class="rem">${esc(r.texte)}<small>${esc((r.date||"").slice(0,16).replace("T"," "))} · ${r.statut==="synchro"?"✓ envoyée":"⏳ en attente de mise à jour"}</small></div>`).join("")}<textarea id="remtxt" placeholder="Ex : balances décalées à 15h"></textarea><button class="btn" id="remgo">Enregistrer la remarque</button>${e.fiche?`<a class="btn light" href="${esc(e.fiche)}" target="_blank" rel="noopener">📄 Ouvrir la fiche FDR (Drive)</a>`:""}`);
+  }
+  const ti=TI.length?`<div class="tiles">${TI.map(([k,lab])=>{const ic=lab.split(" ")[0];return `<button class="tile t-${k}" data-tile="s-${k}"><span class="e">${ic}</span><b>${esc(k==="contacts"?"Contacts":lab.slice(ic.length+1))}</b><small>${esc(SM[k]||"")}</small></button>`}).join("")}</div>`+TI.map(([k,lab,html])=>`<details class="tpan t-${k}" id="s-${k}"><summary>${esc(lab)}<span class="x">✕</span></summary><div class="cbody">${html}</div></details>`).join(""):"";
+  const Sx=S.map(x=>x==="@@TILES@@"?ti:x);
+  return `<div class="hero"><button class="back" data-back>← Retour</button><span class="when">${esc(longDate(pub))}</span><h1>${esc(e.titre)}</h1><span class="where">📍 ${esc(e.lieu)} · ${esc(e.ville)}</span><div class="team">${pub.qui.map(s=>`<span>${esc(NOMS[s]||s)}</span>`).join("")}</div></div><nav class="nav">${navs.map(n=>`<button data-go="s-${n[0]}">${n[1]}</button>`).join("")}</nav>${Sx.join("")}`;
 }
 function memoHTML(){
-  return `<div class="eh2"><button class="back" data-back>← Retour</button><h1>📋 Mémo 10 Doigts</h1><span>Les bases à chaque date</span></div><section class="sec" style="margin-top:14px">${st.memo.map((m,i)=>`<details ${i===0?"open":""}><summary>${esc(m.t)}</summary><ul>${m.l.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></details>`).join("")}</section>`;
+  return `<div class="hero"><button class="back" data-back>← Retour</button><h1>📋 Mémo 10 Doigts</h1><span class="where">Les bases à chaque date</span></div><section class="sec" style="margin-top:14px">${st.memo.map((m,i)=>`<details ${i===0?"open":""}><summary>${esc(m.t)}</summary><ul>${m.l.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></details>`).join("")}</section>`;
 }
-function openSheet(id,fromPop,keepScroll){
+function openSheet(id,fromPop){
   curOpen=id;
   const root=document.getElementById("sheet-root");
-  const old=document.getElementById("sheet");const y=old?old.scrollTop:0;
   root.innerHTML=`<div class="sheet" id="sheet">${id==="__memo"?memoHTML():eventHTML(id)}</div>`;
-  if(!fromPop)navPush(id);
-  const sh=document.getElementById("sheet");if(keepScroll)sh.scrollTop=y;
-  const re=(k)=>openSheet(id,true,k);
+  if(!fromPop){try{history.pushState({sheet:id},"")}catch(e){}}
+  const sh=document.getElementById("sheet");
   sh.querySelector("[data-back]").onclick=closeSheet;
-  sh.querySelectorAll("[data-day]").forEach(b=>b.onclick=()=>{EV.v="day";EV.day=+b.dataset.day;re(false);navPush(id)});
-  sh.querySelectorAll("[data-step]").forEach(b=>b.onclick=()=>{const i=+b.dataset.step;EV.open[EV.day]=EV.open[EV.day]===i?-1:i;re(true)});
-  sh.querySelectorAll("[data-panel]").forEach(b=>b.onclick=()=>{EV.prev=EV.v;EV.v="panel";EV.panel=b.dataset.panel;re(false);navPush(id)});
-  sh.querySelectorAll("[data-pback]").forEach(b=>b.onclick=()=>{if(history.state&&history.state.v==="panel"){history.back();return}EV.v=EV.prev||"days";re(false)});
-  sh.querySelectorAll("[data-alldays]").forEach(b=>b.onclick=()=>{EV.v="days";re(false);navPush(id)});
+  sh.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{const t=document.getElementById(b.dataset.go);if(t){if(t.tagName==="DETAILS")t.open=true;t.scrollIntoView({behavior:"smooth",block:"start"})}});
+  sh.querySelectorAll("[data-tile]").forEach(b=>b.onclick=()=>{const t=document.getElementById(b.dataset.tile);if(!t)return;const was=t.open;sh.querySelectorAll(".tpan").forEach(p=>p.open=false);if(!was){t.open=true;t.scrollIntoView({behavior:"smooth",block:"nearest"})}});
+  sh.querySelectorAll(".tpan").forEach(p=>p.addEventListener("toggle",()=>{const b=sh.querySelector(`[data-tile="${p.id}"]`);if(b)b.classList.toggle("on",p.open)}));
   sh.querySelectorAll("[data-billet]").forEach(b=>b.onclick=()=>openBillet(id,b.dataset.billet,b));
   const rg=document.getElementById("remgo");if(rg)rg.onclick=()=>saveRem(id);
 }
-
 function removeSheet(){curOpen=null;document.getElementById("sheet-root").innerHTML=""}
-function navPush(id){try{const n=((history.state&&history.state.n)||0)+1;history.pushState({sheet:id,n,v:EV.v,day:EV.day,panel:EV.panel,prev:EV.prev},"")}catch(e){}}
-function closeSheet(){const n=history.state&&history.state.n;if(n){try{history.go(-n);return}catch(e){}}removeSheet()}
-window.addEventListener("popstate",ev=>{const S=ev.state||{};
-  if(window._pdfOv){window._pdfOv.remove();window._pdfOv=null;if(S.sheet)return}
-  if(S.guard){try{history.pushState({n:0},"")}catch(e){}removeSheet();return}
-  const s=S.sheet;
-  if(s&&(st.ev[s]||s==="__memo")){if(s!=="__memo"&&S.v)Object.assign(EV,{open:EV.id===s?EV.open:{},id:s,v:S.v,day:S.day,panel:S.panel,prev:S.prev});openSheet(s,true)}
-  else removeSheet()});
-/* Glisser vers la droite = écran d'avant. Sur la liste, l'appli ne se ferme pas. */
-try{if(!(history.state&&("n" in history.state))){history.replaceState({guard:1},"");history.pushState({n:0},"")}}catch(e){}
+function closeSheet(){if(history.state&&history.state.sheet){try{history.back();return}catch(e){}}removeSheet()}
+window.addEventListener("popstate",ev=>{if(window._pdfOv){window._pdfOv.remove();window._pdfOv=null;if(ev.state&&ev.state.sheet)return}const s=ev.state&&ev.state.sheet;if(s&&(st.ev[s]||s==="__memo"))openSheet(s,true);else removeSheet()});
 
 const pdfCache={};let pdfjsP=null;
 function loadPdfjs(){if(!pdfjsP)pdfjsP=new Promise((ok,ko)=>{const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";s.onload=()=>{pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";ok(pdfjsLib)};s.onerror=()=>{pdfjsP=null;ko()};document.head.appendChild(s)});return pdfjsP}

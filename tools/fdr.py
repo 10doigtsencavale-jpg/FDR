@@ -252,13 +252,25 @@ def addbillet(ev_id, qui, sens, fid, titre, pdf):
     L = [x for x in e["trajets"] if x["qui"].lower() == qui.lower() and x["sens"].lower() == sens.lower()]
     # plusieurs lignes même personne / même sens : prends celle dont le jour est dans le titre du billet (ex. « … 15/11 »)
     jours = set(re.findall(r"\b(\d{1,2})[/-]\d{1,2}\b", titre))
-    l = next((x for x in L if (re.findall(r"\b(\d{1,2})\b", x.get("date", "")) or [""])[0] in jours), None) if jours else None
-    if l is None: l = L[0] if L else None
-    if l is None:
-        l = {"qui": qui, "sens": sens.capitalize(), "date": "", "dep": "", "arr": "", "de": "", "vers": "", "detail": "", "etat": "ok", "billets": []}; e["trajets"].append(l)
-    if fid not in l["billets"]: l["billets"].append(fid)
-    if l["etat"] in ("a_faire", "a_verifier") and l["dep"]: l["etat"] = "ok"
-    save(STATE, S); print("ok", ev_id, qui, sens)
+    if jours:
+        Lj = [x for x in L if (re.findall(r"\b(\d{1,2})\b", x.get("date", "")) or [""])[0] in jours]
+        L = Lj or L
+    # un trajet = une ligne par train : range le billet sur la (les) ligne(s) dont les deux villes sont dans le titre
+    # (ex. « Billet RETOUR Surgères-Paris-Dijon » -> Surgères→Paris et Paris→Dijon)
+    import unicodedata
+    nz = lambda s: re.sub(r"[^a-z0-9 ]", " ", unicodedata.normalize("NFD", (s or "").lower()).encode("ascii", "ignore").decode())
+    words = set(nz(titre).split())
+    city = lambda s: (nz(re.sub(r"(?i)^gare( sncf)?( de| d')?\s*", "", s or "")).split() or [""])[0]
+    sc = [(int(city(x.get("de")) in words) + int(city(x.get("vers")) in words), x) for x in L]
+    best = max([s for s, _ in sc], default=0)
+    targets = [x for s, x in sc if s == best and best > 0] if len(L) > 1 else L[:1]
+    if not targets and L: targets = L[:1]
+    if not targets:
+        l = {"qui": qui, "sens": sens.capitalize(), "date": "", "dep": "", "arr": "", "de": "", "vers": "", "detail": "", "etat": "ok", "billets": []}; e["trajets"].append(l); targets = [l]
+    for l in targets:
+        if fid not in l["billets"]: l["billets"].append(fid)
+        if l["etat"] in ("a_faire", "a_verifier") and l["dep"]: l["etat"] = "ok"
+    save(STATE, S); print("ok", ev_id, qui, sens, len(targets), "ligne(s)")
 
 def rmbillet(ev_id, fid):
     """Retire de l'appli un billet qui n'est plus valable (échangé, annulé, rangé dans « Erreurs »).
@@ -381,10 +393,7 @@ def build():
     DATA = {"salt": K["salt"], "iter": ITER, "persons": persons, "team": {"wraps": tw, "data": enc(teamkey, json.dumps(S["memo"], ensure_ascii=False).encode()), "noms": enc(teamkey, json.dumps(noms, ensure_ascii=False).encode())}, "events": pub}
     html = open(os.path.join(TOOLS, "template.html")).read().replace("__DATA__", json.dumps(DATA, ensure_ascii=False)).replace("__PHOTOS__", "{}")
     open(os.path.join(REPO, "index.html"), "w").write(html)
-    # Version test (nouvelle mise en page « Soleil ») : mêmes données chiffrées, page à part test.html
-    v2 = os.path.join(TOOLS, "template-v2.html")
-    if os.path.exists(v2):
-        open(os.path.join(REPO, "test.html"), "w").write(open(v2).read().replace("__DATA__", json.dumps(DATA, ensure_ascii=False)).replace("__PHOTOS__", "{}"))
+    # (test.html renvoie maintenant vers la page principale ; l'ancienne mise en page est gardée dans tools/template-v1.html)
     for f in ("manifest.json", "icon-192.png", "icon-512.png", "icon-maskable-512.png"): shutil.copy(os.path.join(TOOLS, f), os.path.join(REPO, f))
     sw = open(os.path.join(TOOLS, "sw.js")).read().replace('const C="fdr-v1"', 'const C="fdr-' + secrets.token_hex(4) + '"')
     open(os.path.join(REPO, "sw.js"), "w").write(sw)

@@ -84,3 +84,26 @@ Quand l'Agenda, un mail ou la fiche donne le NOM d'un hôtel (ou d'un logement) 
 - Un RUN = l'orga (festival, salle) vient chercher ou déposer le chansigneur. Picto 🚕 (ou 🚐).
 - Un TRANSPORT AUTONOME = le chansigneur y va seul (bus, métro, tram, à pied). Picto 🚌 🚇 🚊 ou 🚶. L'appli les compte à part (« 1 transport autonome · 1 run »).
 - Ne jamais appeler « run » un trajet en bus ou métro.
+
+## Trajets : UNE LIGNE PAR TRAIN (règle d'Aurélie du 24/10/2026)
+L'équipe doit être 100 % autonome : tout ce qui n'est pas écrit, on le demande à Aurélie.
+- Dans « 🚆 TRAJETS & BILLETS », chaque train, car ou avion a SA ligne (jamais plusieurs trains dans une seule ligne).
+  Ex. Chalon → Cognac avec 2 changements = 3 lignes : Chalon-sur-Saône → Paris Bercy, Paris Montparnasse → Angoulême, Angoulême → Cognac.
+  Même « Qui » et même « Sens · date » sur les 3 lignes. L'appli les enchaîne toute seule et calcule les changements.
+- Colonne « Horaires » : `8h35 → 12h27` (départ → arrivée de CE train).
+- Colonne « Trajet · détail » : `Gare de départ → Gare d'arrivée · <Type> n° <numéro> · Voiture <n> · Place <n>` puis, si besoin, une phrase courte.
+  Ex. `Paris Montparnasse → Angoulême · TGV INOUI n° 8485 · Voiture 6 · Place 681`
+  Ex. `Caen → Saint-Lô · Train Nomad n° 853419 · Place libre`
+  Ex. `Angoulême → Cognac · Car TER (ligne 16)`
+- Type, numéro, voiture et place : LIS-LES dans le e-billet PDF (`pdftotext -layout billet.pdf -`). Pas de place attribuée → « Place libre ». Rien d'inventé.
+- Noms de gares complets et exacts (comme sur le billet) : « Paris Bercy », « Paris Gare de Lyon », « Dijon Ville ».
+- Titre court du billet : mets les villes du trajet et la date (ex. « Billet RETOUR Surgères-Paris-Dijon 09/11 Eddy »). Un même PDF qui couvre deux trains est rangé sur les deux lignes.
+
+## Changement de gare (règle d'Aurélie du 24/10/2026)
+Quand deux trains qui se suivent arrivent et repartent de DEUX GARES DIFFÉRENTES de la même ville (ex. Paris Bercy → Paris Montparnasse) :
+- Cherche le chemin sur le site OFFICIEL (RATP, SNCF Connect « correspondances depuis la gare de … », réseau de la ville) : ligne(s), direction, arrêt où monter, où descendre, changement, durée, prix et où acheter le billet.
+- Ajoute UNE ligne dans « 🚕 RUN / TRANSPORTS » : Quand = `🚇 Sam 7/11 · Paris Bercy → Paris Montparnasse` (les deux gares écrites comme dans les trajets). Détail, une info par ligne :
+  « Métro ligne 6 » / « Monter : Bercy » / « Direction : Charles de Gaulle – Étoile » / « Descendre : Montparnasse – Bienvenüe » / « Environ 13 min de métro » / « Billet : 2,55 € au distributeur ou sur l'appli Bonjour RATP » / « ⚠️ Acheter le billet AVANT » / si moins d'1h entre les trains : « ⚠️ 56 min entre les deux trains : ne pas traîner » / en DERNIÈRE ligne le lien Google Maps en transports (`travelmode=transit`).
+- L'appli range ces infos dans le menu « 🔁 Changer de gare » du trajet (fermé, s'ouvre au toucher).
+- Pas trouvé sur une source sûre → « Chemin à vérifier » + le lien Google Maps, statut « à vérifier ». N'invente aucune ligne.
+- Même gare (ex. arrivée et départ à Caen) : rien à ajouter, l'appli affiche « Changement · 15 min · même gare ».
