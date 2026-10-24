@@ -364,17 +364,17 @@ function chipsTeam(e){return `<span class="chips2">${teamOf(e).map(s=>`<span cla
 function render(){
   const app=document.getElementById("app");
   const logged=st.me||st.admin;
-  let h=`<header class="top2"><div class="row2"><h1>${logged?"Mes dates":"🤟 10DEC - FDR"}</h1>${st.me?`<button class="small-btn" id="logout">Changer de code</button>`:""}</div>`;
+  let h=`<header class="top2"><div class="row2"><h1>${logged?(st.admin?"Les dates":"Mes dates"):"🤟 10DEC - FDR"}</h1>${st.me?`<button class="small-btn" id="logout">Changer de code</button>`:""}</div>`;
   if(logged)h+=`<div class="hi">Bonjour ${esc(st.me?st.me.nom:"l'équipe admin")} 👋</div>`;
   else h+=`<div class="login"><label for="code">🔑 Ton code personnel</label><div class="row"><input id="code" type="password" autocomplete="current-password" enterkeyhint="go"><button id="go">OK</button></div><div class="err" id="err"></div><div class="note" style="color:#1d2033">Ton téléphone s'en souviendra.</div></div>`;
   h+=`</header>`;
   if(logged){
     const all=DATA.events.filter(e=>e.id&&!(e.a&&!st.admin)).sort((a,b)=>a.date.localeCompare(b.date));
     const mine=all.filter(isMine);
-    if(V2.filter==null)V2.filter=mine.length?"me":"all";
+    if(V2.filter==null)V2.filter=(st.admin||!mine.length)?"all":"me";
     const list=V2.filter==="me"?mine:all;
     h+=`<div class="pad2">`;
-    if(st.me)h+=`<div class="seg2" role="group" aria-label="Filtre"><button data-filter="me" aria-pressed="${V2.filter==="me"}">Mes dates</button><button data-filter="all" aria-pressed="${V2.filter==="all"}">Toute l'équipe</button></div>`;
+    if(st.me)h+=`<div class="seg2" role="group" aria-label="Filtre">${st.admin?`<button data-filter="all" aria-pressed="${V2.filter==="all"}">Toutes les dates</button><button data-filter="me" aria-pressed="${V2.filter==="me"}">Mes dates</button>`:`<button data-filter="me" aria-pressed="${V2.filter==="me"}">Mes dates</button><button data-filter="all" aria-pressed="${V2.filter==="all"}">Toute l'équipe</button>`}</div>`;
     if(!list.length)h+=`<p class="empty">Aucune date pour l'instant.</p>`;
     else{
       const [f,...rest]=list;const p=st.ev[f.id];
@@ -531,7 +531,6 @@ function eventHTML(id){
       ${open?`<div class="det2">${/\d/.test(hh)?`<div class="hh">${esc(hh)}</div>`:""}${x.tag?`<span class="tg">${esc(x.tag)}</span>`:""}<div class="jti">${S_.full}</div>${S_.sub.map(s=>`<div class="js">${s}</div>`).join("")}${x.x||""}</div>`:""}</div>`}).join("")}</div>`;
   if(!X.length)h+=`<p class="note">Le programme arrive bientôt.</p>`;
   const ni=days.indexOf(o);if(ni>=0&&ni<days.length-1){const n=days[ni+1];h+=`<button class="next2" data-day="${n}">${n-o===1?"Demain":esc(dayName(M.ev,n,true))} : ${esc(dayTag(n,M.it.filter(x=>x.o===n)))} →</button>`}
-  if(days.length>1)h+=`<button class="pb2" data-alldays>📅 Voir tous les jours</button>`;
   h+=pratHTML(e,M)+tilesHTML(O);
   return h+`</div>`;
 }
