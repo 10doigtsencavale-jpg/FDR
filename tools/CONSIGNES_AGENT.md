@@ -11,7 +11,7 @@ Tu prépares les données d'UN événement pour l'appli équipe « 10DEC - FDR �
 
 ## Où chercher (charge les outils via ToolSearch : Gmail search_threads/get_thread, Google_Calendar get_event/search_events, Google_Drive search_files/read_file_content/download_file_content)
 1. L'événement Google Agenda (id donné) : titre, lieu, description (horaires, transports, hébergement), pièces jointes.
-2. Le dossier Drive de l'événement (id donné) et ses sous-dossiers (search_files parentId = '<id>') : « 2) TRANSPORT / HEBERGEMENT » (billets, fiche transport), « 3) LOGISTIQUE » (feuille de route de la salle / du festival), « 6) SETLIST & PAROLES ».
+2. Le dossier Drive de l'événement (id donné) et ses sous-dossiers (search_files parentId = '<id>') : « 2) TRANSPORT / HEBERGEMENT » (billets, fiche transport), « 3) LOGISTIQUE » (feuille de route de la salle / du festival), « 6) PREPA - SETLIST & PAROLES ».
 3. Gmail : fils avec l'organisateur (cherche le nom de l'événement, du lieu, de l'artiste ; newer_than:180d).
 
 ## Billets
