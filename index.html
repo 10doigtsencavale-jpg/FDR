@@ -378,8 +378,10 @@ function tmin(x){const s=String(x||"").toLowerCase();const m=s.match(/(\d{1,2})\
   if(/apr[eè]s-midi|aprem/.test(s))return 840;if(/matin/.test(s))return 480;if(/midi/.test(s))return 720;if(/journ/.test(s))return 600;
   if(/soir|d[iî]ner/.test(s))return 1140;if(/apr[eè]s|fin|retour/.test(s))return 1400;if(/nuit/.test(s))return 1430;return null}
 let DMO=null;/* mois de l'événement : une date "27/10" sur une date de décembre est une remarque, pas un jour */
-/* Une date = "9/12", "mer 9" ou "9 déc" (jamais un nombre seul dans un texte : "1 chambre" n'est pas une date). */
-function dnum(x){const s=String(x||"").trim();if(/^\d{1,2}$/.test(s))return +s;const dm=[...s.matchAll(/\b(\d{1,2})\/(\d{1,2})\b/g)].find(a=>DMO==null||Math.min((+a[2]-DMO+12)%12,(DMO-a[2]+12)%12)<=1);const m=dm||s.match(/\b(?:lun|mar|mer|jeu|ven|sam|dim)[a-z]*\.?\s+(\d{1,2})\b/i)||s.match(/\b(\d{1,2})\s+(?:janv|f[ée]v|mars|avr|mai|juin|juil|ao[uû]|sept|oct|nov|d[ée]c)/i);return m?+m[1]:null}
+/* Une date = "9/12", "mer 9" ou "9 déc" (jamais un nombre seul dans un texte : "1 chambre" n'est pas une date).
+   "27/10" dans une note (date d'écriture) est ignoré si le mois est loin de celui de l'événement. */
+let DNUM_M=null;
+function dnum(x){const s=String(x||"").trim();if(/^\d{1,2}$/.test(s))return +s;for(const m of s.matchAll(/\b(\d{1,2})\/(\d{1,2})\b/g)){const mo=+m[2];if(DNUM_M==null||[0,1,11].includes((mo-DNUM_M+12)%12))return +m[1]}const m=s.match(/\b(?:lun|mar|mer|jeu|ven|sam|dim)[a-z]*\.?\s+(\d{1,2})\b/i)||s.match(/\b(\d{1,2})\s+(?:janv|f[ée]v|mars|avr|mai|juin|juil|ao[uû]|sept|oct|nov|d[ée]c)/i);return m?+m[1]:null}
 function kindOf(x){const s=String(x||"").toLowerCase();return /balance|concert|spectacle|chansign|show|atelier|conf[ée]rence|table ronde|line ?check|speech|r[ée]p[ée]t|filage|captation|tournage|interview|lecture|pl[ée]ni[èe]re|prestation|soundcheck/.test(s)?"p":"i"}
 /* ===== V2 : liste « ma prochaine date » ===== */
 const V2={filter:null};
@@ -461,7 +463,7 @@ function render(){
 
 /* ===== V2 : les étapes de chaque jour (même lecture des données que la version d'avant) ===== */
 function dayModel(e,pub){
-  const ev=new Date(pub.date+"T12:00:00"),evD=ev.getDate();DMO=ev.getMonth()+1;
+  const ev=new Date(pub.date+"T12:00:00"),evD=ev.getDate();DNUM_M=ev.getMonth()+1;DMO=ev.getMonth()+1;
   const off=d=>{if(d==null)return 0;let o=d-evD;if(o<-20)o+=31;if(o>20)o-=31;return o};
   const it=[];const hb=e.hebergement||{};
   let T=e.trajets||[];const me=st.me&&st.me.nom?st.me.nom.toLowerCase():"";
