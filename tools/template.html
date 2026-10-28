@@ -377,7 +377,8 @@ function sums(e){const pl=(n,w)=>n+" "+w+(n>1?"s":"");const run=Array.isArray(e.
 function tmin(x){const s=String(x||"").toLowerCase();const m=s.match(/(\d{1,2})\s*h\s*(\d{0,2})/);if(m)return (+m[1])*60+(+(m[2]||0));
   if(/apr[eè]s-midi|aprem/.test(s))return 840;if(/matin/.test(s))return 480;if(/midi/.test(s))return 720;if(/journ/.test(s))return 600;
   if(/soir|d[iî]ner/.test(s))return 1140;if(/apr[eè]s|fin|retour/.test(s))return 1400;if(/nuit/.test(s))return 1430;return null}
-function dnum(x){const m=String(x||"").match(/\b(\d{1,2})(?:\/\d{1,2})?\b/);return m?+m[1]:null}
+/* Une date = "9/12", "mer 9" ou "9 déc" (jamais un nombre seul dans un texte : "1 chambre" n'est pas une date). */
+function dnum(x){const s=String(x||"").trim();if(/^\d{1,2}$/.test(s))return +s;const m=s.match(/\b(\d{1,2})\/\d{1,2}\b/i)||s.match(/\b(?:lun|mar|mer|jeu|ven|sam|dim)[a-z]*\.?\s+(\d{1,2})\b/i)||s.match(/\b(\d{1,2})\s+(?:janv|f[ée]v|mars|avr|mai|juin|juil|ao[uû]|sept|oct|nov|d[ée]c)/i);return m?+m[1]:null}
 function kindOf(x){const s=String(x||"").toLowerCase();return /balance|concert|spectacle|chansign|show|atelier|conf[ée]rence|table ronde|line ?check|speech|r[ée]p[ée]t|filage|captation|tournage|interview|lecture|pl[ée]ni[èe]re|prestation|soundcheck/.test(s)?"p":"i"}
 /* ===== V2 : liste « ma prochaine date » ===== */
 const V2={filter:null};
