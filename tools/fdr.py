@@ -21,7 +21,7 @@ Commandes (dossier de travail : $FDR_WORK, par défaut /tmp/fdr_work, jamais dan
   fdr.py repasvalues <event_id> <out.json>  -> valeurs de l'onglet « REPAS & TAILLES » de la fiche
   fdr.py archives <archives.json>           -> charge le tableau « Archives chansignes - liens youtube » (liste de lignes
                                                [artiste, titre, qui, lien youtube, …], tous les onglets sauf « Captation LIVE »)
-  fdr.py lsf <event_id> "<titre>" <lien>     -> lien LSF imposé pour un titre (colonne ARCHIVE LSF de la setlist du Drive)
+  fdr.py lsf <event_id> "<titre>" <lien>[|étiquette] …  -> vidéos LSF imposées pour un titre (setlist du Drive), ex. « https://…|Ralenti »
   fdr.py lsfcheck                           -> pour chaque setlist : titres avec / sans vidéo LSF trouvée
 """
 import json, os, sys, base64, secrets, random, re, shutil, glob, subprocess, urllib.parse, hashlib, datetime
@@ -368,7 +368,7 @@ def archives(path):
     S["archives"] = out; save(STATE, S); print("ok", len(out), "vidéos LSF")
 def lsf_for(S, e, titre):
     force = (e.get("lsf_force") or {}).get(_norm(titre))
-    if force: return [{"u": force, "q": ""}]
+    if force: return [{"u": force, "q": ""}] if isinstance(force, str) else force
     A = S.get("archives") or []
     known = {x["a"] for x in A}
     split = lambda art: [_art(x) for x in re.split(r"\+|,|/| et |\(|\)", art or "") if _art(x)]
@@ -393,9 +393,11 @@ def lsf_for(S, e, titre):
         if x["u"] in seen: continue
         seen.add(x["u"]); out.append({"u": x["u"], "q": re.sub(r"\s+", " ", x["q"]).strip()})
     return out[:3]
-def lsf(ev_id, titre, url):
+def lsf(ev_id, titre, *urls):
+    """urls : un ou plusieurs liens, chacun avec une étiquette facultative après « | » (ex. « https://…|Ralenti »)."""
     S = load(STATE); e = next(x for x in S["events"] if x["id"] == ev_id)
-    e.setdefault("lsf_force", {})[_norm(titre)] = url; save(STATE, S); print("ok", ev_id, titre)
+    v = [{"u": u.split("|", 1)[0], "q": "", "l": (u.split("|", 1) + [""])[1]} for u in urls]
+    e.setdefault("lsf_force", {})[_norm(titre)] = v; save(STATE, S); print("ok", ev_id, titre, len(v))
 def lsfcheck():
     S = load(STATE)
     for e in S["events"]:
