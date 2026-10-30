@@ -19,6 +19,10 @@ Commandes (dossier de travail : $FDR_WORK, par défaut /tmp/fdr_work, jamais dan
   fdr.py setev <event_id> <champ> <valeur>  -> ex. setev X fiche https://… ; setev X visible false
   fdr.py profils <reponses.json>            -> régime et tailles saisis dans l'appli (réponses signées du formulaire)
   fdr.py repasvalues <event_id> <out.json>  -> valeurs de l'onglet « REPAS & TAILLES » de la fiche
+  fdr.py archives <archives.json>           -> charge le tableau « Archives chansignes - liens youtube » (liste de lignes
+                                               [artiste, titre, qui, lien youtube, …], tous les onglets sauf « Captation LIVE »)
+  fdr.py lsf <event_id> "<titre>" <lien>     -> lien LSF imposé pour un titre (colonne ARCHIVE LSF de la setlist du Drive)
+  fdr.py lsfcheck                           -> pour chaque setlist : titres avec / sans vidéo LSF trouvée
 """
 import json, os, sys, base64, secrets, random, re, shutil, glob, subprocess, urllib.parse, hashlib, datetime
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
@@ -340,6 +344,66 @@ def repasvalues(ev_id, out):
     json.dump(V, open(out, "w"), ensure_ascii=False); print("ok", len(e.get("qui", [])), "personnes")
 
 # ---------- construction de l'appli ----------
+# ---------- archives LSF (vidéos YouTube des chansons déjà chansignées) ----------
+import unicodedata, difflib
+def _norm(t):
+    t = unicodedata.normalize("NFD", (t or "").lower()); t = "".join(c for c in t if unicodedata.category(c) != "Mn")
+    t = re.sub(r"\.(rtf|docx?|pdf)$", "", t.strip()); t = re.sub(r"^\d{1,2}\s+(?=[a-z])", "", t)
+    t = t.replace("&", " et "); t = re.sub(r"[^a-z0-9]+", " ", t)
+    t = re.sub(r"\b(les|le|la|l|the)\b", " ", t)
+    return re.sub(r"\s+", " ", t).strip()
+def _art(t):
+    t = _norm(t); t = re.sub(r"^reprise ", "", t); t = t.replace("facteurs", "facteur").replace("yembre", "yembe")
+    return t
+def archives(path):
+    S = load(STATE); rows = json.load(open(path)); out = []
+    for r in rows:
+        r = [(x or "").strip() for x in r] + ["", "", "", ""]
+        art, tit, qui = r[0], r[1], r[2]
+        links = re.findall(r"https?://(?:www\.)?(?:youtu\.be|youtube\.com)/[^\s,]+", r[3])
+        if art.upper() == "ARTISTES" or not tit or not links: continue
+        for u in links:
+            if "studio.youtube.com" in u: continue
+            out.append({"a": _art(art), "t": _norm(tit), "q": qui, "u": u})
+    S["archives"] = out; save(STATE, S); print("ok", len(out), "vidéos LSF")
+def lsf_for(S, e, titre):
+    force = (e.get("lsf_force") or {}).get(_norm(titre))
+    if force: return [{"u": force, "q": ""}]
+    A = S.get("archives") or []
+    known = {x["a"] for x in A}
+    split = lambda art: [_art(x) for x in re.split(r"\+|,|/| et |\(|\)", art or "") if _art(x)]
+    m = re.match(r"^(.*?)\s*\(([^)]*)\)\s*$", titre)
+    t, arts = titre, split(e.get("artiste"))
+    if m:  # « Titre (Artiste) » ; sinon « Titre (précision) » : on garde l'artiste de la date
+        t = m.group(1); pa = split(m.group(2))
+        if any(a == k or (min(len(a), len(k)) >= 4 and (a in k or k in a)) for a in pa for k in known): arts = pa
+    t = _norm(t)
+    pool = [x for x in A if any(a == x["a"] or (min(len(a), len(x["a"])) >= 4 and (a in x["a"] or x["a"] in a)) for a in arts)] if arts else []
+    hit = [x for x in pool if x["t"] == t]
+    if not hit and pool:  # « Bledi mon amour » ↔ « Bledi »
+        hit = [x for x in pool if len(x["t"]) >= 4 and (t.startswith(x["t"] + " ") or x["t"].startswith(t + " "))]
+    if not hit and pool:
+        best = difflib.get_close_matches(t, list({x["t"] for x in pool}), n=1, cutoff=0.86)
+        hit = [x for x in pool if best and x["t"] == best[0]]
+    if not hit and not arts:  # sans artiste connu : seulement si le titre est unique dans les archives
+        same = [x for x in A if x["t"] == t]
+        if len({x["a"] for x in same}) == 1: hit = same
+    seen, out = set(), []
+    for x in hit:
+        if x["u"] in seen: continue
+        seen.add(x["u"]); out.append({"u": x["u"], "q": re.sub(r"\s+", " ", x["q"]).strip()})
+    return out[:3]
+def lsf(ev_id, titre, url):
+    S = load(STATE); e = next(x for x in S["events"] if x["id"] == ev_id)
+    e.setdefault("lsf_force", {})[_norm(titre)] = url; save(STATE, S); print("ok", ev_id, titre)
+def lsfcheck():
+    S = load(STATE)
+    for e in S["events"]:
+        if e.get("fin", e["date"]) < S.get("today","0000") or not e.get("setlist"): continue
+        ok = [s["titre"] for s in e["setlist"] if lsf_for(S, e, s["titre"])]
+        ko = [s["titre"] for s in e["setlist"] if not lsf_for(S, e, s["titre"])]
+        print(e["id"], "| avec vidéo:", len(ok), "| sans:", ", ".join(ko) or "-")
+
 def build():
     S = load(STATE); C = load(os.path.join(WORK, "codes.json"))
     S["today"] = datetime.datetime.utcnow().strftime("%Y-%m-%d")
@@ -372,7 +436,8 @@ def build():
                 if not name or not os.path.exists(os.path.join(REPO, "b", name + ".txt")): continue
                 used.add(name + ".txt")
                 bil[b] = {"f": "b/" + name + ".txt", "t": titles.get(b, "Billet").replace(".pdf", "").split(" (")[0]}
-        payload = {k: v for k, v in e.items() if k not in ("id", "date", "fin", "qui", "profils")}; payload["billets"] = bil
+        payload = {k: v for k, v in e.items() if k not in ("id", "date", "fin", "qui", "profils", "lsf_force")}; payload["billets"] = bil
+        payload["setlist"] = [dict(x, lsf=lsf_for(S, e, x["titre"])) for x in e.get("setlist") or []]
         payload["equipe"] = e.get("qui", [])  # liste de l'équipe, aussi pour les dates privées (en-tête sans « qui »)
         prive = bool(e.get("prive"))
         wr = ([] if prive else [enc(pkeys[s], ek) for s in e["qui"] if s in pkeys]) + [enc(admin, ek)]; random.shuffle(wr)
@@ -429,4 +494,4 @@ def lst():
 
 if __name__ == "__main__":
     c, a = sys.argv[1], sys.argv[2:]
-    {"unlock": unlock, "lock": lock, "codes": codes, "sheet": sheet, "addevent": addevent, "addbillet": addbillet, "rmbillet": rmbillet, "build": build, "sheetgen": sheetgen, "list": lst, "meta": meta, "setev": setev, "fiches": fiches, "profils": profils, "repasvalues": repasvalues}[c](*a)
+    {"unlock": unlock, "lock": lock, "codes": codes, "sheet": sheet, "addevent": addevent, "addbillet": addbillet, "rmbillet": rmbillet, "build": build, "sheetgen": sheetgen, "list": lst, "meta": meta, "setev": setev, "fiches": fiches, "profils": profils, "repasvalues": repasvalues, "archives": archives, "lsf": lsf, "lsfcheck": lsfcheck}[c](*a)
