@@ -22,6 +22,7 @@ Commandes (dossier de travail : $FDR_WORK, par défaut /tmp/fdr_work, jamais dan
   fdr.py archives <archives.json>           -> charge le tableau « Archives chansignes - liens youtube » (liste de lignes
                                                [artiste, titre, qui, lien youtube, …], tous les onglets sauf « Captation LIVE »)
   fdr.py lsf <event_id> "<titre>" <lien>[|étiquette] …  -> vidéos LSF imposées pour un titre (setlist du Drive), ex. « https://…|Ralenti »
+  fdr.py setliens <event_id> "<lien>|<texte>" …  -> boutons en haut de la setlist (dossier Drive, captation du concert)
   fdr.py lsfcheck                           -> pour chaque setlist : titres avec / sans vidéo LSF trouvée
 """
 import json, os, sys, base64, secrets, random, re, shutil, glob, subprocess, urllib.parse, hashlib, datetime
@@ -398,6 +399,11 @@ def lsf(ev_id, titre, *urls):
     S = load(STATE); e = next(x for x in S["events"] if x["id"] == ev_id)
     v = [{"u": u.split("|", 1)[0], "q": "", "l": (u.split("|", 1) + [""])[1]} for u in urls]
     e.setdefault("lsf_force", {})[_norm(titre)] = v; save(STATE, S); print("ok", ev_id, titre, len(v))
+def setliens(ev_id, *liens):
+    """Boutons en haut de la setlist : « <lien>|<texte> » (ex. dossier Drive, captation du concert). Sans lien : efface."""
+    S = load(STATE); e = next(x for x in S["events"] if x["id"] == ev_id)
+    e["setlist_liens"] = [{"u": l.split("|", 1)[0], "t": (l.split("|", 1) + ["Lien"])[1]} for l in liens]
+    save(STATE, S); print("ok", ev_id, len(liens))
 def lsfcheck():
     S = load(STATE)
     for e in S["events"]:
@@ -496,4 +502,4 @@ def lst():
 
 if __name__ == "__main__":
     c, a = sys.argv[1], sys.argv[2:]
-    {"unlock": unlock, "lock": lock, "codes": codes, "sheet": sheet, "addevent": addevent, "addbillet": addbillet, "rmbillet": rmbillet, "build": build, "sheetgen": sheetgen, "list": lst, "meta": meta, "setev": setev, "fiches": fiches, "profils": profils, "repasvalues": repasvalues, "archives": archives, "lsf": lsf, "lsfcheck": lsfcheck}[c](*a)
+    {"unlock": unlock, "lock": lock, "codes": codes, "sheet": sheet, "addevent": addevent, "addbillet": addbillet, "rmbillet": rmbillet, "build": build, "sheetgen": sheetgen, "list": lst, "meta": meta, "setev": setev, "fiches": fiches, "profils": profils, "repasvalues": repasvalues, "archives": archives, "lsf": lsf, "lsfcheck": lsfcheck, "setliens": setliens}[c](*a)
